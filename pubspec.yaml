@@ -25,8 +25,20 @@ dependencies:
   cupertino_icons: ^0.1.2
 
   # Bloc Pattern Packages
-  bloc: ^0.14.0
-  flutter_bloc: ^0.20.0
+  bloc: ^0.15.0
+  flutter_bloc: ^0.21.0
+  splashscreen: ^1.2.0
+  http: ^0.12.0+1
+  meta: ^1.1.6
+  equatable: ^0.2.6
+  rxdart: ^0.22.1+1
+  font_awesome_flutter: ^8.5.0
+  async: ^2.2.0
+  dynamic_theme: ^1.0.1
+  shared_preferences: ^0.5.3+2
+  localstorage: ^2.0.0
+  sms_autofill: ^1.1.0
+
 
 dev_dependencies:
   flutter_test:
