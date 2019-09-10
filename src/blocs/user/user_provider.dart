@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:shared/shared.dart';
 
-import '../../const/endpoints.dart';
 import 'index.dart';
 
 class UserProvider {

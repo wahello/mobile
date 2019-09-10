@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
+import 'package:shared/shared.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
-import '../../const/colors.dart';
 import 'index.dart';
 
 class OTPPage extends StatefulWidget {

@@ -8,12 +8,12 @@ import 'index.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final UserRepository userRepository;
-  bool hasToken = false;
-  bool registered = false;
-
   AuthenticationBloc({@required this.userRepository})
       : assert(userRepository != null);
+
+  bool hasToken = false;
+  bool registered = false;
+  final UserRepository userRepository;
 
   @override
   AuthenticationState get initialState => AuthenticationUninitialized();

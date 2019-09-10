@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared/shared.dart';
 
-import '../../const/colors.dart';
 import '../splash/index.dart';
 
 class LoadingIndicator extends StatelessWidget {

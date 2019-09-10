@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:shared/shared.dart';
 
-import '../../utils/token.dart';
 import '../authentication/authentication_bloc.dart';
 import '../authentication/index.dart';
 import '../user/user_repository.dart';

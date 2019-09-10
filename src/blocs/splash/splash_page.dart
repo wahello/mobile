@@ -1,8 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-import '../../const/colors.dart';
+import 'package:shared/shared.dart';
 
 class SplashPage extends StatelessWidget {
   @override
@@ -24,13 +23,6 @@ class SplashPage extends StatelessWidget {
 }
 
 class FlipLoader extends StatefulWidget {
-  final Color loaderBackground;
-  final Color iconColor;
-  final IconData icon;
-  final String animationType;
-  final String shape;
-  final bool rotateIcon;
-
   FlipLoader(
       {this.loaderBackground = MainColors.PRIMARY,
       this.iconColor = Colors.white,
@@ -38,6 +30,13 @@ class FlipLoader extends StatefulWidget {
       this.animationType = "full_flip",
       this.shape = "square",
       this.rotateIcon = true});
+
+  final String animationType;
+  final IconData icon;
+  final Color iconColor;
+  final Color loaderBackground;
+  final bool rotateIcon;
+  final String shape;
 
   @override
   _FlipLoaderState createState() => _FlipLoaderState(
@@ -51,19 +50,19 @@ class FlipLoader extends StatefulWidget {
 
 class _FlipLoaderState extends State<FlipLoader>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> rotationHorizontal;
-  Animation<double> rotationVertical;
-  Color loaderColor;
-  Color iconColor;
-  IconData icon;
-  Widget loaderIconChild;
-  String animationType;
-  String shape;
-  bool rotateIcon;
-
   _FlipLoaderState(this.loaderColor, this.iconColor, this.icon,
       this.animationType, this.shape, this.rotateIcon);
+
+  String animationType;
+  AnimationController controller;
+  IconData icon;
+  Color iconColor;
+  Color loaderColor;
+  Widget loaderIconChild;
+  bool rotateIcon;
+  Animation<double> rotationHorizontal;
+  Animation<double> rotationVertical;
+  String shape;
 
   @override
   void initState() {
@@ -139,15 +138,6 @@ class _FlipLoaderState extends State<FlipLoader>
     }
 
     return animCtrl;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (animationType == "half_flip") {
-      return buildHalfFlipper(context);
-    } else {
-      return buildFullFlipper(context);
-    }
   }
 
   Widget buildHalfFlipper(BuildContext context) {
@@ -231,5 +221,14 @@ class _FlipLoaderState extends State<FlipLoader>
         );
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (animationType == "half_flip") {
+      return buildHalfFlipper(context);
+    } else {
+      return buildFullFlipper(context);
+    }
   }
 }
