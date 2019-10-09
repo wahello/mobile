@@ -10,6 +10,15 @@ import 'index.dart';
 class UserRepository {
   final UserProvider userProvider = new UserProvider();
 
+  Future<Response> newPassword({
+    @required String username,
+    @required String password,
+  }) async {
+    var response = await userProvider.newPassword(username, password);
+    await Future.delayed(Duration(seconds: 1));
+    return response;
+  }
+
   Future<Response> login({
     @required String username,
     @required String password,

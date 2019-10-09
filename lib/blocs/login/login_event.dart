@@ -40,3 +40,17 @@ class OtpPageLoaded extends LoginEvent {
   @override
   String toString() => 'OtpPageLoaded { mobileNumber: $mobileNumber }';
 }
+
+class ForgotPasswordButtonPressed extends LoginEvent {
+  final String username;
+  final String password;
+
+  ForgotPasswordButtonPressed({
+    @required this.username,
+    @required this.password,
+  }) : super([username, password]);
+
+  @override
+  String toString() =>
+      'ForgotPasswordButtonPressed { username: $username, password: $password }';
+}

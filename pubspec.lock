@@ -173,13 +173,11 @@ packages:
     source: hosted
     version: "0.22.2"
   shared:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
-      path: "."
-      ref: develop
-      resolved-ref: ee31fea8abc09c336f6a6a2beec3cf8d98526a4a
-      url: "git@github.com:football-system/shared.git"
-    source: git
+      path: "..\\shared"
+      relative: true
+    source: path
     version: "0.0.1"
   shared_preferences:
     dependency: "direct main"

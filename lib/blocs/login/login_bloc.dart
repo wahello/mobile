@@ -69,12 +69,37 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         final response = await userRepository.authenticateUser(otp: event.otp);
         if (response.reasonPhrase == 'OK') {
-          authenticationBloc.dispatch(LoggedIn());
-          yield LoginInitial();
+          final newpassword = await userRepository.readKey('newpassword');
+          if (newpassword.isNotEmpty) {
+            final username = await userRepository.readKey('username');
+            final reset = await userRepository.newPassword(
+                username: username, password: newpassword);
+            if (reset.reasonPhrase == 'OK') {
+              authenticationBloc.dispatch(LoggedIn());
+              yield LoginInitial();
+            } else {
+              yield LoginFailure(
+                  error: jsonDecode(response.reasonPhrase).toString());
+            }
+          } else {
+            authenticationBloc.dispatch(LoggedIn());
+            yield LoginInitial();
+          }
         } else {
           yield LoginFailure(
               error: jsonDecode(response.reasonPhrase).toString());
         }
+      } catch (error) {
+        yield LoginFailure(error: error.toString());
+      }
+    }
+    if (event is ForgotPasswordButtonPressed) {
+      yield LoginLoading();
+      try {
+        userRepository.persistKey('username', event.username);
+        userRepository.persistKey('newpassword', event.password);
+        var token = await userRepository.readKey('token');
+        authenticationBloc.dispatch(OTP(token: token));
       } catch (error) {
         yield LoginFailure(error: error.toString());
       }
