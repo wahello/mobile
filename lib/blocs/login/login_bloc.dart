@@ -75,6 +75,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             final reset = await userRepository.newPassword(
                 username: username, password: newpassword);
             if (reset.reasonPhrase == 'OK') {
+              userRepository.deleteKey('newpassword');
               authenticationBloc.dispatch(LoggedIn());
               yield LoginInitial();
             } else {
