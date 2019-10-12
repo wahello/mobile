@@ -48,7 +48,9 @@ dev_dependencies:
     flutter_test:
         sdk: flutter
     shared:
-        path: ../shared/
+        git:
+            url: git@github.com:football-system/shared.git
+            ref: develop
     test: ^1.6.3
     mockito: ^4.1.1
 

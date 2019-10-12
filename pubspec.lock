@@ -322,9 +322,11 @@ packages:
   shared:
     dependency: "direct dev"
     description:
-      path: "..\\shared"
-      relative: true
-    source: path
+      path: "."
+      ref: develop
+      resolved-ref: "582039497a5406b8e33f1fb14b2f9c55120fa0d9"
+      url: "git@github.com:football-system/shared.git"
+    source: git
     version: "0.0.1"
   shared_preferences:
     dependency: "direct main"
