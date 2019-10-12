@@ -49,6 +49,8 @@ dev_dependencies:
         sdk: flutter
     shared:
         path: ../shared/
+    test: ^1.6.3
+    mockito: ^4.1.1
 
 
 # For information on the generic Dart part of this file, see the

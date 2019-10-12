@@ -32,7 +32,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: event.password,
         );
 
-        if (response.reasonPhrase == 'OK') {
+        if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
           userRepository.persistKey('username', event.username);
           Map tokenMap = jsonDecode(response.body);
           var token = Token.fromJson(tokenMap);
@@ -54,7 +54,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final username = await userRepository.readKey('username');
         final response = await userRepository.authenticate(
             username: username, mobileNumber: event.mobileNumber);
-        if (response.reasonPhrase == 'OK') {
+        if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
           yield OTPInitial();
         } else {
           yield LoginFailure(
@@ -68,7 +68,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginLoading();
       try {
         final response = await userRepository.authenticateUser(otp: event.otp);
-        if (response.reasonPhrase == 'OK') {
+        if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
           final newpassword = await userRepository.readKey('newpassword');
           if (newpassword.isNotEmpty) {
             final username = await userRepository.readKey('username');
