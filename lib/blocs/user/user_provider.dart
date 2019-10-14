@@ -36,10 +36,30 @@ class UserProvider {
     return _respAuth;
   }
 
+  Future<http.Response> askOtpNoAuth(
+      String username, String mobileNumber) async {
+    http.Response _respAuth = await http.post(Endpoints.askOtpNoAuthEndpoint,
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: {'username': username, 'mobileNumber': mobileNumber});
+    return _respAuth;
+  }
+
   Future<http.Response> authenticateUser(String otp) async {
     final token = await UserRepository().readKey('token');
     http.Response _respAuth =
         await http.post(Endpoints.confirmOtpEndpoint, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      HttpHeaders.authorizationHeader: 'Bearer ' + token
+    }, body: {
+      'otp': otp
+    });
+    return _respAuth;
+  }
+
+  Future<http.Response> authenticateUserNoAuth(String otp) async {
+    final token = await UserRepository().readKey('token');
+    http.Response _respAuth =
+        await http.post(Endpoints.confirmOtpNoAuthEndpoint, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       HttpHeaders.authorizationHeader: 'Bearer ' + token
     }, body: {

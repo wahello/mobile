@@ -52,8 +52,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       try {
         final username = await userRepository.readKey('username');
-        final response = await userRepository.authenticate(
-            username: username, mobileNumber: event.mobileNumber);
+        var response;
+        final newpassword = await userRepository.readKey('newpassword');
+        if (newpassword.isNotEmpty) {
+          response = await userRepository.authenticateNoAuth(
+              username: username, mobileNumber: event.mobileNumber);
+        } else {
+          response = await userRepository.authenticate(
+              username: username, mobileNumber: event.mobileNumber);
+        }
         if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
           yield OTPInitial();
         } else {
@@ -67,9 +74,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is OtpButtonPressed) {
       yield LoginLoading();
       try {
-        final response = await userRepository.authenticateUser(otp: event.otp);
+        final newpassword = await userRepository.readKey('newpassword');
+        var response;
+        if (newpassword.isNotEmpty) {
+          response =
+              await userRepository.authenticateUserNoAuth(otp: event.otp);
+        } else {
+          response = await userRepository.authenticateUser(otp: event.otp);
+        }
         if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
-          final newpassword = await userRepository.readKey('newpassword');
           if (newpassword.isNotEmpty) {
             final username = await userRepository.readKey('username');
             final reset = await userRepository.newPassword(

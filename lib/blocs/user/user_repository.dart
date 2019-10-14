@@ -35,8 +35,21 @@ class UserRepository {
     return response;
   }
 
+  Future<Response> authenticateNoAuth(
+      {@required String username, @required String mobileNumber}) async {
+    var response = await userProvider.askOtpNoAuth(username, mobileNumber);
+    await Future.delayed(Duration(seconds: 1));
+    return response;
+  }
+
   Future<Response> authenticateUser({@required String otp}) async {
     var response = await userProvider.authenticateUser(otp);
+    await Future.delayed(Duration(seconds: 1));
+    return response;
+  }
+
+  Future<Response> authenticateUserNoAuth({@required String otp}) async {
+    var response = await userProvider.authenticateUserNoAuth(otp);
     await Future.delayed(Duration(seconds: 1));
     return response;
   }
