@@ -55,25 +55,25 @@ class UserRepository {
   }
 
   Future<void> deleteKey(String key) async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove(key);
     await Future.delayed(Duration(seconds: 1));
   }
 
   Future<void> persistKey(String key, String value) async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(key, value);
     await Future.delayed(Duration(seconds: 1));
   }
 
   Future<String> readKey(String key) async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final value = prefs.getString(key) ?? '';
     return value;
   }
 
   Future<bool> hasToken() async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final key = 'token';
     final value = prefs.getString(key) ?? '';
     if (value != null && value != '') {

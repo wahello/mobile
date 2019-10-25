@@ -6,32 +6,33 @@ import 'package:sms_autofill/sms_autofill.dart';
 import 'index.dart';
 
 class OTPPage extends StatefulWidget {
-  final LoginBloc loginBloc;
-
   OTPPage({Key key, @required this.loginBloc}) : super(key: key);
+
+  final LoginBloc loginBloc;
 
   @override
   _OTPPageState createState() => new _OTPPageState();
 }
 
 class _OTPPageState extends State<OTPPage> {
-  String _code;
   String signature = "{{ app signature }}";
-  LoginBloc get _loginBloc => widget.loginBloc;
+
+  String _code;
   final _phoneFieldController = TextEditingController();
 
   @override
+  void dispose() {
+    _loginBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
-    _phoneFieldController.addListener(() {
-      if (_phoneFieldController.text != null &&
-          _phoneFieldController.text != '') {
-        _loginBloc
-            .dispatch(OtpPageLoaded(mobileNumber: _phoneFieldController.text));
-      }
-    });
     _sms();
     super.initState();
   }
+
+  LoginBloc get _loginBloc => widget.loginBloc;
 
   _sms() async {
     await SmsAutoFill().getAppSignature;
@@ -43,10 +44,9 @@ class _OTPPageState extends State<OTPPage> {
     });
   }
 
-  @override
-  void dispose() {
-    _loginBloc.dispose();
-    super.dispose();
+  _onOtpButtonPressed() {
+    String otp = _code;
+    _loginBloc.dispatch(OtpButtonPressed(otp: otp));
   }
 
   @override
@@ -59,15 +59,52 @@ class _OTPPageState extends State<OTPPage> {
           title: const Text('OTP'),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(40.0),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Spacer(),
               PhoneFieldHint(
                 autofocus: true,
                 controller: _phoneFieldController,
+              ),
+              Divider(
+                height: 24.0,
+              ),
+              FlatButton(
+                shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(30.0)),
+                color: MainColors.PRIMARY,
+                onPressed: () => {
+                  if (_phoneFieldController.text != null &&
+                      _phoneFieldController.text != '')
+                    {
+                      _loginBloc.dispatch(OtpPageLoaded(
+                          mobileNumber: _phoneFieldController.text))
+                    }
+                },
+                child: new Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20.0,
+                    horizontal: 20.0,
+                  ),
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Expanded(
+                        child: Text(
+                          "Richiedi codice",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MainColors.SECONDARY,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               Spacer(),
               PinFieldAutoFill(
@@ -77,7 +114,9 @@ class _OTPPageState extends State<OTPPage> {
                 codeLength: 6,
                 currentCode: _code,
               ),
-              Spacer(),
+              Divider(
+                height: 24.0,
+              ),
               new FlatButton(
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(30.0)),
@@ -104,6 +143,7 @@ class _OTPPageState extends State<OTPPage> {
                   ),
                 ),
               ),
+              Spacer(),
               // SizedBox(height: 8.0),
               // Divider(height: 1.0),
               // SizedBox(height: 4.0),
@@ -114,10 +154,5 @@ class _OTPPageState extends State<OTPPage> {
         ),
       ),
     );
-  }
-
-  _onOtpButtonPressed() {
-    String otp = _code;
-    _loginBloc.dispatch(OtpButtonPressed(otp: otp));
   }
 }
