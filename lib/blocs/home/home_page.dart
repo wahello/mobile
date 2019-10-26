@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
                   ),
                   color: MainColors.PRIMARY,
                   onPressed: () {
-                    authenticationBloc.dispatch(LoggedOut());
+                    authenticationBloc.add(LoggedOut());
                   },
                   child: new Container(
                     padding: const EdgeInsets.symmetric(
