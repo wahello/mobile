@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared/shared.dart';
-
-import 'index.dart';
 
 class UserProvider {
   UserProvider();
@@ -24,11 +23,11 @@ class UserProvider {
   }
 
   Future<http.Response> askOtp(String username, String mobileNumber) async {
-    final token = await UserRepository().readKey('token');
+    final token = await CallsRepository().readKey('token');
     http.Response _respAuth =
         await http.post(Endpoints.askOtpEndpoint, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      HttpHeaders.authorizationHeader: 'Bearer ' + token
+      HttpHeaders.authorizationHeader: token
     }, body: {
       'username': username,
       'mobileNumber': mobileNumber
@@ -45,11 +44,11 @@ class UserProvider {
   }
 
   Future<http.Response> authenticateUser(String otp) async {
-    final token = await UserRepository().readKey('token');
+    final token = await CallsRepository().readKey('token');
     http.Response _respAuth =
         await http.post(Endpoints.confirmOtpEndpoint, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      HttpHeaders.authorizationHeader: 'Bearer ' + token
+      HttpHeaders.authorizationHeader: token
     }, body: {
       'otp': otp
     });
@@ -57,11 +56,11 @@ class UserProvider {
   }
 
   Future<http.Response> authenticateUserNoAuth(String otp) async {
-    final token = await UserRepository().readKey('token');
+    final token = await CallsRepository().readKey('token');
     http.Response _respAuth =
         await http.post(Endpoints.confirmOtpNoAuthEndpoint, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      HttpHeaders.authorizationHeader: 'Bearer ' + token
+      HttpHeaders.authorizationHeader: token
     }, body: {
       'otp': otp
     });

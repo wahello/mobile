@@ -3,7 +3,6 @@ import 'dart:core';
 
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'index.dart';
 
@@ -52,34 +51,5 @@ class UserRepository {
     var response = await userProvider.authenticateUserNoAuth(otp);
     await Future.delayed(Duration(seconds: 1));
     return response;
-  }
-
-  Future<void> deleteKey(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(key);
-    await Future.delayed(Duration(seconds: 1));
-  }
-
-  Future<void> persistKey(String key, String value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, value);
-    await Future.delayed(Duration(seconds: 1));
-  }
-
-  Future<String> readKey(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final value = prefs.getString(key) ?? '';
-    return value;
-  }
-
-  Future<bool> hasToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final key = 'token';
-    final value = prefs.getString(key) ?? '';
-    if (value != null && value != '') {
-      return true;
-    }
-    await Future.delayed(Duration(seconds: 1));
-    return false;
   }
 }
