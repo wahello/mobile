@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:football_system/blocs/stuff/calls_repository.dart';
 
 import '../authentication/authentication_bloc.dart';
 import '../user/user_repository.dart';
@@ -7,9 +8,11 @@ import 'index.dart';
 
 class LoginPage extends StatefulWidget {
   final UserRepository userRepository;
+  final CallsRepository callsRepository;
 
-  LoginPage({Key key, @required this.userRepository})
-      : assert(userRepository != null),
+  LoginPage(
+      {Key key, @required this.userRepository, @required this.callsRepository})
+      : assert(userRepository != null && callsRepository != null),
         super(key: key);
 
   @override
@@ -21,12 +24,14 @@ class _LoginPageState extends State<LoginPage> {
   AuthenticationBloc _authenticationBloc;
 
   UserRepository get _userRepository => widget.userRepository;
+  CallsRepository get _callsRepository => widget.callsRepository;
 
   @override
   void initState() {
     _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     _loginBloc = LoginBloc(
       userRepository: _userRepository,
+      callsRepository: _callsRepository,
       authenticationBloc: _authenticationBloc,
     );
     super.initState();
@@ -44,7 +49,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _loginBloc.dispose();
+    _loginBloc.close();
+    _authenticationBloc.close();
     super.dispose();
   }
 }

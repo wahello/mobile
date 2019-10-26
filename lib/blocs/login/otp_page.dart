@@ -22,7 +22,7 @@ class _OTPPageState extends State<OTPPage> {
 
   @override
   void dispose() {
-    _loginBloc.dispose();
+    _loginBloc.close();
     super.dispose();
   }
 
@@ -46,7 +46,7 @@ class _OTPPageState extends State<OTPPage> {
 
   _onOtpButtonPressed() {
     String otp = _code;
-    _loginBloc.dispatch(OtpButtonPressed(otp: otp));
+    _loginBloc.add(OtpButtonPressed(otp: otp));
   }
 
   @override
@@ -70,9 +70,7 @@ class _OTPPageState extends State<OTPPage> {
                 autofocus: true,
                 controller: _phoneFieldController,
               ),
-              Divider(
-                height: 24.0,
-              ),
+              Divider(height: 24.0, color: Color.fromRGBO(255, 255, 255, 0)),
               FlatButton(
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(30.0)),
@@ -81,7 +79,7 @@ class _OTPPageState extends State<OTPPage> {
                   if (_phoneFieldController.text != null &&
                       _phoneFieldController.text != '')
                     {
-                      _loginBloc.dispatch(OtpPageLoaded(
+                      _loginBloc.add(OtpPageLoaded(
                           mobileNumber: _phoneFieldController.text))
                     }
                 },
@@ -114,9 +112,7 @@ class _OTPPageState extends State<OTPPage> {
                 codeLength: 6,
                 currentCode: _code,
               ),
-              Divider(
-                height: 24.0,
-              ),
+              Divider(height: 24.0, color: Color.fromRGBO(255, 255, 255, 0)),
               new FlatButton(
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(30.0)),

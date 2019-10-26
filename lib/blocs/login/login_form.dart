@@ -21,8 +21,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
-  PageController _controller =
-      new PageController(initialPage: 1, viewportFraction: 1.0);
+  final _controller = PageController(initialPage: 0, viewportFraction: 1.0);
 
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
@@ -185,9 +184,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            Divider(
-              height: 24.0,
-            ),
+            Divider(height: 24.0, color: Color.fromRGBO(255, 255, 255, 0)),
             new Row(
               children: <Widget>[
                 new Expanded(
@@ -232,9 +229,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            Divider(
-              height: 24.0,
-            ),
+            Divider(height: 24.0, color: Color.fromRGBO(255, 255, 255, 0)),
             new Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -368,9 +363,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            Divider(
-              height: 24.0,
-            ),
+            Divider(height: 24.0, color: Color.fromRGBO(255, 255, 255, 0)),
             new Row(
               children: <Widget>[
                 new Expanded(
@@ -415,9 +408,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            Divider(
-              height: 24.0,
-            ),
+            Divider(height: 24.0, color: Color.fromRGBO(255, 255, 255, 0)),
             new Row(
               children: <Widget>[
                 new Expanded(
@@ -519,7 +510,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
 
   _onLoginButtonPressed() {
     if (_formKey.currentState.validate()) {
-      _loginBloc.dispatch(LoginButtonPressed(
+      _loginBloc.add(LoginButtonPressed(
         username: _usernameController.text,
         password: _passwordController.text,
       ));
@@ -529,7 +520,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
   _onForgotPasswordButtonPressed() {
     if (_formKey.currentState.validate()) {
       if (_passwordController.text == _samePasswordController.text) {
-        _loginBloc.dispatch(ForgotPasswordButtonPressed(
+        _loginBloc.add(ForgotPasswordButtonPressed(
           username: _usernameController.text,
           password: _passwordController.text,
         ));

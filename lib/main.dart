@@ -2,12 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:football_system/blocs/splash/splash_page.dart';
+import 'package:football_system/blocs/stuff/calls_repository.dart';
+import 'package:football_system/blocs/stuff/index.dart';
 
 import 'blocs/authentication/index.dart';
 import 'blocs/home/index.dart';
 import 'blocs/login/index.dart';
-import 'blocs/splash/index.dart';
-import 'blocs/stuff/index.dart';
 import 'blocs/user/index.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
@@ -32,13 +33,16 @@ class SimpleBlocDelegate extends BlocDelegate {
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(App(userRepository: UserRepository()));
+  runApp(App(
+      callsRepository: CallsRepository(), userRepository: UserRepository()));
 }
 
 class App extends StatefulWidget {
+  final CallsRepository callsRepository;
   final UserRepository userRepository;
 
-  App({Key key, @required this.userRepository}) : super(key: key);
+  App({Key key, @required this.callsRepository, @required this.userRepository})
+      : super(key: key);
 
   @override
   State<App> createState() => _AppState();
@@ -47,15 +51,17 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   AuthenticationBloc authenticationBloc;
   LoginBloc loginBloc;
+  CallsRepository get callsRepository => widget.callsRepository;
   UserRepository get userRepository => widget.userRepository;
 
   @override
   void initState() {
     authenticationBloc = AuthenticationBloc(
-      userRepository: userRepository,
+      callsRepository: callsRepository,
     );
-    authenticationBloc.dispatch(AppStarted());
+    authenticationBloc.add(AppStarted());
     loginBloc = LoginBloc(
+      callsRepository: callsRepository,
       userRepository: userRepository,
       authenticationBloc: authenticationBloc,
     );
@@ -64,8 +70,8 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
-    authenticationBloc.dispose();
-    loginBloc.dispose();
+    authenticationBloc.close();
+    loginBloc.close();
     super.dispose();
   }
 
@@ -81,6 +87,7 @@ class _AppState extends State<App> {
             }
             if (state is AuthenticationUnauthenticated) {
               return LoginPage(
+                callsRepository: callsRepository,
                 userRepository: userRepository,
               );
             }

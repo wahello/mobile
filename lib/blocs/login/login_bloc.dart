@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:shared/shared.dart';
 
@@ -13,11 +14,15 @@ import 'index.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository userRepository;
   final AuthenticationBloc authenticationBloc;
+  final CallsRepository callsRepository;
 
   LoginBloc({
     @required this.userRepository,
+    @required this.callsRepository,
     @required this.authenticationBloc,
-  }) : assert(userRepository != null && authenticationBloc != null);
+  }) : assert(userRepository != null &&
+            authenticationBloc != null &&
+            callsRepository != null);
 
   LoginState get initialState => LoginInitial();
 
@@ -33,11 +38,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
 
         if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
-          userRepository.persistKey('username', event.username);
+          callsRepository.persistKey('username', event.username);
           Map tokenMap = jsonDecode(response.body);
           var token = Token.fromJson(tokenMap);
-          await userRepository.persistKey('token', token.token);
-          authenticationBloc.dispatch(OTP(token: token.token));
+          await callsRepository.persistKey('token', 'Bearer ' + token.token);
+          authenticationBloc.add(OTP(token: token.token));
           yield OTPInitial();
         } else {
           yield LoginFailure(
@@ -51,9 +56,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginLoading();
 
       try {
-        final username = await userRepository.readKey('username');
+        final username = await callsRepository.readKey('username');
         var response;
-        final newpassword = await userRepository.readKey('newpassword');
+        final newpassword = await callsRepository.readKey('newpassword');
         if (newpassword.isNotEmpty) {
           response = await userRepository.authenticateNoAuth(
               username: username, mobileNumber: event.mobileNumber);
@@ -74,7 +79,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is OtpButtonPressed) {
       yield LoginLoading();
       try {
-        final newpassword = await userRepository.readKey('newpassword');
+        final newpassword = await callsRepository.readKey('newpassword');
         var response;
         if (newpassword.isNotEmpty) {
           response =
@@ -84,19 +89,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
         if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
           if (newpassword.isNotEmpty) {
-            final username = await userRepository.readKey('username');
+            final username = await callsRepository.readKey('username');
             final reset = await userRepository.newPassword(
                 username: username, password: newpassword);
             if (reset.reasonPhrase == 'OK') {
-              userRepository.deleteKey('newpassword');
-              authenticationBloc.dispatch(LoggedIn());
+              callsRepository.deleteKey('newpassword');
+              authenticationBloc.add(LoggedIn());
               yield LoginInitial();
             } else {
               yield LoginFailure(
                   error: jsonDecode(response.reasonPhrase).toString());
             }
           } else {
-            authenticationBloc.dispatch(LoggedIn());
+            authenticationBloc.add(LoggedIn());
             yield LoginInitial();
           }
         } else {
@@ -110,10 +115,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is ForgotPasswordButtonPressed) {
       yield LoginLoading();
       try {
-        userRepository.persistKey('username', event.username);
-        userRepository.persistKey('newpassword', event.password);
-        var token = await userRepository.readKey('token');
-        authenticationBloc.dispatch(OTP(token: token));
+        callsRepository.persistKey('username', event.username);
+        callsRepository.persistKey('newpassword', event.password);
+        var token = await callsRepository.readKey('token');
+        authenticationBloc.add(OTP(token: token));
       } catch (error) {
         yield LoginFailure(error: error.toString());
       }

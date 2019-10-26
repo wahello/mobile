@@ -1,19 +1,19 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:meta/meta.dart';
 
-import '../user/user_repository.dart';
 import 'index.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({@required this.userRepository})
-      : assert(userRepository != null);
+  AuthenticationBloc({@required this.callsRepository})
+      : assert(callsRepository != null);
 
   bool hasToken = false;
   bool registered = false;
-  final UserRepository userRepository;
+  final CallsRepository callsRepository;
 
   @override
   AuthenticationState get initialState => AuthenticationUninitialized();
@@ -22,6 +22,9 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
+    yield AuthenticationUninitialized();
+    await Future.delayed(Duration(seconds: 5));
+
     if (event is AppStarted) {
       yield AuthenticationLoading();
       yield AuthenticationUnauthenticated();
@@ -34,7 +37,8 @@ class AuthenticationBloc
 
     if (event is LoggedOut) {
       yield AuthenticationLoading();
-      if (hasToken) await userRepository.deleteKey('token');
+      hasToken = await callsRepository.hasToken();
+      if (hasToken) await callsRepository.deleteKey('token');
       yield AuthenticationUnauthenticated();
     }
 
