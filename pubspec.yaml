@@ -25,8 +25,8 @@ dependencies:
     cupertino_icons: ^0.1.2
 
     # Bloc Pattern Packages
-    bloc: ^0.15.0
-    flutter_bloc: ^0.21.0
+    bloc: ^1.0.0
+    flutter_bloc: ^1.0.0
     splashscreen: ^1.2.0
     http: ^0.12.0+1
     meta: ^1.1.7
@@ -38,21 +38,16 @@ dependencies:
     shared_preferences: ^0.5.3+2
     localstorage: ^2.0.0
     sms_autofill: ^1.1.0
-
-    # shared:
-    #     git:
-    #         url: git@github.com:football-system/shared.git
-    #         ref: develop
-
-dev_dependencies:
-    flutter_test:
-        sdk: flutter
     shared:
         git:
             url: git@github.com:football-system/shared.git
             ref: develop
-    test: ^1.6.3
-    mockito: ^4.1.1
+
+dev_dependencies:
+    flutter_test:
+        sdk: flutter
+    # shared:
+    #     path: '../shared/'
 
 
 # For information on the generic Dart part of this file, see the
