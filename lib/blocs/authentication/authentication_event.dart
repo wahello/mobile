@@ -5,6 +5,11 @@ abstract class AuthenticationEvent extends Equatable {
   AuthenticationEvent([List props = const []]) : super(props);
 }
 
+class Splash extends AuthenticationEvent {
+  @override
+  String toString() => 'Splash';
+}
+
 class AppStarted extends AuthenticationEvent {
   @override
   String toString() => 'AppStarted';

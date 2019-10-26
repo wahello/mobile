@@ -102,7 +102,6 @@ class _AppState extends State<App> {
             if (state is AuthenticationAuthenticated) {
               return HomePage();
             }
-            return SplashPage();
           },
         ),
       ),

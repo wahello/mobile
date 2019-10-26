@@ -22,10 +22,9 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
-    yield AuthenticationUninitialized();
-    await Future.delayed(Duration(seconds: 5));
-
     if (event is AppStarted) {
+      yield AuthenticationUninitialized();
+      await Future.delayed(Duration(seconds: 5));
       yield AuthenticationLoading();
       yield AuthenticationUnauthenticated();
     }

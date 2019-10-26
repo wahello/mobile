@@ -32,13 +32,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginLoading();
 
       try {
+        await callsRepository.persistKey('username', event.username);
         final response = await userRepository.login(
           username: event.username,
           password: event.password,
         );
 
         if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
-          callsRepository.persistKey('username', event.username);
           Map tokenMap = jsonDecode(response.body);
           var token = Token.fromJson(tokenMap);
           await callsRepository.persistKey('token', 'Bearer ' + token.token);
@@ -93,7 +93,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             final reset = await userRepository.newPassword(
                 username: username, password: newpassword);
             if (reset.reasonPhrase == 'OK') {
-              callsRepository.deleteKey('newpassword');
+              await callsRepository.deleteKey('newpassword');
               authenticationBloc.add(LoggedIn());
               yield LoginInitial();
             } else {
@@ -115,8 +115,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is ForgotPasswordButtonPressed) {
       yield LoginLoading();
       try {
-        callsRepository.persistKey('username', event.username);
-        callsRepository.persistKey('newpassword', event.password);
+        await callsRepository.persistKey('username', event.username);
+        await callsRepository.persistKey('newpassword', event.password);
         var token = await callsRepository.readKey('token');
         authenticationBloc.add(OTP(token: token));
       } catch (error) {
