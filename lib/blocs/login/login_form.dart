@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:football_system/generated/i18n.dart';
 import 'package:shared/shared.dart';
 
 import '../authentication/index.dart';
@@ -99,7 +100,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                         children: <Widget>[
                           new Expanded(
                             child: Text(
-                              "LOGIN",
+                              I18n().login,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: MainColors.PRIMARY,
@@ -146,7 +147,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                   child: new Padding(
                     padding: const EdgeInsets.only(left: 40.0),
                     child: new Text(
-                      "EMAIL",
+                      I18n().email,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: MainColors.PRIMARY,
@@ -191,7 +192,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                   child: new Padding(
                     padding: const EdgeInsets.only(left: 40.0),
                     child: new Text(
-                      "PASSWORD",
+                      I18n().password,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: MainColors.PRIMARY,
@@ -237,7 +238,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                   padding: const EdgeInsets.only(right: 20.0),
                   child: new FlatButton(
                     child: new Text(
-                      "Forgot Password?",
+                      I18n().forgotPassword,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: MainColors.PRIMARY,
@@ -274,7 +275,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                           children: <Widget>[
                             new Expanded(
                               child: Text(
-                                "LOGIN",
+                                I18n().login,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: MainColors.TEXT_NEGATIVE,
@@ -325,7 +326,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                   child: new Padding(
                     padding: const EdgeInsets.only(left: 40.0),
                     child: new Text(
-                      "EMAIL",
+                      I18n().email,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: MainColors.PRIMARY,
@@ -415,7 +416,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                   child: new Padding(
                     padding: const EdgeInsets.only(left: 40.0),
                     child: new Text(
-                      "RIPETI PASSWORD",
+                      I18n().ripetiPassword,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: MainColors.PRIMARY,
@@ -478,7 +479,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                           children: <Widget>[
                             new Expanded(
                               child: Text(
-                                "SALVA",
+                                I18n().salva,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: MainColors.TEXT_NEGATIVE,
