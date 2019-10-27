@@ -1,0 +1,9 @@
+{
+    "greetTo": "Buon giorno {name}",
+    "login": "LOGIN",
+    "forgotPassword": "Forgot Password?",
+    "password": "PASSWORD",
+    "email": "EMAIL",
+    "ripetiPassword": "RIPETI PASSWORD",
+    "salva": "SALVA"
+}
