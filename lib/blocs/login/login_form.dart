@@ -525,7 +525,16 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
           username: _usernameController.text,
           password: _passwordController.text,
         ));
-      } else {}
+      } else {
+        _onWidgetDidBuild(() {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text(I18n().passwordDifferent),
+              backgroundColor: MainColors.PRIMARY,
+            ),
+          );
+        });
+      }
     }
   }
 
