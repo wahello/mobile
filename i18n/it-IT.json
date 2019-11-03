@@ -23,5 +23,6 @@
     "inserimentoIncontro": "Inserimento incontro",
     "inserisciIncontro": "Inserisci incontro",
     "modificaIncontro": "Modifica incontro",
-    "inserisciFormazioneTipo": "Inserisci formazione tipo"
+    "inserisciFormazioneTipo": "Inserisci formazione tipo",
+    "obbligatorio": "Questo campo non può essere vuoto."
 }
