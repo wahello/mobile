@@ -31,6 +31,7 @@ class CallsProvider {
     http.Response _respAuth = await http.get(
         Endpoints.domain +
             Endpoints.championships +
+            '/' +
             championshipId +
             Endpoints.matches,
         headers: {
@@ -40,14 +41,20 @@ class CallsProvider {
     return _respAuth;
   }
 
-  Future<http.Response> categories(String matchId, String genderId) async {
+  Future<http.Response> categories(
+      String genderId, String championshipId, String matchId) async {
     final token = await CallsRepository().readKey('token');
     http.Response _respAuth = await http.get(
         Endpoints.domain +
-            Endpoints.matches +
-            matchId +
+            Endpoints.genders +
             '/' +
             genderId +
+            Endpoints.championships +
+            '/' +
+            championshipId +
+            Endpoints.matches +
+            '/' +
+            matchId +
             Endpoints.categories,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -67,10 +74,10 @@ class CallsProvider {
     return _respAuth;
   }
 
-  Future<http.Response> coaches(String teamId) async {
+  Future<http.Response> players(String teamId) async {
     final token = await CallsRepository().readKey('token');
     http.Response _respAuth = await http.get(
-        Endpoints.domain + Endpoints.teams + teamId + Endpoints.coaches,
+        Endpoints.domain + Endpoints.teams + teamId + Endpoints.players,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           HttpHeaders.authorizationHeader: token
@@ -78,10 +85,10 @@ class CallsProvider {
     return _respAuth;
   }
 
-  Future<http.Response> players(String teamId) async {
+  Future<http.Response> coaches(String teamId) async {
     final token = await CallsRepository().readKey('token');
     http.Response _respAuth = await http.get(
-        Endpoints.domain + Endpoints.teams + teamId + Endpoints.players,
+        Endpoints.domain + Endpoints.teams + teamId + Endpoints.coaches,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           HttpHeaders.authorizationHeader: token

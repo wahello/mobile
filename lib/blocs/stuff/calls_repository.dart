@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:football_system/blocs/stuff/calls_model.dart';
 import 'package:football_system/blocs/stuff/calls_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,11 +52,13 @@ class CallsRepository {
 
   Future<dynamic> getGenders() async {
     var response;
-    var genders = await readKey('genders');
-    if (genders.isEmpty) {
-      response = await callsProvider.genders();
-      genders = jsonDecode(response.body);
-      persistKey('genders', genders);
+    var genders;
+    response = await callsProvider.genders();
+    if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
+      var list = jsonDecode(response.body) as List;
+      List<Gender> genderList =
+          list.map((gender) => Gender.fromJson(gender)).toList();
+      genders = genderList;
     }
     await Future.delayed(Duration(seconds: 1));
     return genders;
@@ -63,11 +66,14 @@ class CallsRepository {
 
   Future<dynamic> getChampionships() async {
     var response;
-    var championships = await readKey('championships');
-    if (championships.isEmpty) {
-      response = await callsProvider.championships();
-      championships = jsonDecode(response.body);
-      persistKey('championships', championships);
+    var championships;
+    response = await callsProvider.championships();
+    if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
+      var list = jsonDecode(response.body) as List;
+      List<Championship> championshipsList = list
+          .map((championship) => Championship.fromJson(championship))
+          .toList();
+      championships = championshipsList;
     }
     await Future.delayed(Duration(seconds: 1));
     return championships;
@@ -75,23 +81,29 @@ class CallsRepository {
 
   Future<dynamic> getMatches(String championshipId) async {
     var response;
-    var matches = await readKey('matches');
-    if (matches.isEmpty) {
-      response = await callsProvider.matches(championshipId);
-      matches = jsonDecode(response.body);
-      persistKey('matches', matches);
+    var matches;
+    response = await callsProvider.matches(championshipId);
+    if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
+      var list = jsonDecode(response.body) as List;
+      List<Match> matchesList =
+          list.map((match) => Match.fromJson(match)).toList();
+      matches = matchesList;
     }
     await Future.delayed(Duration(seconds: 1));
     return matches;
   }
 
-  Future<dynamic> getCategories(String matchId, String genderId) async {
+  Future<dynamic> getCategories(
+      String genderId, String championshipId, String matchId) async {
     var response;
-    var categories = await readKey('categories');
-    if (categories.isEmpty) {
-      response = await callsProvider.categories(matchId, genderId);
-      categories = jsonDecode(response.body);
-      persistKey('categories', categories);
+    var categories;
+    response =
+        await callsProvider.categories(genderId, championshipId, matchId);
+    if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
+      var list = jsonDecode(response.body) as List;
+      List<Category> categoriesList =
+          list.map((match) => Category.fromJson(match)).toList();
+      categories = categoriesList;
     }
     await Future.delayed(Duration(seconds: 1));
     return categories;
