@@ -16,9 +16,9 @@ class I18n implements WidgetsLocalizations {
   static Locale _locale;
   static bool _shouldReload = false;
 
-  static set locale(Locale _newLocale) {
+  static set locale(Locale newLocale) {
     _shouldReload = true;
-    I18n._locale = _newLocale;
+    I18n._locale = newLocale;
   }
 
   static const GeneratedLocalizationsDelegate delegate = GeneratedLocalizationsDelegate();
@@ -32,12 +32,16 @@ class I18n implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  /// "Footbal System"
+  String get appName => "Footbal System";
   /// "Buon giorno ${name}"
   String greetTo(String name) => "Buon giorno ${name}";
   /// "LOGIN"
   String get login => "LOGIN";
-  /// "Forgot Password?"
-  String get forgotPassword => "Forgot Password?";
+  /// "LOGOUT"
+  String get logout => "LOGOUT";
+  /// "Passqord dimenticata?"
+  String get forgotPassword => "Passqord dimenticata?";
   /// "PASSWORD"
   String get password => "PASSWORD";
   /// "EMAIL"
@@ -46,6 +50,38 @@ class I18n implements WidgetsLocalizations {
   String get ripetiPassword => "RIPETI PASSWORD";
   /// "SALVA"
   String get salva => "SALVA";
+  /// "Le password non corrispondono"
+  String get passwordDifferent => "Le password non corrispondono";
+  /// "AVANTI"
+  String get avanti => "AVANTI";
+  /// "INDIETRO"
+  String get indietro => "INDIETRO";
+  /// "Generi"
+  String get genders => "Generi";
+  /// "Seleziona genere"
+  String get selectGender => "Seleziona genere";
+  /// "Campionati"
+  String get championships => "Campionati";
+  /// "Seleziona campionato"
+  String get selectChampionship => "Seleziona campionato";
+  /// "Incontri"
+  String get matches => "Incontri";
+  /// "Seleziona incontro"
+  String get selectMatch => "Seleziona incontro";
+  /// "Trofei"
+  String get trophies => "Trofei";
+  /// "Categorie"
+  String get categories => "Categorie";
+  /// "Seleziona categoria"
+  String get selectCategory => "Seleziona categoria";
+  /// "Inserimento incontro"
+  String get inserimentoIncontro => "Inserimento incontro";
+  /// "Inserisci incontro"
+  String get inserisciIncontro => "Inserisci incontro";
+  /// "Modifica incontro"
+  String get modificaIncontro => "Modifica incontro";
+  /// "Inserisci formazione tipo"
+  String get inserisciFormazioneTipo => "Inserisci formazione tipo";
 }
 
 class _I18n_it_IT extends I18n {
@@ -77,8 +113,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<WidgetsLocali
   Future<WidgetsLocalizations> load(Locale locale) {
     I18n._locale ??= locale;
     I18n._shouldReload = false;
-    final String lang = I18n._locale != null ? locale.toString() : "";
-    final String languageCode = I18n._locale != null ? locale.languageCode : "";
+    final String lang = I18n._locale != null ? I18n._locale.toString() : "";
+    final String languageCode = I18n._locale != null ? I18n._locale.languageCode : "";
     if ("it_IT" == lang) {
       return SynchronousFuture<WidgetsLocalizations>(const _I18n_it_IT());
     }
