@@ -82,6 +82,8 @@ class I18n implements WidgetsLocalizations {
   String get modificaIncontro => "Modifica incontro";
   /// "Inserisci formazione tipo"
   String get inserisciFormazioneTipo => "Inserisci formazione tipo";
+  /// "Questo campo non può essere vuoto."
+  String get obbligatorio => "Questo campo non può essere vuoto.";
 }
 
 class _I18n_it_IT extends I18n {
