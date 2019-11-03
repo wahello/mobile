@@ -1,77 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared/shared.dart';
+import 'package:football_system/blocs/stuff/calls_repository.dart';
 
-import '../authentication/authentication_bloc.dart';
-import '../authentication/index.dart';
+import '../user/user_repository.dart';
+import 'index.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  final UserRepository userRepository;
+  final CallsRepository callsRepository;
+
+  HomePage(
+      {Key key, @required this.userRepository, @required this.callsRepository})
+      : assert(userRepository != null && callsRepository != null),
+        super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final AuthenticationBloc authenticationBloc =
-        BlocProvider.of<AuthenticationBloc>(context);
+    return HomeScreen();
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-        backgroundColor: MainColors.PRIMARY,
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          color: MainColors.SECONDARY,
-        ),
-        padding: EdgeInsets.all(120.0),
-        child: Column(
-          children: <Widget>[
-            Container(
-                padding: EdgeInsets.only(top: 250.0),
-                child: Center(
-                  child: Text(
-                    'BENVENUTO!',
-                    style: TextStyle(
-                      color: MainColors.PRIMARY,
-                    ),
-                    textScaleFactor: 2,
-                  ),
-                )),
-            Container(
-              padding: EdgeInsets.only(top: 150.0),
-              child: Center(
-                child: new FlatButton(
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0),
-                  ),
-                  color: MainColors.PRIMARY,
-                  onPressed: () {
-                    authenticationBloc.add(LoggedOut());
-                  },
-                  child: new Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20.0,
-                      horizontal: 20.0,
-                    ),
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        new Expanded(
-                          child: Text(
-                            "LOGOUT",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: MainColors.TEXT_NEGATIVE,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
