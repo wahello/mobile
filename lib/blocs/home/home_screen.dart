@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
         elevation: 1.0,
         margin: new EdgeInsets.all(8.0),
         child: Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
+          decoration: BoxDecoration(color: MainColors.PRIMARY),
           child: new InkWell(
             onTap: click,
             child: Column(
@@ -25,13 +25,13 @@ class HomeScreen extends StatelessWidget {
                     child: Icon(
                   icon,
                   size: 40.0,
-                  color: Colors.black,
+                  color: MainColors.TEXT_NEGATIVE,
                 )),
                 SizedBox(height: 20.0),
                 new Center(
                   child: new Text(title,
-                      style:
-                          new TextStyle(fontSize: 18.0, color: Colors.black)),
+                      style: new TextStyle(
+                          fontSize: 18.0, color: MainColors.TEXT_NEGATIVE)),
                 ),
                 SizedBox(height: 50.0),
               ],
@@ -63,12 +63,13 @@ class HomeScreen extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.all(3.0),
         children: <Widget>[
-          makeDashboardItem(I18n().inserisciIncontro, Icons.book,
+          makeDashboardItem(I18n().inserisciIncontro, Icons.insert_invitation,
               () => {homeBloc.add(InserimentoIncontroEvent())}),
           makeDashboardItem(
-              I18n().modificaIncontro, Icons.alarm, _onModificaButtonPressed),
-          makeDashboardItem(I18n().inserisciFormazioneTipo, Icons.alarm,
+              I18n().modificaIncontro, Icons.edit, _onModificaButtonPressed),
+          makeDashboardItem(I18n().inserisciFormazioneTipo, Icons.people,
               _onFormazioneButtonPressed),
+          SizedBox(height: 180),
           Container(
             child: Center(
               child: new FlatButton(
