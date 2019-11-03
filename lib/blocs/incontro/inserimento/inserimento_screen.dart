@@ -429,9 +429,10 @@ class InserimentoScreenState extends State<InserimentoScreen>
                                 borderRadius: new BorderRadius.circular(30.0),
                               ),
                               color: MainColors.PRIMARY,
-                              onPressed: inserimentoBloc.selectedMatches != null
-                                  ? () => goToStep(4)
-                                  : null,
+                              onPressed:
+                                  inserimentoBloc.selectedCategories != null
+                                      ? () => goToStep(4)
+                                      : null,
                               padding: const EdgeInsets.symmetric(
                                 vertical: 20.0,
                                 horizontal: 20.0,
