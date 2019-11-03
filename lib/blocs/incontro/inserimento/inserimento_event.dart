@@ -22,3 +22,27 @@ class InserimentoFinishEvent extends InserimentoEvent {
     return 'InserimentoFinishEvent';
   }
 }
+
+class GetGendersEvent extends InserimentoEvent {
+  @override
+  String toString() {
+    return 'GetGendersEvent';
+  }
+}
+
+class GetChampionshipsEvent extends InserimentoEvent {
+  @override
+  String toString() {
+    return 'GetChampionshipsEvent';
+  }
+}
+
+class GetMatchesEvent extends InserimentoEvent {
+  @override
+  String toString() => 'GetMatchesEvent';
+}
+
+class GetCategoriesEvent extends InserimentoEvent {
+  @override
+  String toString() => 'GetCategoriesEvent';
+}

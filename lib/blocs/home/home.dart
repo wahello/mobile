@@ -103,15 +103,10 @@ class _HomeState extends State<Home> {
               body: BlocBuilder<HomeBloc, HomeState>(
                 builder: (BuildContext context, HomeState state) {
                   if (state is HomeInitialized) {
-                    return HomePage(
-                        userRepository: userRepository,
-                        callsRepository: callsRepository);
+                    return HomePage();
                   }
                   if (state is InserimentoIncontroState) {
-                    return InserimentoPage(
-                        notifyParent: updateAppBarTitle,
-                        userRepository: userRepository,
-                        callsRepository: callsRepository);
+                    return InserimentoPage(notifyParent: updateAppBarTitle);
                   }
                   return SplashPage();
                 },

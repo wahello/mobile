@@ -38,3 +38,40 @@ class InserimentoFinishState extends InserimentoState {
   @override
   String toString() => 'InserimentoFinishState';
 }
+
+class GetGendersState extends InserimentoState {
+  @override
+  String toString() => 'GetGendersState';
+}
+
+class GetChampionshipsState extends InserimentoState {
+  @override
+  String toString() => 'GetChampionshipsState';
+}
+
+class GetMatchesState extends InserimentoState {
+  final String selectedChampionships;
+
+  GetMatchesState({@required this.selectedChampionships})
+      : super([selectedChampionships]);
+
+  @override
+  String toString() =>
+      'GetMatchesState { selectedChampionships: $selectedChampionships }';
+}
+
+class GetCategoriesState extends InserimentoState {
+  final String selectedGender;
+  final String selectedChampionships;
+  final String selectedMatches;
+
+  GetCategoriesState(
+      {@required this.selectedGender,
+      @required this.selectedChampionships,
+      @required this.selectedMatches})
+      : super([selectedGender, selectedChampionships, selectedMatches]);
+
+  @override
+  String toString() =>
+      'GetCategoriesState { selectedGender: $selectedGender, selectedChampionships: $selectedChampionships, selectedMatches: $selectedMatches }';
+}
