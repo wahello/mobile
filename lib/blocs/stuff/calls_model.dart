@@ -90,3 +90,30 @@ class Category {
         'UpdatedAt': updatedAt
       };
 }
+
+class Tournament {
+  int id;
+  String name;
+  String createdAt;
+  String updatedAt;
+  String deletedAt;
+
+  Tournament(
+      this.id, this.name, this.createdAt, this.deletedAt, this.updatedAt);
+
+  Tournament.fromJson(Map<String, dynamic> json) {
+    this.id = json['ID'];
+    this.name = json['Name'];
+    this.createdAt = json['CreatedAt'];
+    this.deletedAt = json['DeletedAt'];
+    this.updatedAt = json['UpdatedAt'];
+  }
+
+  Map<String, dynamic> toJson() => {
+        'ID': id,
+        'Name': name,
+        'CreatedAt': createdAt,
+        'DeletedAt': deletedAt,
+        'UpdatedAt': updatedAt
+      };
+}

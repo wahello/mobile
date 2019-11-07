@@ -63,6 +63,16 @@ class CallsProvider {
     return _respAuth;
   }
 
+  Future<http.Response> tournaments(String inputTextValue) async {
+    final token = await CallsRepository().readKey('token');
+    http.Response _respAuth =
+        await http.get(Endpoints.domain + Endpoints.tournaments, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      HttpHeaders.authorizationHeader: token
+    });
+    return _respAuth;
+  }
+
   Future<http.Response> teams(String categoryId) async {
     final token = await CallsRepository().readKey('token');
     http.Response _respAuth = await http.get(

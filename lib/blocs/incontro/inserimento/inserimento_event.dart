@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 abstract class InserimentoEvent extends Equatable {
-  const InserimentoEvent();
+  const InserimentoEvent([List props = const []]) : super(props);
 }
 
 class InserimentoStarted extends InserimentoEvent {
@@ -45,4 +46,16 @@ class GetMatchesEvent extends InserimentoEvent {
 class GetCategoriesEvent extends InserimentoEvent {
   @override
   String toString() => 'GetCategoriesEvent';
+}
+
+class GetTournamentsEvent extends InserimentoEvent {
+  final String inputTextValue;
+
+  GetTournamentsEvent({
+    @required this.inputTextValue,
+  }) : super([inputTextValue]);
+
+  @override
+  String toString() =>
+      'GetTournamentsEvent { inputTextValue: $inputTextValue }';
 }

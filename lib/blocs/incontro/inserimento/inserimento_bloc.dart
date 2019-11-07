@@ -13,10 +13,12 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   List<Championship> championships;
   List<Gender> genders;
   List<Match> matches;
+  List<Tournament> tournaments = [];
   String selectedCategories;
   String selectedChampionships;
   String selectedGender;
   String selectedMatches;
+  String selectedTournament;
 
   @override
   InserimentoState get initialState => InitialInserimentoState();
@@ -123,6 +125,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
           selectedGender: selectedGender,
           selectedChampionships: selectedChampionships,
           selectedMatches: selectedMatches);
+      yield InserimentoLoadingState();
       try {
         final response = await callsRepository.getCategories(
             selectedGender, selectedChampionships, selectedMatches);
@@ -131,6 +134,27 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
           List<Category> categoriesList =
               list.map((match) => Category.fromJson(match)).toList();
           categories = categoriesList;
+        } else {
+          yield InserimentoFailure(
+              error: jsonDecode(response.reasonPhrase).toString());
+        }
+      } catch (error) {
+        yield InserimentoFailure(error: error.toString());
+      }
+      yield InserimentoFinishState();
+    }
+    if (event is GetTournamentsEvent) {
+      yield GetTournamentsState();
+      yield InserimentoLoadingState();
+      try {
+        final response =
+            await callsRepository.getTournaments(event.inputTextValue);
+        if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
+          var list = jsonDecode(response.body) as List;
+          List<Tournament> tournamentsList = list
+              .map((tournament) => Tournament.fromJson(tournament))
+              .toList();
+          tournaments = tournamentsList;
         } else {
           yield InserimentoFailure(
               error: jsonDecode(response.reasonPhrase).toString());

@@ -75,3 +75,8 @@ class GetCategoriesState extends InserimentoState {
   String toString() =>
       'GetCategoriesState { selectedGender: $selectedGender, selectedChampionships: $selectedChampionships, selectedMatches: $selectedMatches }';
 }
+
+class GetTournamentsState extends InserimentoState {
+  @override
+  String toString() => 'GetTournamentsState';
+}

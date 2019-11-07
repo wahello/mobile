@@ -34,8 +34,6 @@ class InserimentoScreenState extends State<InserimentoScreen>
     super.initState();
   }
 
-  void searchTrophy(value) async {}
-
   Widget firstStepScreen(state) {
     return Container(
         height: MediaQuery.of(context).size.height,
@@ -260,30 +258,39 @@ class InserimentoScreenState extends State<InserimentoScreen>
                           labelText: I18n().trophies,
                         ),
                         attribute: 'trophy',
-                        onChanged: (value) => {searchTrophy(value)},
+                        onChanged: (value) => {
+                          inserimentoBloc
+                              .add(GetTournamentsEvent(inputTextValue: value))
+                        },
                         onSuggestionSelected: (value) =>
-                            {inserimentoBloc.selectedCategories = value},
-                        itemBuilder: (context, category) {
+                            {inserimentoBloc.selectedTournament = value},
+                        itemBuilder: (context, Tournament suggestion) {
                           return ListTile(
-                            title: Text(category),
+                            title: Text(suggestion.name),
                           );
                         },
-                        suggestionsCallback: (query) {
-                          if (query.length != 0) {
-                            var lowercaseQuery = query.toLowerCase();
-                            return inserimentoBloc.categories.where((category) {
-                              return category.name
+                        selectionToTextTransformer: (Tournament suggestion) =>
+                            suggestion.name,
+                        suggestionsCallback: (value) {
+                          if (value.length != 0 &&
+                              inserimentoBloc.tournaments.length > 0) {
+                            var lowercaseQuery = value.toLowerCase();
+                            return inserimentoBloc.tournaments
+                                .where((tournament) {
+                              return tournament.name
                                   .toLowerCase()
                                   .contains(lowercaseQuery);
                             }).toList(growable: false)
-                              ..sort((a, b) => a.name
-                                  .toLowerCase()
-                                  .indexOf(lowercaseQuery)
-                                  .compareTo(b.name
+                                  ..sort((a, b) => a.name
                                       .toLowerCase()
-                                      .indexOf(lowercaseQuery)));
+                                      .indexOf(lowercaseQuery)
+                                      .compareTo(b.name
+                                          .toLowerCase()
+                                          .indexOf(lowercaseQuery)));
                           } else {
-                            return inserimentoBloc.categories;
+                            inserimentoBloc.add(
+                                GetTournamentsEvent(inputTextValue: value));
+                            return inserimentoBloc.tournaments;
                           }
                         },
                       )
@@ -461,16 +468,24 @@ class InserimentoScreenState extends State<InserimentoScreen>
 
   void goToStep(int step) {
     if (step == 0) {
-      inserimentoBloc.add(GetGendersEvent());
+      if (inserimentoBloc.genders == null) {
+        inserimentoBloc.add(GetGendersEvent());
+      }
     }
     if (step == 1) {
-      inserimentoBloc.add(GetChampionshipsEvent());
+      if (inserimentoBloc.championships == null) {
+        inserimentoBloc.add(GetChampionshipsEvent());
+      }
     }
     if (step == 2) {
-      inserimentoBloc.add(GetMatchesEvent());
+      if (inserimentoBloc.matches == null) {
+        inserimentoBloc.add(GetMatchesEvent());
+      }
     }
     if (step == 3) {
-      inserimentoBloc.add(GetCategoriesEvent());
+      if (inserimentoBloc.categories == null) {
+        inserimentoBloc.add(GetCategoriesEvent());
+      }
     }
     _controller.animateToPage(
       step,

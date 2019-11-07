@@ -75,6 +75,12 @@ class CallsRepository {
     return response;
   }
 
+  Future<dynamic> getTournaments(String inputTextValue) async {
+    final response = await callsProvider.tournaments(inputTextValue);
+    await Future.delayed(Duration(seconds: 1));
+    return response;
+  }
+
   Future<dynamic> getTeams(String categoryId) async {
     var response;
     var teams = await readKey('teams');
