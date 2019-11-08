@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/home/index.dart';
+import 'package:football_system/blocs/splash/index.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
+import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/generated/i18n.dart';
 import 'package:shared/shared.dart';
 
@@ -106,60 +108,60 @@ class _AppState extends State<App> {
       child: MaterialApp(
         home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (BuildContext context, AuthenticationState state) {
-            // if (state is AuthenticationUninitialized) {
-            //   return SplashPage();
-            // }
-            // if (state is AuthenticationUnauthenticated) {
-            //   return LoginPage(
-            //     callsRepository: callsRepository,
-            //     userRepository: userRepository,
-            //   );
-            // }
-            // if (state is AuthenticationLoading) {
-            //   return LoadingIndicator();
-            // }
-            // if (state is OTPRequired) {
-            //   return OTPPage(
-            //     loginBloc: loginBloc,
-            //   );
-            // }
-            // if (state is AuthenticationAuthenticated) {
-            //   return Scaffold(
-            //       appBar: AppBar(
-            //         title: appBarTitleText,
-            //         backgroundColor: MainColors.PRIMARY,
-            //       ),
-            //       body: Container(
-            //           height: MediaQuery.of(context).size.height,
-            //           decoration: BoxDecoration(
-            //             color: MainColors.SECONDARY,
-            //           ),
-            //           child: Container(
-            //               padding: EdgeInsets.all(3.0),
-            //               child: Home(
-            //                 notifyParent: updateAppBarTitle,
-            //                 callsRepository: callsRepository,
-            //                 userRepository: userRepository,
-            //               ))));
-            // }
-            // return SplashPage();
-            return Scaffold(
-                appBar: AppBar(
-                  title: appBarTitleText,
-                  backgroundColor: MainColors.PRIMARY,
-                ),
-                body: Container(
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      color: MainColors.SECONDARY,
-                    ),
-                    child: Container(
-                        padding: EdgeInsets.all(3.0),
-                        child: Home(
-                          notifyParent: updateAppBarTitle,
-                          callsRepository: callsRepository,
-                          userRepository: userRepository,
-                        ))));
+            if (state is AuthenticationUninitialized) {
+              return SplashPage();
+            }
+            if (state is AuthenticationUnauthenticated) {
+              return LoginPage(
+                callsRepository: callsRepository,
+                userRepository: userRepository,
+              );
+            }
+            if (state is AuthenticationLoading) {
+              return LoadingIndicator();
+            }
+            if (state is OTPRequired) {
+              return OTPPage(
+                loginBloc: loginBloc,
+              );
+            }
+            if (state is AuthenticationAuthenticated) {
+              return Scaffold(
+                  appBar: AppBar(
+                    title: appBarTitleText,
+                    backgroundColor: MainColors.PRIMARY,
+                  ),
+                  body: Container(
+                      height: MediaQuery.of(context).size.height,
+                      decoration: BoxDecoration(
+                        color: MainColors.SECONDARY,
+                      ),
+                      child: Container(
+                          padding: EdgeInsets.all(3.0),
+                          child: Home(
+                            notifyParent: updateAppBarTitle,
+                            callsRepository: callsRepository,
+                            userRepository: userRepository,
+                          ))));
+            }
+            return SplashPage();
+            // return Scaffold(
+            //     appBar: AppBar(
+            //       title: appBarTitleText,
+            //       backgroundColor: MainColors.PRIMARY,
+            //     ),
+            //     body: Container(
+            //         height: MediaQuery.of(context).size.height,
+            //         decoration: BoxDecoration(
+            //           color: MainColors.SECONDARY,
+            //         ),
+            //         child: Container(
+            //             padding: EdgeInsets.all(3.0),
+            //             child: Home(
+            //               notifyParent: updateAppBarTitle,
+            //               callsRepository: callsRepository,
+            //               userRepository: userRepository,
+            //             ))));
           },
         ),
       ),
