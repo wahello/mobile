@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:football_system/blocs/stuff/index.dart';
@@ -461,7 +462,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
         ]));
   }
 
-  Widget teamScreen(state) {
+  Widget teamScreen(homeBloc, state) {
     return inserimentoBloc.incontro == null
         ? Container(
             height: MediaQuery.of(context).size.height,
@@ -583,10 +584,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                   )
                 ],
               ),
-              Divider(
-                height: 24.0,
-                color: Color.fromRGBO(255, 255, 255, 0),
-              ),
+              SizedBox(height: 24),
               inserimentoBloc.incontro.gender != null
                   ? Row(
                       children: <Widget>[
@@ -608,7 +606,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     )
                   : new Container(),
               inserimentoBloc.incontro.gender != null
-                  ? Divider(height: 24.0)
+                  ? SizedBox(height: 24)
                   : new Container(),
               inserimentoBloc.incontro.championship != null
                   ? Row(
@@ -631,7 +629,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     )
                   : new Container(),
               inserimentoBloc.incontro.championship != null
-                  ? Divider(height: 24.0)
+                  ? SizedBox(height: 24)
                   : new Container(),
               inserimentoBloc.incontro.match != null
                   ? Row(
@@ -654,7 +652,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     )
                   : new Container(),
               inserimentoBloc.incontro.match != null
-                  ? Divider(height: 24.0)
+                  ? SizedBox(height: 24)
                   : new Container(),
               inserimentoBloc.incontro.tournament != null
                   ? Row(
@@ -677,7 +675,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     )
                   : new Container(),
               inserimentoBloc.incontro.tournament != null
-                  ? Divider(height: 24.0)
+                  ? SizedBox(height: 24)
                   : new Container(),
               inserimentoBloc.incontro.category != null
                   ? Row(
@@ -699,6 +697,38 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       ],
                     )
                   : new Container(),
+              SizedBox(height: 50),
+              Container(
+                child: Center(
+                  child: new FlatButton(
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0),
+                    ),
+                    color: MainColors.PRIMARY,
+                    onPressed: () => {homeBloc.add(HomeStarted())},
+                    child: new Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20.0,
+                        horizontal: 20.0,
+                      ),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new Expanded(
+                            child: Text(
+                              I18n().homePage,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: MainColors.TEXT_NEGATIVE,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Spacer(),
             ]),
           );
@@ -745,8 +775,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _body({HomeBloc homeBloc, BuildContext context}) {
     return BlocBuilder<InserimentoBloc, InserimentoState>(
         bloc: inserimentoBloc,
         builder: (
@@ -775,10 +804,15 @@ class InserimentoScreenState extends State<InserimentoScreen>
                   championshipScreen(state),
                   matchScreen(state),
                   categoryScreen(state),
-                  teamScreen(state)
+                  teamScreen(homeBloc, state)
                 ],
                 scrollDirection: Axis.horizontal,
               ));
         });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _body(homeBloc: BlocProvider.of<HomeBloc>(context));
   }
 }

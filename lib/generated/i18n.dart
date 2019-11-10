@@ -102,6 +102,8 @@ class I18n implements WidgetsLocalizations {
   String get inserisciFormazioneTipo => "Inserisci formazione tipo";
   /// "Questo campo non può essere vuoto."
   String get obbligatorio => "Questo campo non può essere vuoto.";
+  /// "Torna alla home"
+  String get homePage => "Torna alla home";
 }
 
 class _I18n_it_IT extends I18n {

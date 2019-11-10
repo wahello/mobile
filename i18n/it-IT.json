@@ -33,5 +33,6 @@
     "incontroInserito": "Incontro inserito",
     "modificaIncontro": "Modifica incontro",
     "inserisciFormazioneTipo": "Inserisci formazione tipo",
-    "obbligatorio": "Questo campo non può essere vuoto."
+    "obbligatorio": "Questo campo non può essere vuoto.",
+    "homePage": "Torna alla home"
 }
