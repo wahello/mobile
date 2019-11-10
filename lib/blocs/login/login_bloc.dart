@@ -42,10 +42,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           Map tokenMap = jsonDecode(response.body);
           var token = Token.fromJson(tokenMap);
           await callsRepository.persistKey('token', 'Bearer ' + token.token);
-          // TODO: ripristinare OTP
-          authenticationBloc.add(LoggedIn());
-          // authenticationBloc.add(OTP(token: token.token));
-          // yield OTPInitial();
+          authenticationBloc.add(OTP(token: token.token));
+          yield OTPInitial();
         } else {
           yield LoginFailure(
               error: jsonDecode(response.reasonPhrase).toString());
@@ -120,9 +118,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await callsRepository.persistKey('username', event.username);
         await callsRepository.persistKey('newpassword', event.password);
         var token = await callsRepository.readKey('token');
-        // TODO: ripristinare OTP
-        authenticationBloc.add(LoggedIn());
-        // authenticationBloc.add(OTP(token: token));
+        authenticationBloc.add(OTP(token: token));
       } catch (error) {
         yield LoginFailure(error: error.toString());
       }
