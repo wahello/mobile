@@ -34,7 +34,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
     super.initState();
   }
 
-  Widget firstStepScreen(state) {
+  Widget genderScreen(state) {
     return Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -117,7 +117,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
         ]));
   }
 
-  Widget secondStepScreen(state) {
+  Widget championshipScreen(state) {
     return Container(
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
@@ -217,7 +217,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
         ]));
   }
 
-  Widget thirdStepScreen(state) {
+  Widget matchScreen(state) {
     return Container(
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
@@ -360,7 +360,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
         ]));
   }
 
-  Widget fourthStepScreen(state) {
+  Widget categoryScreen(state) {
     return Container(
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
@@ -460,6 +460,104 @@ class InserimentoScreenState extends State<InserimentoScreen>
         ]));
   }
 
+  Widget teamScreen(state) {
+    return Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          color: MainColors.SECONDARY,
+        ),
+        padding: const EdgeInsets.only(left: 60.0, right: 60.0),
+        child: Column(children: <Widget>[
+          Spacer(),
+          FormBuilder(
+              autovalidate: true,
+              child: Column(children: <Widget>[
+                FormBuilderDropdown(
+                  readOnly:
+                      inserimentoBloc.selectedCategories != null ? false : true,
+                  onChanged: (value) => {inserimentoBloc.selectedTeam = value},
+                  attribute: "team",
+                  decoration: InputDecoration(labelText: I18n().teams),
+                  initialValue: inserimentoBloc.teams != null
+                      ? inserimentoBloc.selectedTeam
+                      : null,
+                  hint: Text(I18n().selectTeam),
+                  validators: [
+                    FormBuilderValidators.required(
+                        errorText: I18n().obbligatorio)
+                  ],
+                  items: inserimentoBloc.teams != null
+                      ? inserimentoBloc.teams
+                          .map((team) => DropdownMenuItem(
+                              value: team.id.toString(),
+                              child: Text(team.name.toString())))
+                          .toList()
+                      : [],
+                ),
+                state is InserimentoLoadingState
+                    ? Container(
+                        margin: const EdgeInsets.only(top: 20.0),
+                        child: LoadingIndicator(),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            margin: const EdgeInsets.only(top: 20.0),
+                            alignment: Alignment.centerLeft,
+                            child: FlatButton(
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0),
+                              ),
+                              color: MainColors.PRIMARY,
+                              onPressed: () => goToStep(3),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20.0,
+                                horizontal: 20.0,
+                              ),
+                              child: Text(
+                                I18n().indietro,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: MainColors.TEXT_NEGATIVE,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            margin: const EdgeInsets.only(top: 20.0),
+                            alignment: Alignment.centerRight,
+                            child: FlatButton(
+                              disabledColor: MainColors.DISABLED,
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0),
+                              ),
+                              color: MainColors.PRIMARY,
+                              onPressed: inserimentoBloc.selectedTeam != null
+                                  ? () => goToStep(5)
+                                  : null,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20.0,
+                                horizontal: 20.0,
+                              ),
+                              child: Text(
+                                I18n().avanti,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: MainColors.TEXT_NEGATIVE,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+              ])),
+          Spacer(),
+        ]));
+  }
+
   void _onWidgetDidBuild(Function callback) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       callback();
@@ -468,23 +566,28 @@ class InserimentoScreenState extends State<InserimentoScreen>
 
   void goToStep(int step) {
     if (step == 0) {
-      if (inserimentoBloc.genders == null) {
+      if (inserimentoBloc.genders.isEmpty) {
         inserimentoBloc.add(GetGendersEvent());
       }
     }
     if (step == 1) {
-      if (inserimentoBloc.championships == null) {
+      if (inserimentoBloc.championships.isEmpty) {
         inserimentoBloc.add(GetChampionshipsEvent());
       }
     }
     if (step == 2) {
-      if (inserimentoBloc.matches == null) {
+      if (inserimentoBloc.matches.isEmpty) {
         inserimentoBloc.add(GetMatchesEvent());
       }
     }
     if (step == 3) {
-      if (inserimentoBloc.categories == null) {
+      if (inserimentoBloc.categories.isEmpty) {
         inserimentoBloc.add(GetCategoriesEvent());
+      }
+    }
+    if (step == 4) {
+      if (inserimentoBloc.teams.isEmpty) {
+        inserimentoBloc.add(GetTeamsEvent());
       }
     }
     _controller.animateToPage(
@@ -520,10 +623,11 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 controller: _controller,
                 physics: new AlwaysScrollableScrollPhysics(),
                 children: <Widget>[
-                  firstStepScreen(state),
-                  secondStepScreen(state),
-                  thirdStepScreen(state),
-                  fourthStepScreen(state)
+                  genderScreen(state),
+                  championshipScreen(state),
+                  matchScreen(state),
+                  categoryScreen(state),
+                  teamScreen(state)
                 ],
                 scrollDirection: Axis.horizontal,
               ));

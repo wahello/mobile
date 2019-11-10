@@ -48,6 +48,11 @@ class GetCategoriesEvent extends InserimentoEvent {
   String toString() => 'GetCategoriesEvent';
 }
 
+class GetTeamsEvent extends InserimentoEvent {
+  @override
+  String toString() => 'GetTeamsEvent';
+}
+
 class GetTournamentsEvent extends InserimentoEvent {
   final String inputTextValue;
 

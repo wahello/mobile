@@ -76,7 +76,11 @@ class CallsProvider {
   Future<http.Response> teams(String categoryId) async {
     final token = await CallsRepository().readKey('token');
     http.Response _respAuth = await http.get(
-        Endpoints.domain + Endpoints.categories + categoryId + Endpoints.teams,
+        Endpoints.domain +
+            Endpoints.categories +
+            '/' +
+            categoryId +
+            Endpoints.teams,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           HttpHeaders.authorizationHeader: token

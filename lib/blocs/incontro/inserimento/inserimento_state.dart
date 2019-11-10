@@ -49,6 +49,11 @@ class GetChampionshipsState extends InserimentoState {
   String toString() => 'GetChampionshipsState';
 }
 
+class GetTeamsState extends InserimentoState {
+  @override
+  String toString() => 'GetTeamsState';
+}
+
 class GetMatchesState extends InserimentoState {
   final String selectedChampionships;
 

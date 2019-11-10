@@ -14,11 +14,13 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   List<Gender> genders;
   List<Match> matches;
   List<Tournament> tournaments = [];
+  List<Team> teams;
   String selectedCategories;
   String selectedChampionships;
   String selectedGender;
   String selectedMatches;
   String selectedTournament;
+  String selectedTeam;
 
   @override
   InserimentoState get initialState => InitialInserimentoState();
@@ -155,6 +157,25 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
               .map((tournament) => Tournament.fromJson(tournament))
               .toList();
           tournaments = tournamentsList;
+        } else {
+          yield InserimentoFailure(
+              error: jsonDecode(response.reasonPhrase).toString());
+        }
+      } catch (error) {
+        yield InserimentoFailure(error: error.toString());
+      }
+      yield InserimentoFinishState();
+    }
+    if (event is GetTeamsEvent) {
+      yield GetTeamsState();
+      yield InserimentoLoadingState();
+      try {
+        final response = await callsRepository.getTeams(selectedCategories);
+        if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
+          var list = jsonDecode(response.body) as List;
+          List<Team> teamsList =
+              list.map((team) => Team.fromJson(team)).toList();
+          teams = teamsList;
         } else {
           yield InserimentoFailure(
               error: jsonDecode(response.reasonPhrase).toString());
