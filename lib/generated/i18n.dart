@@ -56,24 +56,36 @@ class I18n implements WidgetsLocalizations {
   String get avanti => "AVANTI";
   /// "INDIETRO"
   String get indietro => "INDIETRO";
+  /// "Genere: "
+  String get gender => "Genere: ";
   /// "Generi"
   String get genders => "Generi";
   /// "Seleziona genere"
   String get selectGender => "Seleziona genere";
+  /// "Campionato: "
+  String get championship => "Campionato: ";
   /// "Campionati"
   String get championships => "Campionati";
   /// "Seleziona campionato"
   String get selectChampionship => "Seleziona campionato";
+  /// "Incontro: "
+  String get match => "Incontro: ";
   /// "Incontri"
   String get matches => "Incontri";
   /// "Seleziona incontro"
   String get selectMatch => "Seleziona incontro";
+  /// "Trofeo: "
+  String get trophy => "Trofeo: ";
   /// "Trofei"
   String get trophies => "Trofei";
+  /// "Categoria: "
+  String get category => "Categoria: ";
   /// "Categorie"
   String get categories => "Categorie";
   /// "Seleziona categoria"
   String get selectCategory => "Seleziona categoria";
+  /// "Squadra: "
+  String get team => "Squadra: ";
   /// "Squadre"
   String get teams => "Squadre";
   /// "Seleziona squadra"
@@ -82,6 +94,8 @@ class I18n implements WidgetsLocalizations {
   String get inserimentoIncontro => "Inserimento incontro";
   /// "Inserisci incontro"
   String get inserisciIncontro => "Inserisci incontro";
+  /// "Incontro inserito"
+  String get incontroInserito => "Incontro inserito";
   /// "Modifica incontro"
   String get modificaIncontro => "Modifica incontro";
   /// "Inserisci formazione tipo"

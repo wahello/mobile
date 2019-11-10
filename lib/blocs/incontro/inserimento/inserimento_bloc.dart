@@ -2,7 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:football_system/blocs/stuff/category_model.dart';
+import 'package:football_system/blocs/stuff/championship_model.dart';
+import 'package:football_system/blocs/stuff/gender_model.dart';
+import 'package:football_system/blocs/stuff/incontro_model.dart';
 import 'package:football_system/blocs/stuff/index.dart';
+import 'package:football_system/blocs/stuff/match_model.dart' as prefix0;
+import 'package:football_system/blocs/stuff/team_model.dart';
+import 'package:football_system/blocs/stuff/tournament_model.dart';
 
 import './index.dart';
 
@@ -12,7 +19,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   List<Category> categories;
   List<Championship> championships;
   List<Gender> genders;
-  List<Match> matches;
+  List<prefix0.Match> matches;
   List<Tournament> tournaments = [];
   List<Team> teams;
   String selectedCategories;
@@ -21,6 +28,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   String selectedMatches;
   String selectedTournament;
   String selectedTeam;
+  Incontro incontro;
 
   @override
   InserimentoState get initialState => InitialInserimentoState();
@@ -110,8 +118,8 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
             await callsRepository.getMatches(selectedChampionships);
         if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
           var list = jsonDecode(response.body) as List;
-          List<Match> matchesList =
-              list.map((match) => Match.fromJson(match)).toList();
+          List<prefix0.Match> matchesList =
+              list.map((match) => prefix0.Match.fromJson(match)).toList();
           matches = matchesList;
         } else {
           yield InserimentoFailure(
@@ -176,6 +184,49 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
           List<Team> teamsList =
               list.map((team) => Team.fromJson(team)).toList();
           teams = teamsList;
+          if (teams.length < 1) {
+            incontro = new Incontro(
+                new Gender(
+                    int.parse(selectedGender),
+                    genders
+                        .singleWhere(
+                            (gender) => gender.id.toString() == selectedGender)
+                        .name),
+                new Category(
+                    int.parse(selectedCategories),
+                    categories
+                        .singleWhere((category) =>
+                            category.id.toString() == selectedCategories)
+                        .name),
+                new Championship(
+                    int.parse(selectedChampionships),
+                    championships
+                        .singleWhere((championship) =>
+                            championship.id.toString() == selectedChampionships)
+                        .name),
+                new prefix0.Match(
+                    int.parse(selectedMatches),
+                    matches
+                        .singleWhere(
+                            (match) => match.id.toString() == selectedMatches)
+                        .name),
+                selectedMatches == '2'
+                    ? new Tournament(
+                        int.parse(selectedTournament),
+                        tournaments
+                            .singleWhere((tournament) =>
+                                tournament.id.toString() == selectedTournament)
+                            .name)
+                    : null,
+                selectedTeam != null
+                    ? new Team(
+                        int.parse(selectedTeam),
+                        teams
+                            .singleWhere(
+                                (team) => team.id.toString() == selectedTeam)
+                            .name)
+                    : null);
+          }
         } else {
           yield InserimentoFailure(
               error: jsonDecode(response.reasonPhrase).toString());
