@@ -1,60 +1,40 @@
 import 'package:flutter/material.dart';
 
-class FootballField extends StatefulWidget {
-  FootballField({Key key, this.title}) : super(key: key);
+import 'module433.dart';
+import 'module442.dart';
 
-  final String title;
+class FootballField extends StatefulWidget {
+  String formazione;
+
+  FootballField({this.formazione});
 
   @override
-  _FootballFieldState createState() => _FootballFieldState();
+  _FootballFieldState createState() {
+    return _FootballFieldState();
+  }
 }
 
 class _FootballFieldState extends State<FootballField> {
+  Widget module;
+
   @override
   Widget build(BuildContext context) {
+    if (widget.formazione == '4-4-2') {
+      module = Module442();
+    } else if (widget.formazione == '4-3-3') {
+      module = Module433();
+    }
     return Scaffold(
         body: Center(
+            child: Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/A1QA94rgGUL._AC_SY879_.jpg'))),
       child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/A1QA94rgGUL._AC_SY879_.jpg'))),
-          child: Container(
-              margin: EdgeInsets.only(top: 180),
-              padding: EdgeInsets.all(25),
-              child: Stack(
-                children: <Widget>[
-                  GridView.count(
-                    crossAxisCount: 9,
-                    children: List.generate(
-                      8 * 9,
-                      (_) => DragTarget(builder: (BuildContext context,
-                          List candidateData, List rejectedData) {
-                        return Container(
-                            margin: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              shape: BoxShape.rectangle,
-                            ));
-                      }),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 250),
-                    child: Center(
-                      child: DragTarget(builder: (BuildContext context,
-                          List candidateData, List rejectedData) {
-                        return Container(
-                            width: 25,
-                            height: 25,
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              shape: BoxShape.rectangle,
-                            ));
-                      }),
-                    ),
-                  ),
-                ],
-              ))),
-    ));
+        margin: EdgeInsets.only(top: 50),
+        padding: EdgeInsets.all(25),
+        child: module,
+      ),
+    )));
   }
 }
