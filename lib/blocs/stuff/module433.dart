@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'custom_icon/soccerplayer_icons.dart';
+import 'package:football_system/custom_icon/soccerplayer_icons.dart';
 
 class Module433 extends StatefulWidget {
   @override

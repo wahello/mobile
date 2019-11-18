@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:footballfield/custom_icon/soccerplayer_icons.dart';
+import 'package:football_system/custom_icon/soccerplayer_icons.dart';
 
 import 'field.dart';
 
