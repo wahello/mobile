@@ -285,7 +285,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
               coaches
                   .singleWhere((coach) => coach.id.toString() == selectedCoach)
                   .name),
-        ).toJson();
+        );
       } catch (error) {
         yield InserimentoFailure(error: error.toString());
       }
