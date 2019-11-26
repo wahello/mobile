@@ -85,3 +85,18 @@ class GetTournamentsState extends InserimentoState {
   @override
   String toString() => 'GetTournamentsState';
 }
+
+class GetPlayersState extends InserimentoState {
+  @override
+  String toString() => 'GetPlayersState';
+}
+
+class GetCoachesState extends InserimentoState {
+  @override
+  String toString() => 'GetCoachesState';
+}
+
+class IncontroInseritoState extends InserimentoState {
+  @override
+  String toString() => 'IncontroInseritoState';
+}

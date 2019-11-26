@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
+import 'package:football_system/blocs/model/tournament_model.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:football_system/blocs/stuff/index.dart';
-import 'package:football_system/blocs/stuff/tournament_model.dart';
 import 'package:football_system/generated/i18n.dart';
 import 'package:shared/shared.dart';
 
@@ -23,6 +23,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
   InserimentoBloc inserimentoBloc = new InserimentoBloc();
   CallsRepository callsRepository = new CallsRepository();
 
+  final GlobalKey<FormBuilderState> playerKey = GlobalKey<FormBuilderState>();
   final _controller = PageController();
 
   @override
@@ -462,109 +463,221 @@ class InserimentoScreenState extends State<InserimentoScreen>
         ]));
   }
 
-  Widget teamScreen(homeBloc, state) {
-    return inserimentoBloc.incontro == null
-        ? Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              color: MainColors.SECONDARY,
-            ),
-            padding: const EdgeInsets.only(left: 60.0, right: 60.0),
-            child: Column(children: <Widget>[
-              Spacer(),
-              FormBuilder(
-                  autovalidate: true,
-                  child: Column(children: <Widget>[
-                    FormBuilderDropdown(
-                      readOnly: inserimentoBloc.selectedCategories != null
-                          ? false
-                          : true,
-                      onChanged: (value) =>
-                          {inserimentoBloc.selectedTeam = value},
-                      attribute: "team",
-                      decoration: InputDecoration(labelText: I18n().teams),
-                      initialValue: inserimentoBloc.teams != null
-                          ? inserimentoBloc.selectedTeam
-                          : null,
-                      hint: Text(I18n().selectTeam),
-                      validators: [
-                        FormBuilderValidators.required(
-                            errorText: I18n().obbligatorio)
-                      ],
-                      items: inserimentoBloc.teams != null
-                          ? inserimentoBloc.teams
-                              .map((team) => DropdownMenuItem(
-                                  value: team.id.toString(),
-                                  child: Text(team.name.toString())))
-                              .toList()
-                          : [],
-                    ),
-                    state is InserimentoLoadingState
-                        ? Container(
+  Widget teamScreen(state) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        color: MainColors.SECONDARY,
+      ),
+      padding: const EdgeInsets.only(left: 60.0, right: 60.0),
+      child: Column(
+        children: <Widget>[
+          Spacer(),
+          FormBuilder(
+              autovalidate: true,
+              child: Column(children: <Widget>[
+                FormBuilderDropdown(
+                  onChanged: (value) => {inserimentoBloc.selectedTeam = value},
+                  attribute: "team",
+                  decoration: InputDecoration(labelText: I18n().teams),
+                  initialValue: inserimentoBloc.teams != null
+                      ? inserimentoBloc.selectedTeam
+                      : null,
+                  hint: Text(I18n().selectTeam),
+                  validators: [
+                    FormBuilderValidators.required(
+                        errorText: I18n().obbligatorio)
+                  ],
+                  items: inserimentoBloc.teams != null
+                      ? inserimentoBloc.teams
+                          .map((team) => DropdownMenuItem(
+                              value: team.id.toString(),
+                              child: Text(team.name.toString())))
+                          .toList()
+                      : [],
+                ),
+                state is InserimentoLoadingState
+                    ? Container(
+                        margin: const EdgeInsets.only(top: 20.0),
+                        child: LoadingIndicator(),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
                             margin: const EdgeInsets.only(top: 20.0),
-                            child: LoadingIndicator(),
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                width: MediaQuery.of(context).size.width / 3,
-                                margin: const EdgeInsets.only(top: 20.0),
-                                alignment: Alignment.centerLeft,
-                                child: FlatButton(
-                                  shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(30.0),
-                                  ),
-                                  color: MainColors.PRIMARY,
-                                  onPressed: () => goToStep(3),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 20.0,
-                                    horizontal: 20.0,
-                                  ),
-                                  child: Text(
-                                    I18n().indietro,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: MainColors.TEXT_NEGATIVE,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
+                            alignment: Alignment.centerLeft,
+                            child: FlatButton(
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0),
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width / 3,
-                                margin: const EdgeInsets.only(top: 20.0),
-                                alignment: Alignment.centerRight,
-                                child: FlatButton(
-                                  disabledColor: MainColors.DISABLED,
-                                  shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(30.0),
-                                  ),
-                                  color: MainColors.PRIMARY,
-                                  onPressed:
-                                      inserimentoBloc.selectedTeam != null
-                                          ? () => goToStep(5)
-                                          : null,
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 20.0,
-                                    horizontal: 20.0,
-                                  ),
-                                  child: Text(
-                                    I18n().avanti,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: MainColors.TEXT_NEGATIVE,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
+                              color: MainColors.PRIMARY,
+                              onPressed: () => goToStep(3),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20.0,
+                                horizontal: 20.0,
                               ),
-                            ],
-                          )
-                  ])),
-              Spacer(),
-            ]))
-        : Container(
+                              child: Text(
+                                I18n().indietro,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: MainColors.TEXT_NEGATIVE,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            margin: const EdgeInsets.only(top: 20.0),
+                            alignment: Alignment.centerRight,
+                            child: FlatButton(
+                              disabledColor: MainColors.DISABLED,
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0),
+                              ),
+                              color: MainColors.PRIMARY,
+                              onPressed: inserimentoBloc.selectedTeam != null
+                                  ? () => goToStep(5)
+                                  : null,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20.0,
+                                horizontal: 20.0,
+                              ),
+                              child: Text(
+                                I18n().avanti,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: MainColors.TEXT_NEGATIVE,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+              ])),
+          Spacer(),
+        ],
+      ),
+    );
+  }
+
+  Widget playersScreen(state) {
+    return Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          color: MainColors.SECONDARY,
+        ),
+        padding: const EdgeInsets.only(left: 60.0, right: 60.0),
+        child: Column(children: <Widget>[
+          Spacer(),
+          FormBuilder(
+              key: playerKey,
+              autovalidate: true,
+              child: Column(children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: <Widget>[
+                      FormBuilderCheckboxList(
+                        activeColor: MainColors.PRIMARY,
+                        decoration: InputDecoration(labelText: I18n().players),
+                        attribute: "players",
+                        initialValue: inserimentoBloc.players != null
+                            ? inserimentoBloc.selectedPlayers
+                            : null,
+                        options: inserimentoBloc.players != null
+                            ? inserimentoBloc.players
+                                .map((player) => FormBuilderFieldOption(
+                                    value: player.id.toString(),
+                                    child: Text(player.name.toString())))
+                                .toList()
+                            : [],
+                        validators: [
+                          FormBuilderValidators.required(
+                              errorText: I18n().obbligatorio)
+                        ],
+                        onChanged: (value) => {
+                          inserimentoBloc.selectedPlayers = playerKey
+                              .currentState.fields['players'].currentState.value
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                state is InserimentoLoadingState
+                    ? Container(
+                        margin: const EdgeInsets.only(top: 20.0),
+                        child: LoadingIndicator(),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            margin: const EdgeInsets.only(top: 20.0),
+                            alignment: Alignment.centerLeft,
+                            child: FlatButton(
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0),
+                              ),
+                              color: MainColors.PRIMARY,
+                              onPressed: () => goToStep(4),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20.0,
+                                horizontal: 20.0,
+                              ),
+                              child: Text(
+                                I18n().indietro,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: MainColors.TEXT_NEGATIVE,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            margin: const EdgeInsets.only(top: 20.0),
+                            alignment: Alignment.centerRight,
+                            child: FlatButton(
+                              disabledColor: MainColors.DISABLED,
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0),
+                              ),
+                              color: MainColors.PRIMARY,
+                              onPressed: () {
+                                goToStep(7);
+                              },
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20.0,
+                                horizontal: 20.0,
+                              ),
+                              child: Text(
+                                // I18n().avanti,
+                                inserimentoBloc.selectedPlayers.toString(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: MainColors.TEXT_NEGATIVE,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+              ])),
+          Spacer(),
+        ]));
+  }
+
+  Widget coachesScreen(state) {
+    // goToStep(7);
+  }
+
+  Widget incontroScreen(homeBloc, state) {
+    return inserimentoBloc.incontro != null
+        ? Container(
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               color: MainColors.SECONDARY,
@@ -697,6 +810,20 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       ],
                     )
                   : new Container(),
+              inserimentoBloc.incontro.players != null
+                  ? Row(
+                      children: <Widget>[
+                        Text(
+                          I18n().category,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: MainColors.PRIMARY,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        getTextWidgets(inserimentoBloc.incontro.players),
+                      ],
+                    )
+                  : new Container(),
               SizedBox(height: 50),
               Container(
                 child: Center(
@@ -731,7 +858,22 @@ class InserimentoScreenState extends State<InserimentoScreen>
               ),
               Spacer(),
             ]),
-          );
+          )
+        : new Container();
+  }
+
+  Widget getTextWidgets(dynamic elements) {
+    return new Row(
+        children: elements
+            .map(
+              (item) => new Text(
+                item.name,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    color: MainColors.TEXT, fontWeight: FontWeight.normal),
+              ),
+            )
+            .toList());
   }
 
   void _onWidgetDidBuild(Function callback) {
@@ -766,6 +908,21 @@ class InserimentoScreenState extends State<InserimentoScreen>
     if (step == 4) {
       if (inserimentoBloc.teams == null || inserimentoBloc.teams.isEmpty) {
         inserimentoBloc.add(GetTeamsEvent());
+      }
+    }
+    if (step == 5) {
+      if (inserimentoBloc.players == null || inserimentoBloc.players.isEmpty) {
+        inserimentoBloc.add(GetPlayersEvent());
+      }
+    }
+    if (step == 6) {
+      if (inserimentoBloc.coaches == null || inserimentoBloc.coaches.isEmpty) {
+        inserimentoBloc.add(GetCoachesEvent());
+      }
+    }
+    if (step == 7) {
+      if (inserimentoBloc.incontro == null) {
+        inserimentoBloc.add(IncontroInseritoEvent());
       }
     }
     _controller.animateToPage(
@@ -804,7 +961,10 @@ class InserimentoScreenState extends State<InserimentoScreen>
                   championshipScreen(state),
                   matchScreen(state),
                   categoryScreen(state),
-                  teamScreen(homeBloc, state)
+                  teamScreen(state),
+                  playersScreen(state),
+                  coachesScreen(state),
+                  incontroScreen(homeBloc, state)
                 ],
                 scrollDirection: Axis.horizontal,
               ));

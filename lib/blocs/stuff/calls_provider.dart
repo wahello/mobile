@@ -91,7 +91,7 @@ class CallsProvider {
   Future<http.Response> players(String teamId) async {
     final token = await CallsRepository().readKey('token');
     http.Response _respAuth = await http.get(
-        Endpoints.domain + Endpoints.teams + teamId + Endpoints.players,
+        Endpoints.domain + Endpoints.teams + "/" + teamId + Endpoints.players,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           HttpHeaders.authorizationHeader: token
@@ -102,7 +102,7 @@ class CallsProvider {
   Future<http.Response> coaches(String teamId) async {
     final token = await CallsRepository().readKey('token');
     http.Response _respAuth = await http.get(
-        Endpoints.domain + Endpoints.teams + teamId + Endpoints.coaches,
+        Endpoints.domain + Endpoints.teams + "/" + teamId + Endpoints.coaches,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           HttpHeaders.authorizationHeader: token
@@ -115,6 +115,7 @@ class CallsProvider {
     http.Response _respAuth = await http.get(
         Endpoints.domain +
             Endpoints.categories +
+            "/" +
             categoryId +
             Endpoints.tactics,
         headers: {
