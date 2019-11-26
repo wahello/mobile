@@ -922,7 +922,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
     }
     if (step == 7) {
       if (inserimentoBloc.incontro == null) {
-        inserimentoBloc.add(IncontroInseritoEvent());
+        inserimentoBloc.add(InserisciIncontroEvent());
       }
     }
     _controller.animateToPage(

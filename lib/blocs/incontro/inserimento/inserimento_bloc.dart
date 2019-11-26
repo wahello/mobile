@@ -237,8 +237,8 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       }
       yield InserimentoFinishState();
     }
-    if (event is IncontroInseritoEvent) {
-      yield IncontroInseritoState();
+    if (event is InserisciIncontroEvent) {
+      yield InserisciIncontroState();
       try {
         incontro = new Incontro(
           new Gender(

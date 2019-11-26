@@ -96,7 +96,7 @@ class GetCoachesState extends InserimentoState {
   String toString() => 'GetCoachesState';
 }
 
-class IncontroInseritoState extends InserimentoState {
+class InserisciIncontroState extends InserimentoState {
   @override
-  String toString() => 'IncontroInseritoState';
+  String toString() => 'InserisciIncontroState';
 }

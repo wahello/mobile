@@ -75,7 +75,7 @@ class GetCoachesEvent extends InserimentoEvent {
   String toString() => 'GetCoachesEvent';
 }
 
-class IncontroInseritoEvent extends InserimentoEvent {
+class InserisciIncontroEvent extends InserimentoEvent {
   @override
-  String toString() => 'IncontroInseritoEvent';
+  String toString() => 'InserisciIncontroEvent';
 }
