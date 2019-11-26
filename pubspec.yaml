@@ -38,6 +38,7 @@ dependencies:
     shared_preferences: ^0.5.3+2
     localstorage: ^2.0.0
     sms_autofill: ^1.1.0
+    json_annotation: ^3.0.0
     shared:
         git:
             url: git@github.com:football-system/shared.git
@@ -46,9 +47,12 @@ dependencies:
 dev_dependencies:
     flutter_test:
         sdk: flutter
-    # shared:
-    #     path: '../shared/'
+    build_runner: ^1.0.0
+    json_serializable: ^3.2.0
 
+dependency_overrides:
+    shared:
+        path: "../shared/"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
