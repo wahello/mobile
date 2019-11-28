@@ -10,6 +10,12 @@ class CreateFootballField extends FootballFieldEvent {
 }
 
 class RefreshFootballField extends FootballFieldEvent {
-  @override
+
+  String oldPosition;
+  String newPosition;
+
+  RefreshFootballField({this.oldPosition,this.newPosition});
+  
+  @override 
   String toString() => 'RefreshFootballField';
 }
