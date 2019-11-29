@@ -5,7 +5,7 @@ abstract class FootballFieldEvent extends Equatable {
   FootballFieldEvent([List props = const []]) : super(props);
 }
 
-class InitFootballField extends FootballFieldEvent{
+class InitFootballField extends FootballFieldEvent {
   @override
   String toString() => 'InitFootballField';
 }
@@ -16,7 +16,6 @@ class CreateFootballField extends FootballFieldEvent {
 }
 
 class AddFootballPlayerToField extends FootballFieldEvent {
-
   final Player player;
 
   AddFootballPlayerToField(this.player);
@@ -26,7 +25,6 @@ class AddFootballPlayerToField extends FootballFieldEvent {
 }
 
 class RemoveFootballPlayerFromField extends FootballFieldEvent {
-
   final Player player;
 
   RemoveFootballPlayerFromField(this.player);
@@ -36,18 +34,31 @@ class RemoveFootballPlayerFromField extends FootballFieldEvent {
 }
 
 class RefreshFootballField extends FootballFieldEvent {
-
   String oldPosition;
   String newPosition;
 
-  RefreshFootballField({this.oldPosition,this.newPosition});
-  
-  @override 
+  RefreshFootballField({this.oldPosition, this.newPosition});
+
+  @override
   String toString() => 'RefreshFootballField';
 }
 
-
 class EditFootballField extends FootballFieldEvent {
+  Player player;
+  String dataType;
+  String dataValue;
+
+  EditFootballField({this.player, this.dataType, this.dataValue}) {
+    switch (dataType) {
+      case 'note':
+        {
+          player.note = dataValue;
+          break;
+        }
+      default:
+        break;
+    }
+  }
   @override
   String toString() => 'EditFootballField';
 }
