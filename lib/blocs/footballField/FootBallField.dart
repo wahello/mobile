@@ -1,3 +1,5 @@
+import 'package:football_system/blocs/model/player_model.dart';
+
 class FootballField {
   final int rows;
   final int columns;

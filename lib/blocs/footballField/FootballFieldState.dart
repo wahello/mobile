@@ -9,9 +9,23 @@ class FootballFieldCreated extends FootballFieldState {
   }
 }
 
+class FootballFieldInitiated extends FootballFieldState {
+  @override
+  String toString() {
+    return 'FootballFieldInitiated';
+  }
+}
+
 class FootballFieldRefreshed extends FootballFieldState {
   @override
   String toString() {
     return 'FootballFieldRefreshed';
+  }
+}
+
+class FootballFieldEdit extends FootballFieldState {
+  @override
+  String toString() {
+    return 'FootballFieldEdit';
   }
 }

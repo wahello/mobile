@@ -13,18 +13,17 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
 
   final int rows;
   final int columns;
-  
-  final FootballFieldProvider footballFieldProvider;
-  final FootballFieldRepository footballFieldRepository;
+
+  final FootballFieldProvider footballFieldProvider = FootballFieldProvider();
+  final FootballFieldRepository footballFieldRepository =
+      FootballFieldRepository();
 
 
   FootballFieldBloc(
-      {@required this.footballFieldProvider,
-      @required this.footballFieldRepository,
+      {
       @required this.rows,
       @required this.columns})
-      : assert(footballFieldProvider != null &&
-      footballFieldRepository!=null &&
+      : assert(
       rows != null &&
       columns != null){
         currentInstantanea = FootballField(rows: this.rows,columns: this.columns);
@@ -42,6 +41,9 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
   Stream<FootballFieldState> mapEventToState(
     FootballFieldEvent event,
   ) async* {
+    if(event is InitFootballField){
+      yield FootballFieldInitiated();
+    }
     if (event is CreateFootballField) {
       //mostro il campo di calcio con modulo predefinito o senza
       yield FootballFieldCreated();
@@ -55,6 +57,9 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
       currentInstantanea[oldPosition]  = null;
 
       yield FootballFieldRefreshed();
+    }
+    if (event is EditFootballField) {
+      yield FootballFieldEdit();
     }
   }
 }

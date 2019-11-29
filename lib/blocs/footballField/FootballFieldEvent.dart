@@ -4,6 +4,11 @@ abstract class FootballFieldEvent extends Equatable {
   FootballFieldEvent([List props = const []]) : super(props);
 }
 
+class InitFootballField extends FootballFieldEvent{
+  @override
+  String toString() => 'InitFootballField';
+}
+
 class CreateFootballField extends FootballFieldEvent {
   @override
   String toString() => 'CreateFootballField';
@@ -18,4 +23,10 @@ class RefreshFootballField extends FootballFieldEvent {
   
   @override 
   String toString() => 'RefreshFootballField';
+}
+
+
+class EditFootballField extends FootballFieldEvent {
+  @override
+  String toString() => 'EditFootballField';
 }
