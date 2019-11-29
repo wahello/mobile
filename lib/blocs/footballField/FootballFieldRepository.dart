@@ -24,9 +24,7 @@ class FootballFieldRepository {
     List<Module> list;
     var body = jsonDecode(response.body) as List;
 
-    list = body.map((module) => Module.fromJson(module));
-    await Future.delayed(Duration(seconds: 1));
-
+    list = body.map((module) => Module.fromJson(module));  
     return list;
   }
 }

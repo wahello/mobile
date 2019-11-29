@@ -52,7 +52,7 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
       String newPosition =  event.newPosition;
       
       currentInstantanea[newPosition] = currentInstantanea[oldPosition] ;
-      currentInstantanea[oldPosition]  = 0;
+      currentInstantanea[oldPosition]  = null;
 
       yield FootballFieldRefreshed();
     }

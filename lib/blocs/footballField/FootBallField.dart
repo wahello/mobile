@@ -2,10 +2,10 @@ class FootballField {
   final int rows;
   final int columns;
 
-  List<List<int>> matrix;
+  List<List<Player>> matrix;
 
   FootballField({this.rows, this.columns}) {
-    matrix = List.generate(rows, (_) => List<int>(columns));
+    matrix = List.generate(rows, (_) => List<Player>(columns));
 
     clearField();
   }
@@ -13,7 +13,7 @@ class FootballField {
   /*
   usage: 
     FootballField footballField = FootballField(11,11);
-    int occupato = footballField['1,1'];
+    Player occupato = footballField['1,1'];
    */
 
   operator [](String xy) {
@@ -28,9 +28,9 @@ class FootballField {
   /*
   usage: 
     FootballField footballField = FootballField(11,11);
-    int occupato = footballField['1,1'];
+    Player occupato = footballField['1,1'];
    */
-  operator []=(String xy, int value) {
+  operator []=(String xy, Player value) {
     List<String> XY = xy.split(',');
 
     int x = int.parse(XY[0]);
@@ -41,7 +41,7 @@ class FootballField {
 
   void clearField() {
     matrix.forEach((row) => {
-          row.forEach((value) => {value = 0})
+          row.forEach((value) => {value = null})
         });
   }
 }

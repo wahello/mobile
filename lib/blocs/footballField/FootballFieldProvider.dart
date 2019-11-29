@@ -9,8 +9,10 @@ class FootballFieldProvider {
   FootballFieldProvider();
 
   Future<http.Response> getModules() async {
+    final token = await CallsRepository().readKey('token');
     http.Response _respAuth = await http.get(Endpoints.modules,
-        headers: {"Content-Type": "application/x-www-form-urlencoded"});
+        headers: {"Content-Type": "application/x-www-form-urlencoded",
+        HttpHeaders.authorizationHeader: token});
     return _respAuth;
   }
 }
