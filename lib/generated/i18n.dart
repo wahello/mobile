@@ -90,6 +90,18 @@ class I18n implements WidgetsLocalizations {
   String get teams => "Squadre";
   /// "Seleziona squadra"
   String get selectTeam => "Seleziona squadra";
+  /// "Giocatore: "
+  String get player => "Giocatore: ";
+  /// "Giocatori"
+  String get players => "Giocatori";
+  /// "Seleziona giocatore"
+  String get selectPlayer => "Seleziona giocatore";
+  /// "Allenatore: "
+  String get coach => "Allenatore: ";
+  /// "Allenatori"
+  String get coaches => "Allenatori";
+  /// "Seleziona allenatore"
+  String get selectCoach => "Seleziona allenatore";
   /// "Inserimento incontro"
   String get inserimentoIncontro => "Inserimento incontro";
   /// "Inserisci incontro"

@@ -79,13 +79,13 @@ class CallsRepository {
     return response;
   }
 
-  Future<dynamic> getCoaches(String teamId) async {
-    final response = await callsProvider.coaches(teamId);
+  Future<dynamic> getPlayers(String teamId) async {
+    final response = await callsProvider.players(teamId);
     return response;
   }
 
-  Future<dynamic> getPlayers(String teamId) async {
-    final response = await callsProvider.players(teamId);
+  Future<dynamic> getCoaches(String teamId) async {
+    final response = await callsProvider.coaches(teamId);
     return response;
   }
 

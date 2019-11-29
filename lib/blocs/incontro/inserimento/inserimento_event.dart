@@ -64,3 +64,18 @@ class GetTournamentsEvent extends InserimentoEvent {
   String toString() =>
       'GetTournamentsEvent { inputTextValue: $inputTextValue }';
 }
+
+class GetPlayersEvent extends InserimentoEvent {
+  @override
+  String toString() => 'GetPlayersEvent';
+}
+
+class GetCoachesEvent extends InserimentoEvent {
+  @override
+  String toString() => 'GetCoachesEvent';
+}
+
+class InserisciIncontroEvent extends InserimentoEvent {
+  @override
+  String toString() => 'InserisciIncontroEvent';
+}
