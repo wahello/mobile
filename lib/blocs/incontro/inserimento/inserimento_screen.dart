@@ -948,7 +948,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                   ? Row(
                       children: <Widget>[
                         Text(
-                          I18n().players,
+                          I18n().player,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               color: MainColors.PRIMARY,
