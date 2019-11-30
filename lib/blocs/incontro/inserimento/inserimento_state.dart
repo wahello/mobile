@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:football_system/blocs/model/incontro_model.dart';
 import 'package:meta/meta.dart';
 
 abstract class InserimentoState extends Equatable {
@@ -97,6 +98,12 @@ class GetCoachesState extends InserimentoState {
 }
 
 class InserisciIncontroState extends InserimentoState {
+  final Incontro incontro;
+
+  InserisciIncontroState({
+    @required this.incontro,
+  }) : super([incontro]);
+
   @override
-  String toString() => 'InserisciIncontroState';
+  String toString() => 'InserisciIncontroState { incontro: $incontro }';
 }
