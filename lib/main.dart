@@ -106,6 +106,11 @@ class _AppState extends State<App> {
         ),
       ],
       child: MaterialApp(
+        theme: ThemeData(
+          hintColor: MainColors.PRIMARY,
+          cursorColor: MainColors.PRIMARY,
+          indicatorColor: MainColors.PRIMARY,
+        ),
         home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (BuildContext context, AuthenticationState state) {
             if (state is AuthenticationUninitialized) {
@@ -145,23 +150,6 @@ class _AppState extends State<App> {
                           ))));
             }
             return SplashPage();
-            // return Scaffold(
-            //     appBar: AppBar(
-            //       title: appBarTitleText,
-            //       backgroundColor: MainColors.PRIMARY,
-            //     ),
-            //     body: Container(
-            //         height: MediaQuery.of(context).size.height,
-            //         decoration: BoxDecoration(
-            //           color: MainColors.SECONDARY,
-            //         ),
-            //         child: Container(
-            //             padding: EdgeInsets.all(3.0),
-            //             child: Home(
-            //               notifyParent: updateAppBarTitle,
-            //               callsRepository: callsRepository,
-            //               userRepository: userRepository,
-            //             ))));
           },
         ),
       ),
