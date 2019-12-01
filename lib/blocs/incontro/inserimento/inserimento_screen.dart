@@ -602,27 +602,27 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       shrinkWrap: true,
                       children: <Widget>[
                         FormBuilderCheckboxList(
-                            activeColor: MainColors.PRIMARY,
-                            decoration:
-                                InputDecoration(labelText: I18n().players),
-                            attribute: "players",
-                            initialValue: inserimentoBloc.players != null
-                                ? inserimentoBloc.selectedPlayers
-                                : null,
-                            options: inserimentoBloc.players != null
-                                ? inserimentoBloc.players
-                                    .map((player) => FormBuilderFieldOption(
-                                        value: player.id.toString(),
-                                        child: Text(player.name.toString())))
-                                    .toList()
-                                : [],
-                            validators: [
-                              FormBuilderValidators.required(
-                                  errorText: I18n().obbligatorio)
-                            ],
-                            onChanged: (value) => {
-                                  updateSelectedList(value),
-                                }),
+                          activeColor: MainColors.PRIMARY,
+                          decoration:
+                              InputDecoration(labelText: I18n().players),
+                          attribute: "players",
+                          initialValue: inserimentoBloc.players != null
+                              ? inserimentoBloc.selectedPlayers
+                              : null,
+                          options: inserimentoBloc.players != null
+                              ? inserimentoBloc.players
+                                  .map((player) => FormBuilderFieldOption(
+                                      value: player.id.toString(),
+                                      child: Text(player.name.toString())))
+                                  .toList()
+                              : [],
+                          validators: [
+                            FormBuilderValidators.required(
+                                errorText: I18n().obbligatorio)
+                          ],
+                          onChanged: (value) =>
+                              {inserimentoBloc.selectedPlayers = value},
+                        ),
                       ],
                     ),
                   ),
@@ -692,13 +692,6 @@ class InserimentoScreenState extends State<InserimentoScreen>
         ),
       ),
     );
-  }
-
-  void updateSelectedList(List<dynamic> selectedPlayers) {
-    inserimentoBloc.selectedPlayers = inserimentoBloc.players
-        .where((player) => selectedPlayers.contains(player.id.toString()))
-        .toList() as List<Player>;
-    print(inserimentoBloc.selectedPlayers);
   }
 
   Widget coachesScreen(state) {
@@ -999,9 +992,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       borderRadius: new BorderRadius.circular(30.0),
                     ),
                     color: MainColors.PRIMARY,
-                    onPressed: () => {
-                      homeBloc.add(HomeStarted()),
-                    },
+                    onPressed: () => {homeBloc.add(HomeStarted())},
                     child: new Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20.0,
@@ -1031,20 +1022,17 @@ class InserimentoScreenState extends State<InserimentoScreen>
   }
 
   Widget getPlayerTextWidgets(List<Player> elements) {
-    List<String> teamList = [''];
-    List<String> onlyNames = elements.map((element) => element.name).toList();
-    teamList.addAll(onlyNames);
-
-    return DropdownButton<String>(
-      value: '',
-      items: teamList.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onChanged: (String value) {},
-    );
+    return new Row(
+        children: elements
+            .map(
+              (item) => new Text(
+                item.name + ', ',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    color: MainColors.TEXT, fontWeight: FontWeight.normal),
+              ),
+            )
+            .toList());
   }
 
   void _onWidgetDidBuild(Function callback) {
