@@ -32,7 +32,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   String selectedMatches;
   String selectedTournament;
   String selectedTeam;
-  List<Player> selectedPlayers;
+  List<Player> selectedPlayers = List<Player>();
   String selectedCoach;
   Incontro incontro;
 
@@ -226,7 +226,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
         if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
           var list = jsonDecode(response.body) as List;
           List<Coach> coachesList =
-              list.map((player) => Coach.fromJson(player)).toList();
+              list.map((coach) => Coach.fromJson(coach)).toList();
           coaches = coachesList;
         } else {
           yield InserimentoFailure(
@@ -238,8 +238,9 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       yield InserimentoFinishState();
     }
     if (event is InserisciIncontroEvent) {
-      yield InserisciIncontroState();
+      // yield InserisciIncontroState();
       try {
+        List<Player> giocatori = selectedPlayers;
         incontro = new Incontro(
           new Gender(
               int.parse(selectedGender),
@@ -265,27 +266,27 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
                   .singleWhere(
                       (match) => match.id.toString() == selectedMatches)
                   .name),
-          new Tournament(
-              int.parse(selectedTournament),
-              tournaments
-                  .singleWhere((tournament) =>
-                      tournament.id.toString() == selectedTournament)
-                  .name),
+          selectedTournament != null
+              ? new Tournament(
+                  int.parse(selectedTournament),
+                  tournaments
+                      .singleWhere((tournament) =>
+                          tournament.id.toString() == selectedTournament)
+                      .name)
+              : null,
           new Team(
               int.parse(selectedTeam),
               teams
                   .singleWhere((team) => team.id.toString() == selectedTeam)
                   .name),
-          selectedPlayers
-              .map((player) =>
-                  players.singleWhere((giocatore) => giocatore.id == player.id))
-              .toList(),
+          giocatori,
           new Coach(
               int.parse(selectedCoach),
               coaches
                   .singleWhere((coach) => coach.id.toString() == selectedCoach)
                   .name),
         );
+        yield InserisciIncontroState(incontro: incontro);
       } catch (error) {
         yield InserimentoFailure(error: error.toString());
       }
