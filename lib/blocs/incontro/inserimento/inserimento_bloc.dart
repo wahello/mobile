@@ -32,7 +32,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   String selectedMatches;
   String selectedTournament;
   String selectedTeam;
-  List<Player> selectedPlayers = List<Player>();
+  List<String> selectedPlayers = [];
   String selectedCoach;
   Incontro incontro;
 
@@ -240,7 +240,10 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
     if (event is InserisciIncontroEvent) {
       // yield InserisciIncontroState();
       try {
-        List<Player> giocatori = selectedPlayers;
+        List<Player> giocatori = selectedPlayers
+            .map((player) => players
+                .singleWhere((giocatore) => giocatore.id.toString() == player))
+            .toList();
         incontro = new Incontro(
           new Gender(
               int.parse(selectedGender),
