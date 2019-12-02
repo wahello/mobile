@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
+import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
+import 'package:football_system/blocs/stuff/footballField.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/generated/i18n.dart';
 import 'package:shared/shared.dart';
@@ -22,6 +25,7 @@ class InserimentoScreen extends StatefulWidget {
 class InserimentoScreenState extends State<InserimentoScreen>
     with TickerProviderStateMixin {
   InserimentoBloc inserimentoBloc = new InserimentoBloc();
+  FootballFieldBloc footballFieldBloc;
   CallsRepository callsRepository = new CallsRepository();
 
   final GlobalKey<FormBuilderState> playerKey = GlobalKey<FormBuilderState>();
@@ -807,6 +811,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
     );
   }
 
+  //TODO: aggiungere il campo di calcio qui
   Widget incontroScreen(homeBloc, state) {
     return inserimentoBloc.incontro != null
         ? Container(
@@ -1020,6 +1025,221 @@ class InserimentoScreenState extends State<InserimentoScreen>
           )
         : new Container();
   }
+
+  // Widget incontroScreen(homeBloc, state) {
+  //   return inserimentoBloc.incontro != null
+  //       ? Container(
+  //           decoration: BoxDecoration(
+  //             color: MainColors.SECONDARY,
+  //           ),
+  //           padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+  //           child: Column(children: <Widget>[
+  //             SizedBox(height: MediaQuery.of(context).size.height / 8),
+  //             Row(
+  //               children: <Widget>[
+  //                 Text(
+  //                   I18n().incontroInserito,
+  //                   textAlign: TextAlign.center,
+  //                   style: TextStyle(
+  //                       color: MainColors.PRIMARY,
+  //                       fontWeight: FontWeight.bold,
+  //                       fontSize: 24),
+  //                 )
+  //               ],
+  //             ),
+  //             SizedBox(height: 24),
+  //             inserimentoBloc.incontro.gender != null
+  //                 ? Row(
+  //                     children: <Widget>[
+  //                       Text(
+  //                         I18n().gender,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.PRIMARY,
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                       Text(
+  //                         inserimentoBloc.incontro.gender.name,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.TEXT,
+  //                             fontWeight: FontWeight.normal),
+  //                       ),
+  //                     ],
+  //                   )
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.gender != null
+  //                 ? SizedBox(height: 24)
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.championship != null
+  //                 ? Row(
+  //                     children: <Widget>[
+  //                       Text(
+  //                         I18n().championship,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.PRIMARY,
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                       Text(
+  //                         inserimentoBloc.incontro.championship.name,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.TEXT,
+  //                             fontWeight: FontWeight.normal),
+  //                       ),
+  //                     ],
+  //                   )
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.championship != null
+  //                 ? SizedBox(height: 24)
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.match != null
+  //                 ? Row(
+  //                     children: <Widget>[
+  //                       Text(
+  //                         I18n().match,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.PRIMARY,
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                       Text(
+  //                         inserimentoBloc.incontro.match.name,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.TEXT,
+  //                             fontWeight: FontWeight.normal),
+  //                       ),
+  //                     ],
+  //                   )
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.match != null
+  //                 ? SizedBox(height: 24)
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.tournament != null
+  //                 ? Row(
+  //                     children: <Widget>[
+  //                       Text(
+  //                         I18n().trophy,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.PRIMARY,
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                       Text(
+  //                         inserimentoBloc.incontro.tournament.name,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.TEXT,
+  //                             fontWeight: FontWeight.normal),
+  //                       ),
+  //                     ],
+  //                   )
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.tournament != null
+  //                 ? SizedBox(height: 24)
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.category != null
+  //                 ? Row(
+  //                     children: <Widget>[
+  //                       Text(
+  //                         I18n().category,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.PRIMARY,
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                       Text(
+  //                         inserimentoBloc.incontro.category.name,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.TEXT,
+  //                             fontWeight: FontWeight.normal),
+  //                       ),
+  //                     ],
+  //                   )
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.category != null
+  //                 ? SizedBox(height: 24)
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.players != null
+  //                 ? Row(
+  //                     children: <Widget>[
+  //                       Text(
+  //                         I18n().player,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.PRIMARY,
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                       getPlayerTextWidgets(inserimentoBloc.incontro.players)
+  //                     ],
+  //                   )
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.players != null
+  //                 ? SizedBox(height: 24)
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.coach != null
+  //                 ? Row(
+  //                     children: <Widget>[
+  //                       Text(
+  //                         I18n().coach,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.PRIMARY,
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                       Text(
+  //                         inserimentoBloc.incontro.coach.name,
+  //                         textAlign: TextAlign.left,
+  //                         style: TextStyle(
+  //                             color: MainColors.TEXT,
+  //                             fontWeight: FontWeight.normal),
+  //                       ),
+  //                     ],
+  //                   )
+  //                 : new Container(),
+  //             inserimentoBloc.incontro.coach != null
+  //                 ? SizedBox(height: 24)
+  //                 : new Container(),
+  //             SizedBox(height: 50),
+  //             Container(
+  //               child: Center(
+  //                 child: new FlatButton(
+  //                   shape: new RoundedRectangleBorder(
+  //                     borderRadius: new BorderRadius.circular(30.0),
+  //                   ),
+  //                   color: MainColors.PRIMARY,
+  //                   onPressed: () => {
+  //                     homeBloc.add(HomeStarted()),
+  //                   },
+  //                   child: new Container(
+  //                     padding: const EdgeInsets.symmetric(
+  //                       vertical: 20.0,
+  //                       horizontal: 20.0,
+  //                     ),
+  //                     child: new Row(
+  //                       mainAxisAlignment: MainAxisAlignment.center,
+  //                       children: <Widget>[
+  //                         new Expanded(
+  //                           child: Text(
+  //                             I18n().homePage,
+  //                             textAlign: TextAlign.center,
+  //                             style: TextStyle(
+  //                                 color: MainColors.TEXT_NEGATIVE,
+  //                                 fontWeight: FontWeight.bold),
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ]),
+  //         )
+  //       : new Container();
 
   Widget getPlayerTextWidgets(List<Player> elements) {
     return new Row(

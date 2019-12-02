@@ -14,8 +14,8 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
   final int columns;
 
   final FootballFieldProvider footballFieldProvider = FootballFieldProvider();
-  final FootballFieldRepository footballFieldRepository =
-      FootballFieldRepository();
+  // final FootballFieldRepository footballFieldRepository =
+  //     FootballFieldRepository();
 
   FootballFieldBloc({@required this.rows, @required this.columns})
       : assert(rows != null && columns != null) {

@@ -1,30 +1,30 @@
-import 'dart:convert';
+// import 'dart:convert';
 
-import 'package:football_system/blocs/footballField/FootballFieldProvider.dart';
-import 'package:football_system/blocs/stuff/module.dart';
-import 'package:meta/meta.dart';
+// import 'package:football_system/blocs/footballField/FootballFieldProvider.dart';
 
-import 'FootBallField.dart';
-import 'FootballFieldBloc.dart';
+// import 'package:meta/meta.dart';
 
-import 'package:football_system/blocs/stuff/calls_repository.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared/shared.dart';
+// import 'FootBallField.dart';
+// import 'FootballFieldBloc.dart';
 
-class FootballFieldRepository {
-  FootballFieldProvider footballFieldProvider;
+// import 'package:football_system/blocs/stuff/calls_repository.dart';
+// import 'package:http/http.dart' as http;
+// import 'package:shared/shared.dart';
 
-  FootballFieldRepository() {
-    footballFieldProvider = FootballFieldProvider();
-  }
+// class FootballFieldRepository {
+//   FootballFieldProvider footballFieldProvider;
 
-  Future<List<Module>> getModules() async {
-    http.Response response = await footballFieldProvider.getModules();
+//   FootballFieldRepository() {
+//     footballFieldProvider = FootballFieldProvider();
+//   }
 
-    List<Module> list;
-    var body = jsonDecode(response.body) as List;
+//   Future<List<Module>> getModules() async {
+//     http.Response response = await footballFieldProvider.getModules();
 
-    list = body.map((module) => Module.fromJson(module));  
-    return list;
-  }
-}
+//     List<Module> list;
+//     var body = jsonDecode(response.body) as List;
+
+//     list = body.map((module) => Module.fromJson(module));
+//     return list;
+//   }
+// }

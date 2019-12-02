@@ -12,12 +12,16 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     ruolo: json['ruolo'] as String,
     posizione: json['posizione'] as String,
-  );
+  )
+    ..note = json['note'] as String
+    ..numero = json['numero'] as String;
 }
 
 Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
+      'note': instance.note,
       'id': instance.id,
       'name': instance.name,
       'ruolo': instance.ruolo,
+      'numero': instance.numero,
       'posizione': instance.posizione,
     };
