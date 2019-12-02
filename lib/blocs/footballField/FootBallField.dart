@@ -1,8 +1,7 @@
 import 'package:football_system/blocs/model/player_model.dart';
 
 class FootballField {
-  final int rows;
-  final int columns;
+  final int category;
 
   //campo da gioco
   List<List<Player>> matrix;
@@ -10,8 +9,8 @@ class FootballField {
   //ogni qual volta si schiera un giocatore nel campo , questo viene rimosso dalla lista
   List<Player> players;
 
-  FootballField({this.rows, this.columns, this.players}) {
-    matrix = List.generate(rows, (_) => List<Player>(columns));
+  FootballField({this.category, this.players}) {
+    matrix = List.generate(category, (_) => List<Player>(category));
 
     clearField();
   }

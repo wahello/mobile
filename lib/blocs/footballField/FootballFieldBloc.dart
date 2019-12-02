@@ -10,18 +10,15 @@ import 'FootballFieldRepository.dart';
 import 'FootballFieldState.dart';
 
 class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
-  final int rows;
-  final int columns;
+  final int category;
 
   final FootballFieldProvider footballFieldProvider = FootballFieldProvider();
   // final FootballFieldRepository footballFieldRepository =
   //     FootballFieldRepository();
 
-  FootballFieldBloc({@required this.rows, @required this.columns})
-      : assert(rows != null && columns != null) {
-    currentInstantanea = FootballField(rows: this.rows, columns: this.columns);
+  FootballFieldBloc({@required this.category}) : assert(category != null) {
+    currentInstantanea = FootballField(category: this.category);
     instantanee = List<FootballField>();
-    instantanee.add(currentInstantanea);
   }
 
   FootballField currentInstantanea;
