@@ -32,7 +32,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   String selectedMatches;
   String selectedTournament;
   String selectedTeam;
-  List<String> selectedPlayers = [];
+  List selectedPlayers = [];
   String selectedCoach;
   Incontro incontro;
 
