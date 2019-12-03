@@ -6,6 +6,7 @@ import 'package:football_system/blocs/footballField/FootballFieldPage.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
+import 'package:football_system/blocs/incontro/inserimento/keys.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
@@ -28,19 +29,18 @@ class InserimentoScreenState extends State<InserimentoScreen>
   InserimentoBloc inserimentoBloc = new InserimentoBloc();
   CallsRepository callsRepository = new CallsRepository();
 
-  final GlobalKey<FormBuilderState> playerKey = GlobalKey<FormBuilderState>();
-  final GlobalKey<FormBuilderState> coachKey = GlobalKey<FormBuilderState>();
-  final _controller = PageController();
+  var _controller = PageController();
 
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
-    inserimentoBloc.add(InserimentoStarted());
     super.initState();
+    inserimentoBloc.add(InserimentoStarted());
   }
 
   Widget genderScreen(state) {
@@ -596,7 +596,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
           children: <Widget>[
             SizedBox(height: MediaQuery.of(context).size.height / 8),
             FormBuilder(
-              key: playerKey,
+              key: FormKey.playersKey,
               autovalidate: true,
               child: Column(
                 children: <Widget>[
@@ -710,7 +710,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
           children: <Widget>[
             SizedBox(height: 150),
             FormBuilder(
-              key: coachKey,
+              key: FormKey.coachesKey,
               autovalidate: true,
               child: Column(
                 children: <Widget>[
