@@ -2,9 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
+import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/model/incontro_model.dart';
+import 'package:football_system/blocs/model/player_model.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -40,10 +42,17 @@ class FootballFieldPageState extends State<FootballFieldPage> {
   FootballFieldBloc footballFieldBloc;
   InserimentoBloc inserimentoBloc;
   int category;
+  List giocatoriDaInserire;
+  List giocatoriInseriti;
 
   FootballFieldPageState(this.inserimentoBloc) {
     category = getCategoryFromIncontro(inserimentoBloc.incontro);
+    giocatoriDaInserire = getPlayersSelected(inserimentoBloc);
     footballFieldBloc = FootballFieldBloc(category: category);
+  }
+
+  List getPlayersSelected(InserimentoBloc inserimentoBloc){
+    return inserimentoBloc.selectedPlayers;
   }
 
 //TODO: rendere più dinamico
@@ -69,9 +78,8 @@ class FootballFieldPageState extends State<FootballFieldPage> {
         child: BlocBuilder<FootballFieldBloc, FootballFieldState>(
             builder: (BuildContext context, FootballFieldState state) {
           if (state is FootballFieldCreated) {
-            return Container(
-              child: Text('PAGINA CAMPO'),
-            );
+            //TODO aggiungere lista giocatori
+            return FootballFieldScreen(lato: 30,playersFromBloc: giocatoriDaInserire,);
           } else {
             Container(
               child: Text('STATO != FootballFieldCreated'),

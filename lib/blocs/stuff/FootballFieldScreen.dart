@@ -14,11 +14,13 @@ class Module442 extends StatefulWidget {
   // Giocatori inseriti sul campo
   final Map<String, Player> playersPlaced = new Map();
   // Giocatori da inserire (ricevuti da API)
-  final List<Player> players = new List(11);
+  final List<Player> players = new List(2);
 
   Module442({Key key, @required this.lato}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
+    players[0] = new Player(name: 'test');
+    players[1] = new Player(name: 'test1');
     return Module442State();
   }
 }
@@ -34,7 +36,7 @@ class Module442State extends State<Module442> {
     showMenu(
             context: context,
             items: <PopupMenuEntry<int>>[
-              PlayerMenu(widget.playersPlaced, widget.players, _tapIndex)
+              PlayerMenu(widget.playersPlaced, widget.players, _tapIndex ?? -1)
             ],
             position: RelativeRect.fromRect(
                 _tapPosition & Size(40, 40), // smaller rect, the touch area
@@ -154,7 +156,7 @@ class Module442State extends State<Module442> {
     } else {
       // Ritorno un placeholder
       return GestureDetector(
-          onLongPress: _showCustomMenu,
+          onTap: _showCustomMenu,
           onTapDown: _storePosition,
           child: Container(
             child: Icon(
@@ -177,6 +179,7 @@ class PlayerMenu extends PopupMenuEntry<int> {
   final Map<String, Player> _playerPlaced;
   final List<Player> players;
   final int _tapIndex;
+  FootballFieldBloc bloc = new FootballFieldBloc(category: 11);
 
   PlayerMenu(this._playerPlaced, this.players, this._tapIndex);
 
@@ -195,7 +198,7 @@ class PlayerMenuState extends State<PlayerMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return widget._playerPlaced.containsKey(widget._tapIndex)
+    return widget._playerPlaced.containsKey(widget._tapIndex ?? '')
         ? Column(
             children: <Widget>[
               FlatButton(
@@ -224,9 +227,8 @@ class PlayerMenuState extends State<PlayerMenu> {
                   ))),
               FlatButton(
                   onPressed: () => {
-                        BlocProvider.of<FootballFieldBloc>(context).add(
-                            RemoveFootballPlayerFromField(
-                                widget._playerPlaced[widget._tapIndex]))
+                        widget.bloc.add(RemoveFootballPlayerFromField(
+                            widget._playerPlaced[widget._tapIndex]))
                       },
                   child: Center(
                       child: Row(
@@ -240,24 +242,35 @@ class PlayerMenuState extends State<PlayerMenu> {
                   )))
             ],
           )
-        : ListView.builder(
-            itemCount: widget.players.length,
-            itemBuilder: (context, index) {
-              return FlatButton(
-                  onPressed: () => {
-                        BlocProvider.of<FootballFieldBloc>(context).add(
-                            AddFootballPlayerToField(widget.players[index]))
-                      },
-                  child: Center(
-                      child: Row(
-                    children: <Widget>[
-                      Text(widget.players[index].name),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      ),
-                      Text(widget.players[index].numero),
-                    ],
-                  )));
-            });
+        : Container(
+            width: 200,
+            child: Column(children: <Widget>[
+              Text(
+                'Players available',
+                style: TextStyle(fontSize: 16),
+              ),
+              Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 20)),
+              ListView.builder(
+                  shrinkWrap: true,
+                  addRepaintBoundaries: true,
+                  itemCount: widget.players.length,
+                  itemBuilder: (BuildContext ctxt, int index) {
+                    return GestureDetector(
+                        onTap: () => {
+                              widget.bloc.add(AddFootballPlayerToField(
+                                  widget.players[index]))
+                            },
+                        child: Center(
+                            child: Row(
+                          children: <Widget>[
+                            Text(widget.players[index].name ?? 'Test'),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                            ),
+                            Text(widget.players[index].numero ?? '15'),
+                          ],
+                        )));
+                  })
+            ]));
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
 
 import 'module433.dart';
-import 'module442.dart';
+
 
 class FootballField extends StatefulWidget {
   String formazione;
@@ -21,7 +22,7 @@ class _FootballFieldState extends State<FootballField> {
   @override
   Widget build(BuildContext context) {
     if (widget.formazione == '4-4-2') {
-      module = Module442(
+      module = FootballFieldScreen(
         lato: 30,
       );
     } else if (widget.formazione == '4-3-3') {
