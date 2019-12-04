@@ -10,10 +10,6 @@ import 'package:football_system/custom_icon/soccerplayer_icons.dart';
 class FootballFieldScreen extends StatefulWidget {
   final double lato;
   final Field posizioni = Field();
-  // Giocatori inseriti sul campo
-  final Map<String, Player> playersPlaced = new Map();
-  // Giocatori da inserire (ricevuti da API)
-  List<Player> players = new List(11);
 
   final List playersFromBloc;
 
@@ -26,9 +22,16 @@ class FootballFieldScreen extends StatefulWidget {
 }
 
 class FootballFieldScreenState extends State<FootballFieldScreen> {
-  var _tapPosition;
   var _tapIndex;
   List<Player> players = new List(11);
+  final Map<String, Player> playersPlaced = new Map();
+
+  FootballFieldBloc bloc = new FootballFieldBloc(category: 11);
+
+  void _plus1() {
+    // This is how you close the popup menu and return user selection.
+    Navigator.pop<int>(context, 1);
+  }
 
   @override
   void initState() {
@@ -39,29 +42,109 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
   }
 
 // Passo come parametro il giocatore selezionato
-  void _showCustomMenu() {
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
-
-    showMenu(
-            context: context,
-            items: <PopupMenuEntry<int>>[
-              PlayerMenu(
-                playerPlaced: widget.playersPlaced,
-                players: players,
-                tapIndex: _tapIndex,
-              )
-            ],
-            position: RelativeRect.fromRect(
-                _tapPosition & Size(40, 40), // smaller rect, the touch area
-                Offset.zero & overlay.size // Bigger rect, the entire screen
-                ))
-        // This is how you handle user selection
-        .then<void>((int delta) {});
-  }
-
-// Coordinate nello schermo
-  void _storePosition(TapDownDetails details) {
-    _tapPosition = details.globalPosition;
+  void _showCustomMenu(int index) {
+    showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          int playerCount = 0;
+          for (int i = 0; i < players.length; i++) {
+            if (players[i] != null) {
+              playerCount++;
+            }
+          }
+          return playersPlaced.containsKey(_tapIndex ?? '')
+              ? Column(
+                  children: <Widget>[
+                    FlatButton(
+                        onPressed: _plus1,
+                        child: Center(
+                            child: Row(
+                          children: <Widget>[
+                            Text('Add note'),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                            ),
+                            Icon(Icons.note_add)
+                          ],
+                        ))),
+                    FlatButton(
+                        onPressed: _plus1,
+                        child: Center(
+                            child: Row(
+                          children: <Widget>[
+                            Text('Substitution'),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                            ),
+                            Icon(Icons.shuffle)
+                          ],
+                        ))),
+                    FlatButton(
+                        onPressed: () => {
+                              bloc.add(RemoveFootballPlayerFromField(
+                                  playersPlaced[_tapIndex]))
+                            },
+                        child: Center(
+                            child: Row(
+                          children: <Widget>[
+                            Text('Remove'),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                            ),
+                            Icon(Icons.delete)
+                          ],
+                        )))
+                  ],
+                )
+              : Container(
+                  height: 300,
+                  decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(10),
+                          topRight: const Radius.circular(10))),
+                  child: Column(children: <Widget>[
+                    Text(
+                      'Players available',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 20)),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        addRepaintBoundaries: true,
+                        itemCount: playerCount,
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          return Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              child: GestureDetector(
+                                  onTap: () => {
+                                        bloc.add(AddFootballPlayerToField(
+                                            players[index]))
+                                      },
+                                  child: Center(
+                                      child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                        Soccerplayer.soccer_player,
+                                        size: 25,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                      ),
+                                      Text(players[index].name ?? 'Test'),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                      ),
+                                      Text(players[index].numero ?? '15'),
+                                    ],
+                                  ))));
+                        })
+                  ]));
+        });
   }
 
   @override
@@ -155,13 +238,14 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
 // Controllo se nella mappa dei giocatori già inseriti è presente qualcuno per questo indice
 // se si lo ritorno altrimenti restituisco un placeholder
   Widget _getPlayerOrPlaceHolder(int index) {
-    Map<String, Player> players = widget.playersPlaced;
+    Map<String, Player> players = playersPlaced;
     if (players.containsKey(index)) {
       // Ritorno i dati del giocatore
       return GestureDetector(
           // This does not give the tap position ...
-          onLongPress: _showCustomMenu,
-          onTapDown: _storePosition,
+          onLongPress: () {
+            _showCustomMenu(index);
+          },
           onTap: () => {_tapIndex = index}, //Salvo la cella che ho toccato
           child: Container(
             child: Column(
@@ -182,8 +266,9 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
     } else {
       // Ritorno un placeholder
       return GestureDetector(
-          onTap: _showCustomMenu,
-          onTapDown: _storePosition,
+          onTap: () {
+            _showCustomMenu(index);
+          },
           child: Container(
             child: Icon(
               Soccerplayer.soccer_player,
@@ -191,115 +276,5 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
             ),
           ));
     }
-  }
-}
-
-class PlayerMenu extends PopupMenuEntry<int> {
-  @override
-  double height = 100;
-  // height doesn't matter, as long as we are not giving
-  // initialValue to showMenu().
-
-//Questo valore mi dice se ho fatto longPress su una cella con un giocatore
-// o con un placeholder
-  final Map<String, Player> playerPlaced;
-  final List<Player> players;
-  final int tapIndex;
-  FootballFieldBloc bloc = new FootballFieldBloc(category: 11);
-
-  PlayerMenu(
-      {@required this.playerPlaced,
-      @required this.players,
-      @required this.tapIndex});
-
-  @override
-  bool represents(int n) => n == 1 || n == -1;
-
-  @override
-  PlayerMenuState createState() => PlayerMenuState();
-}
-
-class PlayerMenuState extends State<PlayerMenu> {
-  void _plus1() {
-    // This is how you close the popup menu and return user selection.
-    Navigator.pop<int>(context, 1);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.playerPlaced.containsKey(widget.tapIndex ?? '')
-        ? Column(
-            children: <Widget>[
-              FlatButton(
-                  onPressed: _plus1,
-                  child: Center(
-                      child: Row(
-                    children: <Widget>[
-                      Text('Add note'),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      ),
-                      Icon(Icons.note_add)
-                    ],
-                  ))),
-              FlatButton(
-                  onPressed: _plus1,
-                  child: Center(
-                      child: Row(
-                    children: <Widget>[
-                      Text('Substitution'),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      ),
-                      Icon(Icons.shuffle)
-                    ],
-                  ))),
-              FlatButton(
-                  onPressed: () => {
-                        widget.bloc.add(RemoveFootballPlayerFromField(
-                            widget.playerPlaced[widget.tapIndex]))
-                      },
-                  child: Center(
-                      child: Row(
-                    children: <Widget>[
-                      Text('Remove'),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      ),
-                      Icon(Icons.delete)
-                    ],
-                  )))
-            ],
-          )
-        : Container(
-            width: 200,
-            child: Column(children: <Widget>[
-              Text(
-                'Players available',
-                style: TextStyle(fontSize: 16),
-              ),
-              Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 20)),
-              ListView.builder(
-                  shrinkWrap: true,
-                  addRepaintBoundaries: true,
-                  itemCount: widget.players.length,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return GestureDetector(
-                        onTap: () => {
-                              widget.bloc.add(AddFootballPlayerToField(
-                                  widget.players[index]))
-                            },
-                        child: Center(
-                            child: Row(
-                          children: <Widget>[
-                            Text(widget.players[index].name ?? 'Test'),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                            ),
-                            Text(widget.players[index].numero ?? '15'),
-                          ],
-                        )));
-                  })
-            ]));
   }
 }
