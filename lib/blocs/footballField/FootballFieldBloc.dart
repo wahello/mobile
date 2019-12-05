@@ -11,18 +11,31 @@ import 'FootballFieldState.dart';
 
 class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
   final int category;
+  int _indexInstantanea = -1;
+  var instantanee = List<FootballField>();
 
   final FootballFieldProvider footballFieldProvider = FootballFieldProvider();
   // final FootballFieldRepository footballFieldRepository =
   //     FootballFieldRepository();
 
   FootballFieldBloc({@required this.category}) : assert(category != null) {
-    currentInstantanea = FootballField(category: this.category);
-    instantanee = List<FootballField>();
+    addInstantanea();
+  }
+
+  void _assignPlayerToInstantanea(List players) {
+    _getCurrentInstantanea().players = players;
+  }
+
+  void addInstantanea() {
+    _indexInstantanea++;
+    instantanee[_indexInstantanea] = new FootballField(category: this.category);
+  }
+
+  FootballField _getCurrentInstantanea() {
+    return instantanee[_indexInstantanea];
   }
 
   FootballField currentInstantanea;
-  List<FootballField> instantanee;
 
   FootballFieldState get initialState => FootballFieldCreated();
 
@@ -31,6 +44,7 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
     FootballFieldEvent event,
   ) async* {
     if (event is InitFootballField) {
+      _assignPlayerToInstantanea(event.players);
       yield FootballFieldInitiated();
     }
     if (event is CreateFootballField) {
@@ -46,16 +60,17 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
     }
     if (event is AddFootballPlayerToField) {
       //indice della lista che userò per fare il pop del player
-      var index = currentInstantanea.players
+      var index = _getCurrentInstantanea()
+          .players
           .indexWhere((player) => player.id == event.player.id);
       //posiziono il player nella sua posizione
-      currentInstantanea[event.player.posizione] = event.player;
-      currentInstantanea.players.removeAt(index);
+      _getCurrentInstantanea()[event.player.posizione] = event.player;
+      _getCurrentInstantanea().players.removeAt(index);
 
       yield FootballFieldRefreshed();
     }
     if (event is EditFootballField) {
-      currentInstantanea[event.player.posizione] = event.player;
+      _getCurrentInstantanea()[event.player.posizione] = event.player;
       yield FootballFieldRefreshed();
     }
   }

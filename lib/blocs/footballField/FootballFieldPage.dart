@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
+import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
 import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
@@ -77,8 +78,9 @@ class FootballFieldPageState extends State<FootballFieldPage> {
         builder: (BuildContext context) => footballFieldBloc,
         child: BlocBuilder<FootballFieldBloc, FootballFieldState>(
             builder: (BuildContext context, FootballFieldState state) {
-          if (state is FootballFieldCreated) {
+          if (state is FootballFieldCreated || state is FootballFieldInitiated) {
             //TODO aggiungere lista giocatori
+            footballFieldBloc.add(InitFootballField(players: giocatoriDaInserire));
             return FootballFieldScreen(lato: 30,playersFromBloc: giocatoriDaInserire,);
           } else {
             Container(

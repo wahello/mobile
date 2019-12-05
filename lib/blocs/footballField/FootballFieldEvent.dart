@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 
 abstract class FootballFieldEvent extends Equatable {
@@ -6,6 +7,11 @@ abstract class FootballFieldEvent extends Equatable {
 }
 
 class InitFootballField extends FootballFieldEvent {
+
+  final List players;
+
+  InitFootballField({@required this.players});
+
   @override
   String toString() => 'InitFootballField';
 }

@@ -6,6 +6,7 @@ import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/stuff/field.dart';
 import 'package:football_system/custom_icon/soccerplayer_icons.dart';
+import 'package:shared/shared.dart';
 
 class FootballFieldScreen extends StatefulWidget {
   final double lato;
@@ -105,15 +106,22 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                           topLeft: const Radius.circular(10),
                           topRight: const Radius.circular(10))),
                   child: Column(children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                    ),
                     Text(
                       'Players available',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: MainColors.TEXT_NEGATIVE,
+                          fontWeight: FontWeight.bold),
                     ),
                     Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 20)),
                     ListView.builder(
+                        physics: new AlwaysScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        addRepaintBoundaries: true,
                         itemCount: playerCount,
+                        addAutomaticKeepAlives: true,
                         itemBuilder: (BuildContext ctxt, int index) {
                           return Padding(
                               padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
