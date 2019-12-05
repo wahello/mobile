@@ -6,7 +6,6 @@ import 'package:football_system/blocs/footballField/FootballFieldPage.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
-import 'package:football_system/blocs/incontro/inserimento/keys.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
@@ -14,6 +13,7 @@ import 'package:football_system/blocs/stuff/footballField.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/generated/i18n.dart';
 import 'package:shared/shared.dart';
+import '../../stuff/index.dart';
 
 class InserimentoScreen extends StatefulWidget {
   const InserimentoScreen({
@@ -611,7 +611,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                               InputDecoration(labelText: I18n().players),
                           attribute: "players",
                           initialValue: inserimentoBloc.players != null
-                              ? inserimentoBloc.selectedPlayers
+                              ? inserimentoBloc.selectedPlayersFromCheckBoxList
                               : null,
                           options: inserimentoBloc.players != null
                               ? inserimentoBloc.players
@@ -624,8 +624,10 @@ class InserimentoScreenState extends State<InserimentoScreen>
                             FormBuilderValidators.required(
                                 errorText: I18n().obbligatorio)
                           ],
-                          onChanged: (value) =>
-                              {inserimentoBloc.selectedPlayers = value},
+                          onChanged: (value) => {
+                            inserimentoBloc.selectedPlayersFromCheckBoxList =
+                                value
+                          },
                         ),
                       ],
                     ),
@@ -876,9 +878,9 @@ class InserimentoScreenState extends State<InserimentoScreen>
       }
     }
     if (step == 7) {
-      if (inserimentoBloc.incontro == null) {
-        inserimentoBloc.add(InserisciIncontroEvent());
-      }
+      // if (inserimentoBloc.incontro == null) {
+      inserimentoBloc.add(InserisciIncontroEvent());
+      // }
     }
     _controller.animateToPage(
       step,
