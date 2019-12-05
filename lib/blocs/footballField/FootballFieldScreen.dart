@@ -17,17 +17,18 @@ class FootballFieldScreen extends StatefulWidget {
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return FootballFieldScreenState();
+    return FootballFieldScreenState(playersFromBloc);
   }
 }
 
 class FootballFieldScreenState extends State<FootballFieldScreen> {
   var _tapIndex;
-  List<Player> players = new List(11);
+  List<Player> players;
   final Map<String, Player> playersPlaced = new Map();
 
   FootballFieldBloc bloc = new FootballFieldBloc(category: 11);
 
+  FootballFieldScreenState(this.players);
   void _plus1() {
     // This is how you close the popup menu and return user selection.
     Navigator.pop<int>(context, 1);
@@ -36,9 +37,6 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < widget.playersFromBloc.length; i++) {
-      players[i] = new Player(name: widget.playersFromBloc[i]);
-    }
   }
 
 // Passo come parametro il giocatore selezionato
