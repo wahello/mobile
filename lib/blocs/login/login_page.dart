@@ -40,9 +40,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LoginForm(
-        authenticationBloc: _authenticationBloc,
-        loginBloc: _loginBloc,
+      body: SingleChildScrollView(
+        child: LoginForm(
+          authenticationBloc: _authenticationBloc,
+          loginBloc: _loginBloc,
+        ),
       ),
     );
   }
