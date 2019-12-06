@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'FootBallField.dart';
 import 'FootballFieldEvent.dart';
 import 'FootballFieldProvider.dart';
-import 'FootballFieldRepository.dart';
 import 'FootballFieldState.dart';
 
 class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {

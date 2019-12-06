@@ -11,6 +11,7 @@ import 'package:football_system/blocs/model/match_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/team_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
+import 'package:football_system/blocs/stuff/event.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 
 import './index.dart';
@@ -36,6 +37,8 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   List selectedPlayers = [];
   String selectedCoach;
   Incontro incontro;
+  List<Note> notes;
+  List<Event> event;
 
   @override
   InserimentoState get initialState => InitialInserimentoState();

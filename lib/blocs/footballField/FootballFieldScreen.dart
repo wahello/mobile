@@ -5,6 +5,7 @@ import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/stuff/field.dart';
+import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/custom_icon/soccerplayer_icons.dart';
 
 class FootballFieldScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class FootballFieldScreen extends StatefulWidget {
 class FootballFieldScreenState extends State<FootballFieldScreen> {
   var _tapIndex;
   List<Player> players;
-  var _noteFieldController;
+  TextEditingController _noteFieldController;
   final Map<String, Player> playersPlaced = new Map();
 
   FootballFieldBloc bloc = new FootballFieldBloc(category: 11);
@@ -35,7 +36,12 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
     Navigator.pop<int>(context, 1);
   }
 
-  
+  void saveNote(String note, playerId) {
+    //TODO recuperare lista note da incontro
+    Note(playerId, note);
+    //TODO aggiungere alla lista
+  }
+
   openAlertBox() {
     return showDialog(
         context: context,
@@ -52,14 +58,14 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        "Player's note",
-                        style: TextStyle(fontSize: 24.0),
-                      )
-                    ]),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          "Player's note",
+                          style: TextStyle(fontSize: 24.0),
+                        )
+                      ]),
                   SizedBox(
                     height: 5.0,
                   ),
@@ -78,6 +84,9 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                     ),
                   ),
                   InkWell(
+                    onTap: () {
+                      saveNote(_noteFieldController.text, playersPlaced[_tapIndex].id);
+                    },
                     child: Container(
                       padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
                       decoration: BoxDecoration(
@@ -131,7 +140,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                         child: Center(
                             child: Row(
                           children: <Widget>[
-                            Text('Substitution'),
+                            Text('Events'),
                             Padding(
                               padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                             ),
