@@ -4,6 +4,7 @@ import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/model/player_model.dart';
+import 'package:football_system/blocs/stuff/event.dart';
 import 'package:football_system/blocs/stuff/field.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/custom_icon/soccerplayer_icons.dart';
@@ -39,6 +40,12 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
   void saveNote(String note, playerId) {
     //TODO recuperare lista note da incontro
     Note(playerId, note);
+    //TODO aggiungere alla lista
+  }
+
+  void addEvent(int playerId, EventType type, int instId) {
+    //TODO recuperare lista eventi da incontro
+    Event(playerId, type, instId);
     //TODO aggiungere alla lista
   }
 
@@ -85,7 +92,8 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      saveNote(_noteFieldController.text, playersPlaced[_tapIndex].id);
+                      saveNote(_noteFieldController.text,
+                          playersPlaced[_tapIndex].id);
                     },
                     child: Container(
                       padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
@@ -114,6 +122,70 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
     super.initState();
   }
 
+  void _showEventMenu(int index) {
+    showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return Container(
+            child: Column(
+              children: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    addEvent(playersPlaced[index].id, EventType.yellowCard, 0); //TODO recuperare istantaneaID
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.sd_card,
+                        color: Colors.yellow,
+                      ),
+                      Text('Cartellino Giallo')
+                    ],
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    addEvent(playersPlaced[index].id, EventType.redCard, 0); //TODO recuperare istantaneaID
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.sd_card,
+                        color: Colors.red,
+                      ),
+                      Text('Cartellino Rosso')
+                    ],
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    addEvent(playersPlaced[index].id, EventType.goal, 0); //TODO recuperare istantaneaID
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.radio_button_unchecked),
+                      Text('Goal')
+                    ],
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    addEvent(playersPlaced[index].id, EventType.substitution, 0); //TODO recuperare istantaneaID
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.compare_arrows),
+                      Text('Substituion')
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+  }
+
 // Passo come parametro il giocatore selezionato
   void _showCustomMenu(int index) {
     showModalBottomSheet<void>(
@@ -136,7 +208,9 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                           ],
                         ))),
                     FlatButton(
-                        onPressed: _plus1,
+                        onPressed: () {
+                          _showEventMenu(index);
+                        },
                         child: Center(
                             child: Row(
                           children: <Widget>[
