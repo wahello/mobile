@@ -6,7 +6,7 @@ import 'package:football_system/blocs/footballField/FootballFieldPage.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
-import 'package:football_system/blocs/incontro/inserimento/keys.dart';
+import 'package:football_system/blocs/model/module_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
@@ -814,10 +814,44 @@ class InserimentoScreenState extends State<InserimentoScreen>
     );
   }
 
+  Widget moduleScreen(InserimentoState state) {
+    return (state is CaricamentoModuliState || inserimentoBloc.modules == null)
+        ? LoadingIndicator()
+        : Center(
+            child: ListView(
+                padding: const EdgeInsets.all(8),
+                children: inserimentoBloc.modules
+                    .map(
+                      (module) => SizedBox(
+                          width: 150,
+                          child: FlatButton(
+                              color: MainColors.PRIMARY,
+                              child: Center(
+                                child: Text(
+                                  module.name,
+                                  style: TextStyle(
+                                    color: MainColors.TEXT_NEGATIVE,
+                                    fontSize: 35,
+                                  ),
+                                ),
+                              ),
+                              onPressed: () =>
+                                  handleModulePressed(module, context))),
+                    )
+                    .toList()),
+          );
+  }
+
+  void handleModulePressed(Module module, BuildContext context) {
+    inserimentoBloc.add(SalvaModuloEvent(module));
+    goToStep(8);
+  }
+
   Widget incontroScreen() {
-    return inserimentoBloc.incontro != null
+    return inserimentoBloc.incontro != null &&
+            inserimentoBloc.incontro.module != null
         ? FootballFieldPage(inserimentoBloc: inserimentoBloc)
-        : Container();
+        : LoadingIndicator();
   }
 
   Widget getPlayerTextWidgets(List<Player> elements) {
@@ -883,6 +917,11 @@ class InserimentoScreenState extends State<InserimentoScreen>
       inserimentoBloc.add(InserisciIncontroEvent());
       // }
     }
+    if (step == 8) {
+      // if (inserimentoBloc.incontro == null) {
+
+      // }
+    }
     _controller.animateToPage(
       step,
       duration: Duration(milliseconds: 400),
@@ -921,7 +960,8 @@ class InserimentoScreenState extends State<InserimentoScreen>
               teamScreen(state),
               playersScreen(state),
               coachesScreen(state),
-              incontroScreen()
+              moduleScreen(state),
+              incontroScreen(),
             ],
             scrollDirection: Axis.horizontal,
           ));

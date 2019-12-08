@@ -54,7 +54,7 @@ class Module442State extends State<Module442> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FootballFieldBloc, FootballFieldState>(
-        bloc: FootballFieldBloc(category: 13), //TODO: rendere dinamico
+        bloc: FootballFieldBloc(dimension: [11, 11]), //TODO: rendere dinamico
         builder: (BuildContext context, FootballFieldState state) {
           return Container(
               child: GridView.count(
@@ -179,7 +179,7 @@ class PlayerMenu extends PopupMenuEntry<int> {
   final Map<String, Player> _playerPlaced;
   final List<Player> players;
   final int _tapIndex;
-  FootballFieldBloc bloc = new FootballFieldBloc(category: 11);
+  FootballFieldBloc bloc = new FootballFieldBloc(dimension: [11, 11]);
 
   PlayerMenu(this._playerPlaced, this.players, this._tapIndex);
 
@@ -256,10 +256,7 @@ class PlayerMenuState extends State<PlayerMenu> {
                   itemCount: widget.players.length,
                   itemBuilder: (BuildContext ctxt, int index) {
                     return GestureDetector(
-                        onTap: () => {
-                              widget.bloc.add(AddFootballPlayerToField(
-                                  widget.players[index]))
-                            },
+                        onTap: () => {},
                         child: Center(
                             child: Row(
                           children: <Widget>[

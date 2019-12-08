@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:football_system/blocs/model/module_model.dart';
 import 'package:meta/meta.dart';
 
 abstract class InserimentoEvent extends Equatable {
@@ -78,4 +79,17 @@ class GetCoachesEvent extends InserimentoEvent {
 class InserisciIncontroEvent extends InserimentoEvent {
   @override
   String toString() => 'InserisciIncontroEvent';
+}
+
+class InserisciModuloEvent extends InserimentoEvent {
+  @override
+  String toString() => 'InserisciModuloEvent';
+}
+
+class SalvaModuloEvent extends InserimentoEvent {
+  Module moduloScelto;
+
+  SalvaModuloEvent(this.moduloScelto);
+  @override
+  String toString() => 'SalvaModuloEvent';
 }

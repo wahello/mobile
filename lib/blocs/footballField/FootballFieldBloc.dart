@@ -9,14 +9,14 @@ import 'FootballFieldProvider.dart';
 import 'FootballFieldState.dart';
 
 class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
-  final int category;
+  final List<int> dimension;
 
   final FootballFieldProvider footballFieldProvider = FootballFieldProvider();
   // final FootballFieldRepository footballFieldRepository =
   //     FootballFieldRepository();
 
-  FootballFieldBloc({@required this.category}) : assert(category != null) {
-    currentInstantanea = FootballField(category: this.category);
+  FootballFieldBloc({@required this.dimension}) : assert(dimension != null) {
+    currentInstantanea = FootballField(dimension: this.dimension);
     instantanee = List<FootballField>();
   }
 
@@ -45,17 +45,20 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
     }
     if (event is AddFootballPlayerToField) {
       //indice della lista che userò per fare il pop del player
-      var index = currentInstantanea.players
-          .indexWhere((player) => player.id == event.player.id);
+      // var index = currentInstantanea.players
+      //     .indexWhere((player) => player.id == event.player.id);
       //posiziono il player nella sua posizione
-      currentInstantanea[event.player.posizione] = event.player;
-      currentInstantanea.players.removeAt(index);
+      currentInstantanea["1,2"] = event.player;
+      // currentInstantanea.players.removeAt(index);
 
       yield FootballFieldRefreshed();
     }
     if (event is EditFootballField) {
       currentInstantanea[event.player.posizione] = event.player;
       yield FootballFieldRefreshed();
+    }
+    if (event is FinishInstantanea) {
+      print(event.toString());
     }
   }
 }

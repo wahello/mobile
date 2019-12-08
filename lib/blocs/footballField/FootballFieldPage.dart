@@ -41,30 +41,29 @@ class FootballFieldPage extends StatefulWidget {
 class FootballFieldPageState extends State<FootballFieldPage> {
   FootballFieldBloc footballFieldBloc;
   InserimentoBloc inserimentoBloc;
-  int category;
-  List giocatoriDaInserire;
-  List giocatoriInseriti;
+  List<int> dimension;
 
   FootballFieldPageState(this.inserimentoBloc) {
-    category = getCategoryFromIncontro(inserimentoBloc.incontro);
-    giocatoriDaInserire = getPlayersSelected(inserimentoBloc);
-    footballFieldBloc = FootballFieldBloc(category: category);
+    dimension = getDimensionFromCategory(inserimentoBloc.incontro);
+    footballFieldBloc = FootballFieldBloc(dimension: dimension);
   }
 
-  List getPlayersSelected(InserimentoBloc inserimentoBloc){
+  List getPlayersSelected(InserimentoBloc inserimentoBloc) {
     return inserimentoBloc.selectedPlayers;
   }
 
 //TODO: rendere più dinamico
-  int getCategoryFromIncontro(Incontro incontro) {
-    int category = 0;
+  List<int> getDimensionFromCategory(Incontro incontro) {
+    List<int> category = List<int>();
 
     switch (incontro.category.name) {
       case 'Serie A':
-        category = 11;
+        category.add(9);
+        category.add(11);
         break;
       default:
-        category = 11;
+        category.add(9);
+        category.add(11);
         break;
     }
 
@@ -79,7 +78,11 @@ class FootballFieldPageState extends State<FootballFieldPage> {
             builder: (BuildContext context, FootballFieldState state) {
           if (state is FootballFieldCreated) {
             //TODO aggiungere lista giocatori
-            return FootballFieldScreen(lato: 30,playersFromBloc: giocatoriDaInserire,);
+            return FootballFieldScreen(
+              lato: 30,
+              playersFromBloc: inserimentoBloc.incontro.players,
+              moduloScelto: inserimentoBloc.incontro.module,
+            );
           } else {
             Container(
               child: Text('STATO != FootballFieldCreated'),

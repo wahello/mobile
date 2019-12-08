@@ -107,3 +107,10 @@ class InserisciIncontroState extends InserimentoState {
   @override
   String toString() => 'InserisciIncontroState { incontro: $incontro }';
 }
+
+class CaricamentoModuliState extends InserimentoState {
+  CaricamentoModuliState();
+
+  @override
+  String toString() => 'CaricamentoModuliState';
+}

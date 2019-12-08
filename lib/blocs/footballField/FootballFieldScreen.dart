@@ -3,23 +3,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
+import 'package:football_system/blocs/incontro/inserimento/inserimento_bloc.dart';
+import 'package:football_system/blocs/model/module_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/stuff/event.dart';
 import 'package:football_system/blocs/stuff/field.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/custom_icon/soccerplayer_icons.dart';
+import 'package:shared/shared.dart';
 
 class FootballFieldScreen extends StatefulWidget {
   final double lato;
   final Field posizioni = Field();
+  Module moduloScelto;
 
   final List playersFromBloc;
 
-  FootballFieldScreen({Key key, @required this.lato, this.playersFromBloc})
+  FootballFieldScreen(
+      {Key key, @required this.lato, this.playersFromBloc, this.moduloScelto})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return FootballFieldScreenState(playersFromBloc);
+    return FootballFieldScreenState(playersFromBloc, moduloScelto);
   }
 }
 
@@ -27,11 +32,28 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
   var _tapIndex;
   List<Player> players;
   TextEditingController _noteFieldController;
+  List<int> convertedPositions;
+  Module moduloScelto;
   final Map<String, Player> playersPlaced = new Map();
 
-  FootballFieldBloc bloc = new FootballFieldBloc(category: 11);
+  FootballFieldScreenState(this.players, this.moduloScelto) {
+    convertedPositions = convertCordinates(moduloScelto);
+  }
 
-  FootballFieldScreenState(this.players);
+  List<int> convertCordinates(Module module) {
+    List<int> indexesList = List<int>();
+
+    for (int i = 0; i < module.positions.length; i++) {
+      List<String> xy = module.positions[i].split(',');
+      int x = int.parse(xy[0]);
+      int y = int.parse(xy[1]);
+      //TODO : rendere dinamico
+      indexesList.add(x * 9 + y);
+    }
+
+    return indexesList;
+  }
+
   void _plus1() {
     // This is how you close the popup menu and return user selection.
     Navigator.pop<int>(context, 1);
@@ -132,7 +154,8 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
               children: <Widget>[
                 FlatButton(
                   onPressed: () {
-                    addEvent(playersPlaced[index].id, EventType.yellowCard, 0); //TODO recuperare istantaneaID
+                    addEvent(playersPlaced[index].id, EventType.yellowCard,
+                        0); //TODO recuperare istantaneaID
                   },
                   child: Row(
                     children: <Widget>[
@@ -146,7 +169,8 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                 ),
                 FlatButton(
                   onPressed: () {
-                    addEvent(playersPlaced[index].id, EventType.redCard, 0); //TODO recuperare istantaneaID
+                    addEvent(playersPlaced[index].id, EventType.redCard,
+                        0); //TODO recuperare istantaneaID
                   },
                   child: Row(
                     children: <Widget>[
@@ -160,7 +184,8 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                 ),
                 FlatButton(
                   onPressed: () {
-                    addEvent(playersPlaced[index].id, EventType.goal, 0); //TODO recuperare istantaneaID
+                    addEvent(playersPlaced[index].id, EventType.goal,
+                        0); //TODO recuperare istantaneaID
                   },
                   child: Row(
                     children: <Widget>[
@@ -171,7 +196,8 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                 ),
                 FlatButton(
                   onPressed: () {
-                    addEvent(playersPlaced[index].id, EventType.substitution, 0); //TODO recuperare istantaneaID
+                    addEvent(playersPlaced[index].id, EventType.substitution,
+                        0); //TODO recuperare istantaneaID
                   },
                   child: Row(
                     children: <Widget>[
@@ -222,10 +248,11 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                           ],
                         ))),
                     FlatButton(
-                        onPressed: () => {
-                              bloc.add(RemoveFootballPlayerFromField(
-                                  playersPlaced[_tapIndex]))
-                            },
+                        onPressed: () {
+                          BlocProvider.of<FootballFieldBloc>(context).add(
+                              RemoveFootballPlayerFromField(
+                                  playersPlaced[_tapIndex]));
+                        },
                         child: Center(
                             child: Row(
                           children: <Widget>[
@@ -256,33 +283,20 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                         addRepaintBoundaries: true,
                         itemCount: players.length,
                         itemBuilder: (BuildContext ctxt, int index) {
-                          return Padding(
-                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: GestureDetector(
-                                  onTap: () => {
-                                        bloc.add(AddFootballPlayerToField(
-                                            players[index]))
-                                      },
-                                  child: Center(
-                                      child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                        Soccerplayer.soccer_player,
-                                        size: 25,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(50, 0, 0, 0),
-                                      ),
-                                      Text(players[index].name ?? 'Test'),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(50, 0, 0, 0),
-                                      ),
-                                      Text(players[index].numero ?? '15'),
-                                    ],
-                                  ))));
+                          return ListTile(
+                            title: Text(players[index].name),
+                            onTap: () => {
+                              BlocProvider.of<FootballFieldBloc>(context).add(
+                                  AddFootballPlayerToField(
+                                      player: players[index], posizione: index))
+                            },
+                            trailing: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.white),
+                            ),
+                          );
                         })
                   ]));
         });
@@ -291,88 +305,112 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FootballFieldBloc, FootballFieldState>(
-        bloc: FootballFieldBloc(category: 13), //TODO: rendere dinamico
+        bloc: FootballFieldBloc(dimension: [11, 11]), //TODO: rendere dinamico
         builder: (BuildContext context, FootballFieldState state) {
-          return FractionallySizedBox(
-              heightFactor: 0.85,
-              widthFactor: 0.85,
-              child: Stack(alignment: Alignment.center, children: [
-                Image.asset('assets/A1QA94rgGUL._AC_SY879_.jpg'),
-                Container(
-                    margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                    child: GridView.count(
-                        padding: EdgeInsets.all(0),
-                        crossAxisSpacing: 4,
-                        crossAxisCount: 9,
-                        children: List.generate(
-                            13 * 9,
-                            (index) => (index == 11 ||
-                                    index == 15 ||
-                                    index == 57 ||
-                                    index == 59 ||
-                                    index == 37 ||
-                                    index == 43 ||
-                                    index == 95 ||
-                                    index == 93 || //=> posizioni[]
-                                    index == 79 || //=> posizioni[8][7]
-                                    index == 73 || //=> posizioni[8][1]
-                                    index == 112)
-                                ? state is FootballFieldCreated
-                                    ? _getPlayerOrPlaceHolder(index)
-                                    : state is FootballFieldEdit
-                                        ? DragTarget(builder:
-                                            (BuildContext context,
-                                                List candidateData,
-                                                List rejectedData) {
-                                            return (index == 11 ||
-                                                    index == 15 ||
-                                                    index == 57 ||
-                                                    index == 59 ||
-                                                    index == 37 ||
-                                                    index == 43 ||
-                                                    index == 95 ||
-                                                    index ==
-                                                        93 || //=> posizioni[]
-                                                    index ==
-                                                        79 || //=> posizioni[8][7]
-                                                    index ==
-                                                        73 || //=> posizioni[8][1]
-                                                    index ==
-                                                        112) //=> posizioni[12][4]
-                                                ? Draggable(
-                                                    child: Icon(
-                                                      Soccerplayer
-                                                          .soccer_player,
-                                                      size: widget.lato,
-                                                    ),
-                                                    feedback: Icon(
-                                                      Soccerplayer
-                                                          .soccer_player,
-                                                      size: widget.lato,
-                                                    ),
-                                                    childWhenDragging: Icon(
-                                                      Soccerplayer
-                                                          .soccer_player,
-                                                      size: widget.lato,
-                                                    ),
+          return Scaffold(
+              body: Center(
+                  child: false
+                      ? LoadingIndicator()
+                      : FractionallySizedBox(
+                          heightFactor: 0.85,
+                          widthFactor: 0.85,
+                          child: Stack(alignment: Alignment.center, children: [
+                            Image.asset('assets/A1QA94rgGUL._AC_SY879_.jpg'),
+                            Container(
+                                margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                                child: GridView.count(
+                                    padding: EdgeInsets.all(0),
+                                    crossAxisSpacing: 4,
+                                    crossAxisCount: 9,
+                                    children: List.generate(
+                                        13 * 9,
+                                        (index) => (convertedPositions
+                                                .contains(index))
+                                            ? state is FootballFieldCreated
+                                                ? _getPlayerOrPlaceHolder(
+                                                    index,
                                                   )
-                                                : Container(
-                                                    decoration: BoxDecoration(
-                                                    color: Colors.transparent,
-                                                    shape: BoxShape.rectangle,
-                                                  ));
-                                          })
-                                        : Container(
-                                            decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            shape: BoxShape.rectangle,
-                                          ))
-                                : Container(
-                                    decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    shape: BoxShape.rectangle,
-                                  )))))
-              ]));
+                                                : state is FootballFieldEdit
+                                                    ? DragTarget(builder:
+                                                        (BuildContext context,
+                                                            List candidateData,
+                                                            List rejectedData) {
+                                                        return (index == 11 ||
+                                                                index == 15 ||
+                                                                index == 57 ||
+                                                                index == 59 ||
+                                                                index == 37 ||
+                                                                index == 43 ||
+                                                                index == 95 ||
+                                                                index ==
+                                                                    93 || //=> posizioni[]
+                                                                index ==
+                                                                    79 || //=> posizioni[8][7]
+                                                                index ==
+                                                                    73 || //=> posizioni[8][1]
+                                                                index ==
+                                                                    112) //=> posizioni[12][4]
+                                                            ? Draggable(
+                                                                child: Icon(
+                                                                  Soccerplayer
+                                                                      .soccer_player,
+                                                                  size: widget
+                                                                      .lato,
+                                                                ),
+                                                                feedback: Icon(
+                                                                  Soccerplayer
+                                                                      .soccer_player,
+                                                                  size: widget
+                                                                      .lato,
+                                                                ),
+                                                                childWhenDragging:
+                                                                    Icon(
+                                                                  Soccerplayer
+                                                                      .soccer_player,
+                                                                  size: widget
+                                                                      .lato,
+                                                                ),
+                                                              )
+                                                            : Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                shape: BoxShape
+                                                                    .rectangle,
+                                                              ));
+                                                      })
+                                                    : Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                        color:
+                                                            Colors.transparent,
+                                                        shape:
+                                                            BoxShape.rectangle,
+                                                      ))
+                                            : Container(
+                                                decoration: BoxDecoration(
+                                                color: Colors.transparent,
+                                                shape: BoxShape.rectangle,
+                                              )))))
+                          ]))),
+              floatingActionButton: Stack(
+                children: <Widget>[
+                  FloatingActionButton.extended(
+                    tooltip: 'crea instantanea',
+                    onPressed: () {
+                      BlocProvider.of<FootballFieldBloc>(context)
+                          .add(FinishInstantanea());
+                    },
+                    label: false
+                        ? Text('creazione incontro in corso ...')
+                        : Text('crea instantanea'),
+                    icon: Icon(false ? Icons.save : Icons.thumb_up),
+                    backgroundColor:
+                        false ? MainColors.DISABLED : MainColors.PRIMARY,
+                  ),
+                ],
+              ));
         });
   }
 

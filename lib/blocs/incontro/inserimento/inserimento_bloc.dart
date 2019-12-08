@@ -8,6 +8,7 @@ import 'package:football_system/blocs/model/coach_model.dart';
 import 'package:football_system/blocs/model/gender_model.dart';
 import 'package:football_system/blocs/model/incontro_model.dart';
 import 'package:football_system/blocs/model/match_model.dart';
+import 'package:football_system/blocs/model/module_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/team_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
@@ -39,6 +40,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   Incontro incontro;
   List<Note> notes;
   List<Event> event;
+  List<Module> modules;
 
   @override
   InserimentoState get initialState => InitialInserimentoState();
@@ -294,11 +296,65 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
                   .singleWhere((coach) => coach.id.toString() == selectedCoach)
                   .name),
         );
-        yield InserisciIncontroState(incontro: incontro);
       } catch (error) {
         yield InserimentoFailure(error: error.toString());
       }
-      yield InserimentoFinishState();
+      add(InserisciModuloEvent());
+    }
+    if (event is InserisciModuloEvent) {
+      //chiamo il be per farmi restituire i moduli per la categoria scelta
+      yield CaricamentoModuliState();
+      var modules =
+          await callsRepository.getTactics(incontro.championship.id.toString());
+
+      if (modules != null) {
+        //TODO : cancellami quando la chiamata funzionerà
+        modules = [
+          new Module(
+              createdAt: '2019-12-08',
+              id: 1,
+              name: '4-4-2',
+              positions: [
+                '1,2',
+                '6,3',
+                '4,1',
+                '10,5',
+                '1,6',
+                '6,5',
+                '4,7',
+                '10,3',
+                '8,7',
+                '8,1',
+                '12,4'
+              ],
+              profileId: 1,
+              updatedAt: '2019-12-08'),
+          new Module(
+              createdAt: '2019-12-08',
+              id: 1,
+              name: '4-3-3',
+              positions: [
+                '1,2',
+                '6,3',
+                '4,1',
+                '10,5',
+                '1,6',
+                '6,5',
+                '6,5',
+                '6,3',
+                '8,7',
+                '8,1',
+                '12,4'
+              ],
+              profileId: 1,
+              updatedAt: '2019-12-08')
+        ];
+        this.modules = modules;
+        yield InserimentoFinishState();
+      }
+    }
+    if (event is SalvaModuloEvent) {
+      this.incontro.module = event.moduloScelto;
     }
   }
 }
