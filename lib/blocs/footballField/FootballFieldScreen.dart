@@ -9,6 +9,7 @@ import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/stuff/event.dart';
 import 'package:football_system/blocs/stuff/field.dart';
 import 'package:football_system/blocs/stuff/index.dart';
+import 'package:football_system/custom_icon/soccer_icons_icons.dart';
 import 'package:football_system/custom_icon/soccerplayer_icons.dart';
 import 'package:shared/shared.dart';
 
@@ -160,7 +161,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                   child: Row(
                     children: <Widget>[
                       Icon(
-                        Icons.sd_card,
+                        SoccerIcons.yellowCard,
                         color: Colors.yellow,
                       ),
                       Text('Cartellino Giallo')
@@ -175,7 +176,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                   child: Row(
                     children: <Widget>[
                       Icon(
-                        Icons.sd_card,
+                        SoccerIcons.redCard,
                         color: Colors.red,
                       ),
                       Text('Cartellino Rosso')
@@ -188,10 +189,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                         0); //TODO recuperare istantaneaID
                   },
                   child: Row(
-                    children: <Widget>[
-                      Icon(Icons.radio_button_unchecked),
-                      Text('Goal')
-                    ],
+                    children: <Widget>[Icon(SoccerIcons.goal), Text('Goal')],
                   ),
                 ),
                 FlatButton(
@@ -201,7 +199,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                   },
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.compare_arrows),
+                      Icon(SoccerIcons.substitution),
                       Text('Substituion')
                     ],
                   ),
