@@ -125,11 +125,6 @@ class _AppState extends State<App> {
             if (state is AuthenticationLoading) {
               return LoadingIndicator();
             }
-            // if (state is OTPRequired) {
-            //   return OTPPage(
-            //     loginBloc: loginBloc,
-            //   );
-            // }
             if (state is AuthenticationAuthenticated || state is OTPRequired) {
               return Scaffold(
                   appBar: AppBar(
