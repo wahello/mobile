@@ -34,6 +34,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   String selectedMatches;
   String selectedTournament;
   String selectedTeam;
+  String selectedModule;
   List selectedPlayersFromCheckBoxList = [];
   List selectedPlayers = [];
   String selectedCoach;
@@ -296,6 +297,8 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
                   .singleWhere((coach) => coach.id.toString() == selectedCoach)
                   .name),
         );
+        incontro.module = modules.singleWhere(
+            (module) => module.id.toString() == selectedModule.toString());
       } catch (error) {
         yield InserimentoFailure(error: error.toString());
       }
@@ -331,7 +334,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
               updatedAt: '2019-12-08'),
           new Module(
               createdAt: '2019-12-08',
-              id: 1,
+              id: 2,
               name: '4-3-3',
               positions: [
                 '1,2',
@@ -352,9 +355,6 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
         this.modules = modules;
         yield InserimentoFinishState();
       }
-    }
-    if (event is SalvaModuloEvent) {
-      this.incontro.module = event.moduloScelto;
     }
   }
 }

@@ -7,5 +7,6 @@ import 'package:flutter/widgets.dart';
 class FormKey {
   static final playersKey = const Key('players');
   static final coachesKey = const Key('coaches');
+  static final modulesKey = const Key('modules');
   static final loginKey = const Key('login');
 }
