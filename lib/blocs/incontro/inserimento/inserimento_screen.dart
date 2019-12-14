@@ -899,7 +899,9 @@ class InserimentoScreenState extends State<InserimentoScreen>
                                 shape: new RoundedRectangleBorder(
                                   borderRadius: new BorderRadius.circular(30.0),
                                 ),
-                                color: MainColors.PRIMARY,
+                                color: inserimentoBloc.selectedModule == null
+                                    ? MainColors.DISABLED
+                                    : MainColors.PRIMARY,
                                 onPressed: () {
                                   goToStep(8);
                                 },
