@@ -40,5 +40,6 @@
     "modificaIncontro": "Modifica incontro",
     "inserisciFormazioneTipo": "Inserisci formazione tipo",
     "obbligatorio": "Questo campo non può essere vuoto.",
-    "homePage": "Torna alla home"
+    "homePage": "Torna alla home",
+    "modules": "Moduli"
 }

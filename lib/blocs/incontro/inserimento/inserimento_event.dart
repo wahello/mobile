@@ -85,11 +85,3 @@ class InserisciModuloEvent extends InserimentoEvent {
   @override
   String toString() => 'InserisciModuloEvent';
 }
-
-class SalvaModuloEvent extends InserimentoEvent {
-  Module moduloScelto;
-
-  SalvaModuloEvent(this.moduloScelto);
-  @override
-  String toString() => 'SalvaModuloEvent';
-}

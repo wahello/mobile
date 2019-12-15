@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:football_system/blocs/home/home_event.dart';
 import 'package:football_system/blocs/model/category_model.dart';
 import 'package:football_system/blocs/model/championship_model.dart';
 import 'package:football_system/blocs/model/coach_model.dart';
@@ -34,6 +35,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   String selectedMatches;
   String selectedTournament;
   String selectedTeam;
+  String selectedModule;
   List selectedPlayersFromCheckBoxList = [];
   List selectedPlayers = [];
   String selectedCoach;
@@ -296,65 +298,64 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
                   .singleWhere((coach) => coach.id.toString() == selectedCoach)
                   .name),
         );
+        incontro.module = modules.singleWhere(
+            (module) => module.id.toString() == selectedModule.toString());
       } catch (error) {
         yield InserimentoFailure(error: error.toString());
       }
-      add(InserisciModuloEvent());
     }
     if (event is InserisciModuloEvent) {
       //chiamo il be per farmi restituire i moduli per la categoria scelta
-      yield CaricamentoModuliState();
-      var modules =
-          await callsRepository.getTactics(incontro.championship.id.toString());
+      this.modules = await modulesByCategoryId(selectedChampionships);
+      // await callsRepository.getTactics(incontro.championship.id.toString());
 
-      if (modules != null) {
-        //TODO : cancellami quando la chiamata funzionerà
-        modules = [
-          new Module(
-              createdAt: '2019-12-08',
-              id: 1,
-              name: '4-4-2',
-              positions: [
-                '1,2',
-                '6,3',
-                '4,1',
-                '10,5',
-                '1,6',
-                '6,5',
-                '4,7',
-                '10,3',
-                '8,7',
-                '8,1',
-                '12,4'
-              ],
-              profileId: 1,
-              updatedAt: '2019-12-08'),
-          new Module(
-              createdAt: '2019-12-08',
-              id: 1,
-              name: '4-3-3',
-              positions: [
-                '1,2',
-                '6,3',
-                '4,1',
-                '10,5',
-                '1,6',
-                '6,5',
-                '6,5',
-                '6,3',
-                '8,7',
-                '8,1',
-                '12,4'
-              ],
-              profileId: 1,
-              updatedAt: '2019-12-08')
-        ];
-        this.modules = modules;
-        yield InserimentoFinishState();
-      }
+      print(modules);
     }
-    if (event is SalvaModuloEvent) {
-      this.incontro.module = event.moduloScelto;
-    }
+  }
+
+  Future<List<Module>> modulesByCategoryId(String categoryId) async {
+    return await Future.delayed(
+      Duration(seconds: 2),
+      () => [
+        new Module(
+            createdAt: '2019-12-08',
+            id: 1,
+            name: '4-4-2',
+            positions: [
+              '1,2',
+              '6,3',
+              '4,1',
+              '10,5',
+              '1,6',
+              '6,5',
+              '4,7',
+              '10,3',
+              '8,7',
+              '8,1',
+              '12,4'
+            ],
+            profileId: 1,
+            updatedAt: '2019-12-08'),
+        new Module(
+            createdAt: '2019-12-08',
+            id: 2,
+            name: '4-3-3',
+            positions: [
+              '1,2',
+              '6,3',
+              '4,1',
+              '10,5',
+              '1,6',
+              '6,5',
+              '6,5',
+              '6,3',
+              '8,7',
+              '8,1',
+              '12,4'
+            ],
+            profileId: 1,
+            updatedAt: '2019-12-08')
+      ],
+    );
   }
 }

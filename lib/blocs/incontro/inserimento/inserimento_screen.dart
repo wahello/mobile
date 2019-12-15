@@ -815,36 +815,118 @@ class InserimentoScreenState extends State<InserimentoScreen>
   }
 
   Widget moduleScreen(InserimentoState state) {
-    return (state is CaricamentoModuliState || inserimentoBloc.modules == null)
-        ? LoadingIndicator()
-        : Center(
-            child: ListView(
-                padding: const EdgeInsets.all(8),
-                children: inserimentoBloc.modules
-                    .map(
-                      (module) => SizedBox(
-                          width: 150,
-                          child: FlatButton(
-                              color: MainColors.PRIMARY,
-                              child: Center(
+    return Center(
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: MainColors.SECONDARY,
+        ),
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 150),
+            FormBuilder(
+              key: FormKey.modulesKey,
+              autovalidate: true,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: <Widget>[
+                        FormBuilderRadio(
+                          activeColor: MainColors.PRIMARY,
+                          decoration:
+                              InputDecoration(labelText: I18n().modules),
+                          attribute: "modules",
+                          initialValue: inserimentoBloc.modules != null
+                              ? inserimentoBloc.selectedModule
+                              : null,
+                          options: inserimentoBloc.modules != null
+                              ? inserimentoBloc.modules
+                                  .map((module) => FormBuilderFieldOption(
+                                      value: module.id.toString(),
+                                      child: Text(module.name.toString())))
+                                  .toList()
+                              : [],
+                          validators: [
+                            FormBuilderValidators.required(
+                                errorText: I18n().obbligatorio)
+                          ],
+                          onChanged: (value) =>
+                              {inserimentoBloc.selectedModule = value},
+                        ),
+                      ],
+                    ),
+                  ),
+                  inserimentoBloc.modules == null
+                      ? Container(
+                          margin: const EdgeInsets.only(top: 20.0),
+                          child: LoadingIndicator(),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              margin: const EdgeInsets.only(top: 20.0),
+                              alignment: Alignment.centerLeft,
+                              child: FlatButton(
+                                shape: new RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(30.0),
+                                ),
+                                color: MainColors.PRIMARY,
+                                onPressed: () => goToStep(6),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 20.0,
+                                  horizontal: 20.0,
+                                ),
                                 child: Text(
-                                  module.name,
+                                  I18n().indietro,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: MainColors.TEXT_NEGATIVE,
-                                    fontSize: 35,
-                                  ),
+                                      color: MainColors.TEXT_NEGATIVE,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              onPressed: () =>
-                                  handleModulePressed(module, context))),
-                    )
-                    .toList()),
-          );
-  }
-
-  void handleModulePressed(Module module, BuildContext context) {
-    inserimentoBloc.add(SalvaModuloEvent(module));
-    goToStep(8);
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              margin: const EdgeInsets.only(top: 20.0),
+                              alignment: Alignment.centerRight,
+                              child: FlatButton(
+                                disabledColor: MainColors.DISABLED,
+                                shape: new RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(30.0),
+                                ),
+                                color: inserimentoBloc.selectedModule == null
+                                    ? MainColors.DISABLED
+                                    : MainColors.PRIMARY,
+                                onPressed: () {
+                                  goToStep(8);
+                                },
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 20.0,
+                                  horizontal: 20.0,
+                                ),
+                                child: Text(
+                                  I18n().avanti,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: MainColors.TEXT_NEGATIVE,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget incontroScreen() {
@@ -913,14 +995,13 @@ class InserimentoScreenState extends State<InserimentoScreen>
       }
     }
     if (step == 7) {
-      // if (inserimentoBloc.incontro == null) {
-      inserimentoBloc.add(InserisciIncontroEvent());
-      // }
+      inserimentoBloc.add(InserisciModuloEvent());
     }
     if (step == 8) {
-      // if (inserimentoBloc.incontro == null) {
-
-      // }
+      if (inserimentoBloc.selectedModule == null)
+        step = 7;
+      else
+        inserimentoBloc.add(InserisciIncontroEvent());
     }
     _controller.animateToPage(
       step,
