@@ -859,7 +859,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       ],
                     ),
                   ),
-                  state is InserimentoLoadingState
+                  inserimentoBloc.modules == null
                       ? Container(
                           margin: const EdgeInsets.only(top: 20.0),
                           child: LoadingIndicator(),
@@ -899,7 +899,9 @@ class InserimentoScreenState extends State<InserimentoScreen>
                                 shape: new RoundedRectangleBorder(
                                   borderRadius: new BorderRadius.circular(30.0),
                                 ),
-                                color: MainColors.PRIMARY,
+                                color: inserimentoBloc.selectedModule == null
+                                    ? MainColors.DISABLED
+                                    : MainColors.PRIMARY,
                                 onPressed: () {
                                   goToStep(8);
                                 },
@@ -992,9 +994,14 @@ class InserimentoScreenState extends State<InserimentoScreen>
         inserimentoBloc.add(GetCoachesEvent());
       }
     }
-    if (step == 7) {}
+    if (step == 7) {
+      inserimentoBloc.add(InserisciModuloEvent());
+    }
     if (step == 8) {
-      inserimentoBloc.add(InserisciIncontroEvent());
+      if (inserimentoBloc.selectedModule == null)
+        step = 7;
+      else
+        inserimentoBloc.add(InserisciIncontroEvent());
     }
     _controller.animateToPage(
       step,
