@@ -45,7 +45,9 @@ class FootballFieldPageState extends State<FootballFieldPage> {
 
   FootballFieldPageState(this.inserimentoBloc) {
     dimension = getDimensionFromCategory(inserimentoBloc.incontro);
-    footballFieldBloc = FootballFieldBloc(dimension: dimension);
+    footballFieldBloc = FootballFieldBloc(
+        dimension: dimension,
+        availablePlayers: inserimentoBloc.incontro.players);
   }
 
   List getPlayersSelected(InserimentoBloc inserimentoBloc) {
@@ -76,12 +78,13 @@ class FootballFieldPageState extends State<FootballFieldPage> {
         builder: (BuildContext context) => footballFieldBloc,
         child: BlocBuilder<FootballFieldBloc, FootballFieldState>(
             builder: (BuildContext context, FootballFieldState state) {
-          if (state is FootballFieldCreated) {
+          if (state is FootballFieldCreated ||
+              state is FootballFieldRefreshed) {
             //TODO aggiungere lista giocatori
             return FootballFieldScreen(
               lato: 30,
-              playersFromBloc: inserimentoBloc.incontro.players,
-              moduloScelto: inserimentoBloc.incontro.module,
+              inserimentoIncontroBloc: inserimentoBloc,
+              footballFieldBloc: footballFieldBloc,
             );
           } else {
             Container(

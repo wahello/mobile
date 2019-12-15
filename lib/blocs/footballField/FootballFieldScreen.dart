@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
+import 'package:football_system/blocs/footballField/players_screen.dart';
+import 'package:football_system/blocs/footballField/test.dart';
 import 'package:football_system/blocs/incontro/inserimento/inserimento_bloc.dart';
 import 'package:football_system/blocs/model/module_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
@@ -14,31 +16,38 @@ import 'package:football_system/custom_icon/soccerplayer_icons.dart';
 import 'package:shared/shared.dart';
 
 class FootballFieldScreen extends StatefulWidget {
+  InserimentoBloc inserimentoIncontroBloc;
+  FootballFieldBloc footballFieldBloc;
   final double lato;
   final Field posizioni = Field();
-  Module moduloScelto;
-
-  final List playersFromBloc;
 
   FootballFieldScreen(
-      {Key key, @required this.lato, this.playersFromBloc, this.moduloScelto})
+      {Key key,
+      @required this.lato,
+      this.inserimentoIncontroBloc,
+      this.footballFieldBloc})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return FootballFieldScreenState(playersFromBloc, moduloScelto);
+    return FootballFieldScreenState(
+        inserimentoIncontroBloc: inserimentoIncontroBloc,
+        footballFieldBloc: footballFieldBloc);
   }
 }
 
 class FootballFieldScreenState extends State<FootballFieldScreen> {
+  InserimentoBloc inserimentoIncontroBloc;
+  FootballFieldBloc footballFieldBloc;
   var _tapIndex;
   List<Player> players;
   TextEditingController _noteFieldController;
   List<int> convertedPositions;
-  Module moduloScelto;
   final Map<String, Player> playersPlaced = new Map();
 
-  FootballFieldScreenState(this.players, this.moduloScelto) {
-    convertedPositions = convertCordinates(moduloScelto);
+  FootballFieldScreenState(
+      {this.inserimentoIncontroBloc, this.footballFieldBloc}) {
+    convertedPositions =
+        convertCordinates(inserimentoIncontroBloc.incontro.module);
   }
 
   List<int> convertCordinates(Module module) {
@@ -266,34 +275,32 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
               : Container(
                   height: 300,
                   decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.white,
                       borderRadius: BorderRadius.only(
                           topLeft: const Radius.circular(10),
                           topRight: const Radius.circular(10))),
                   child: Column(children: <Widget>[
-                    Text(
-                      'Players available',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 20)),
                     ListView.builder(
                         shrinkWrap: true,
                         addRepaintBoundaries: true,
                         itemCount: players.length,
                         itemBuilder: (BuildContext ctxt, int index) {
-                          return ListTile(
-                            title: Text(players[index].name),
-                            onTap: () => {
-                              BlocProvider.of<FootballFieldBloc>(context).add(
-                                  AddFootballPlayerToField(
-                                      player: players[index], posizione: index))
-                            },
-                            trailing: Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.white),
-                            ),
+                          return Column(
+                            children: <Widget>[
+                              ListTile(
+                                title: Text(
+                                  players[index].name,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: MainColors.PRIMARY),
+                                ),
+                                onTap: () => {},
+                              ),
+                              Divider(
+                                color: MainColors.PRIMARY,
+                                thickness: 2,
+                              )
+                            ],
                           );
                         })
                   ]));
@@ -333,21 +340,9 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                                                         (BuildContext context,
                                                             List candidateData,
                                                             List rejectedData) {
-                                                        return (index == 11 ||
-                                                                index == 15 ||
-                                                                index == 57 ||
-                                                                index == 59 ||
-                                                                index == 37 ||
-                                                                index == 43 ||
-                                                                index == 95 ||
-                                                                index ==
-                                                                    93 || //=> posizioni[]
-                                                                index ==
-                                                                    79 || //=> posizioni[8][7]
-                                                                index ==
-                                                                    73 || //=> posizioni[8][1]
-                                                                index ==
-                                                                    112) //=> posizioni[12][4]
+                                                        return (convertedPositions
+                                                                .contains(
+                                                                    index)) //=> posizioni[12][4]
                                                             ? Draggable(
                                                                 child: Icon(
                                                                   Soccerplayer
@@ -444,7 +439,13 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
       // Ritorno un placeholder
       return GestureDetector(
           onTap: () {
-            _showCustomMenu(index);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PlayersScreen(
+                        footballFieldBloc: footballFieldBloc,
+                        inserimentoIncontroBloc: inserimentoIncontroBloc,
+                        posizione: index)));
           },
           child: Container(
             child: Icon(
