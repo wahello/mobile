@@ -4,7 +4,6 @@ import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/footballField/players_screen.dart';
-import 'package:football_system/blocs/footballField/test.dart';
 import 'package:football_system/blocs/incontro/inserimento/inserimento_bloc.dart';
 import 'package:football_system/blocs/model/module_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';

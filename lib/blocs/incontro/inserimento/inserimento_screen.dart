@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
+import 'package:football_system/blocs/addForm/index.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldPage.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
@@ -484,8 +486,10 @@ class InserimentoScreenState extends State<InserimentoScreen>
   }
 
   Widget teamScreen(state) {
-    return Center(
-        child: Container(
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+        child: Center(
+            child: Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: MainColors.SECONDARY,
@@ -520,6 +524,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                           .toList()
                       : [],
                 ),
+                AddFormScreen(type: TypeAddForm.TEAM),
                 state is InserimentoLoadingState
                     ? Container(
                         margin: const EdgeInsets.only(top: 20.0),
@@ -582,7 +587,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
               ])),
         ],
       ),
-    ));
+    )));
   }
 
   Widget playersScreen(state) {

@@ -18,9 +18,14 @@ class AddFormSingleState extends State<AddFormSingle> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 400,
+      height: 200,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text('Name: '),
               TextField(
@@ -30,6 +35,7 @@ class AddFormSingleState extends State<AddFormSingle> {
           ),
           widget.type == TypeAddForm.PLAYER
               ? Row(
+                mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text('Number: '),
                     TextField(
@@ -40,6 +46,7 @@ class AddFormSingleState extends State<AddFormSingle> {
               : SizedBox.shrink(),
           widget.type == TypeAddForm.PLAYER
               ? Row(
+                mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text('Role: '),
                     TextField(

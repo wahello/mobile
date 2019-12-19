@@ -14,8 +14,9 @@ class AddFormScreen extends StatefulWidget {
 }
 
 class AddFormScreenState extends State<AddFormScreen> {
-  List<AddFormSingle> rows;
+  List<Text> rows;
   final TypeAddForm type;
+  final _controller = TextEditingController();
 
   AddFormScreenState(this.type);
 
@@ -24,19 +25,16 @@ class AddFormScreenState extends State<AddFormScreen> {
   void initState() {
     super.initState();
     rows = new List();
-    rows.add(new AddFormSingle(
-      type: type,
-    ));
   }
 
-  void _addElement() {
-    rows.add(new AddFormSingle(
-      type: type,
-    ));
+  void _addElement(String text) {
+    if (text?.isNotEmpty ?? false) {
+      rows.add(new Text(text));
+    }
   }
 
-  void _removeElement() {
-    rows.removeAt(rows.length - 1);
+  void _removeElement(int index) {
+    rows.removeAt(index);
   }
 
   @override
@@ -46,30 +44,76 @@ class AddFormScreenState extends State<AddFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddFormBloc, AddFormState>(builder: (
-      BuildContext context,
-      AddFormState currentState,
-    ) {
-      return Column(children: [
-        Text('Aggiungi elementi'),
-        Row(
-          children: <Widget>[
-            FlatButton(
-              child: Icon(Icons.plus_one),
-              onPressed: _addElement,
-            ),
-            FlatButton(
-              child: Icon(Icons.delete),
-              onPressed: _removeElement,
-            )
-          ],
-        ),
-        ListView.builder(
-            itemCount: rows.length,
-            itemBuilder: (BuildContext ctxt, int index) {
-              return rows[index];
-            })
-      ]);
-    });
+    return BlocBuilder<AddFormBloc, AddFormState>(
+        bloc: AddFormBloc(),
+        builder: (
+          BuildContext context,
+          AddFormState currentState,
+        ) {
+          return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                ),
+                Text(
+                  'Aggiungi elementi',
+                  style: TextStyle(
+                      fontSize: 16,
+                      decorationStyle: TextDecorationStyle.solid,
+                      decoration: TextDecoration.underline),
+                ),
+                Column(
+                  children: <Widget>[
+                    TextField(
+                      controller: _controller,
+                      textCapitalization: TextCapitalization.sentences,
+                    ),
+                    FlatButton(
+                      child: Icon(Icons.add),
+                      onPressed: () {
+                        _addElement(_controller.text);
+                        _controller.clear();
+                      },
+                    ),
+                  ],
+                ),
+                SingleChildScrollView(
+                    child: Column(
+                  children: <Widget>[
+                    ListView.builder(
+                        itemCount: rows.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          String name = rows[index].data;
+                          return Flex(
+                              direction: Axis.horizontal,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Text('Name: $name'),
+                                    FlatButton(
+                                      child: Icon(Icons.remove),
+                                      onPressed: () {
+                                        _removeElement(index);
+                                      },
+                                    )
+                                  ],
+                                )
+                              ]);
+                        }),
+                    rows.length > 0
+                        ? FlatButton(
+                            onPressed: _submitForm,
+                            child: Icon(Icons.done),
+                          )
+                        : SizedBox.shrink()
+                  ],
+                ))
+              ]);
+        });
   }
+
+  void _submitForm() {}
 }
