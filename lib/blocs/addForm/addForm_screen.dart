@@ -18,6 +18,9 @@ class AddFormScreenState extends State<AddFormScreen> {
   final TypeAddForm type;
   final _controller = TextEditingController();
 
+  String label;
+  int maxRows;
+
   AddFormScreenState(this.type);
 
 //Nell'init creo la lista e la inizializzo con un solo elemento
@@ -25,10 +28,21 @@ class AddFormScreenState extends State<AddFormScreen> {
   void initState() {
     super.initState();
     rows = new List();
+
+    if (type == TypeAddForm.COACH) {
+      label = 'Aggiungi allenatore';
+      maxRows = 1;
+    } else if (type == TypeAddForm.PLAYER) {
+      label = 'Aggiungi giocatori';
+      maxRows = 11;
+    } else if (type == TypeAddForm.TEAM) {
+      label = 'Aggiungi squadra';
+      maxRows = 1;
+    }
   }
 
   void _addElement(String text) {
-    if (text?.isNotEmpty ?? false) {
+    if (rows.length < maxRows && (text?.isNotEmpty ?? false)) {
       rows.add(new Text(text));
     }
   }
@@ -58,7 +72,7 @@ class AddFormScreenState extends State<AddFormScreen> {
                   padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 ),
                 Text(
-                  'Aggiungi elementi',
+                  label,
                   style: TextStyle(
                       fontSize: 16,
                       decorationStyle: TextDecorationStyle.solid,
@@ -69,6 +83,10 @@ class AddFormScreenState extends State<AddFormScreen> {
                     TextField(
                       controller: _controller,
                       textCapitalization: TextCapitalization.sentences,
+                      onSubmitted: (text) {
+                        _addElement(text);
+                        _controller.clear();
+                      },
                     ),
                     FlatButton(
                       child: Icon(Icons.add),
