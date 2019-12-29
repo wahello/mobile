@@ -124,6 +124,8 @@ class I18n implements WidgetsLocalizations {
   String get newCoach => "Aggiungi allenatore";
   /// "Moduli"
   String get modules => "Moduli";
+  /// "Nome ${name}"
+  String name(String name) => "Nome ${name}";
 }
 
 class _I18n_it_IT extends I18n {
@@ -274,6 +276,9 @@ class _I18n_en_US extends I18n {
   /// "Modules"
   @override
   String get modules => "Modules";
+  /// "Name ${name}"
+  @override
+  String name(String name) => "Name ${name}";
 
   @override
   TextDirection get textDirection => TextDirection.ltr;

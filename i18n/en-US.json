@@ -44,5 +44,6 @@
   "newPlayers": "Add player",
   "newTeam": "Add team",
   "newCoach": "Add coach",
-  "modules": "Modules"
+  "modules": "Modules",
+  "name": "Name {name}"
 }

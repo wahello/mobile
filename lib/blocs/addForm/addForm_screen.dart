@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/index.dart';
+import 'package:football_system/generated/i18n.dart';
 
 class AddFormScreen extends StatefulWidget {
   final TypeAddForm type;
@@ -30,13 +31,13 @@ class AddFormScreenState extends State<AddFormScreen> {
     rows = new List();
 
     if (type == TypeAddForm.COACH) {
-      label = 'Aggiungi allenatore';
+      label = I18n().newCoach;
       maxRows = 1;
     } else if (type == TypeAddForm.PLAYER) {
-      label = 'Aggiungi giocatori';
+      label = I18n().newPlayers;
       maxRows = 11;
     } else if (type == TypeAddForm.TEAM) {
-      label = 'Aggiungi squadra';
+      label = I18n().newTeam;
       maxRows = 1;
     }
   }
@@ -110,7 +111,7 @@ class AddFormScreenState extends State<AddFormScreen> {
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    Text('Name: $name'),
+                                    Text(I18n().name(name)),
                                     FlatButton(
                                       child: Icon(Icons.remove),
                                       onPressed: () {

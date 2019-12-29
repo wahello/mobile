@@ -44,5 +44,6 @@
   "newPlayers": "Aggiungi giocatori",
   "newTeam": "Aggiungi squadra",
   "newCoach": "Aggiungi allenatore",
-  "modules": "Moduli"
+  "modules": "Moduli",
+  "name": "Nome {name}"
 }
