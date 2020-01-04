@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/index.dart';
-import 'package:football_system/blocs/model/player_model.dart';
-import 'package:football_system/blocs/model/team_model.dart';
-import 'package:football_system/blocs/stuff/index.dart';
+import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/generated/i18n.dart';
 
 class AddFormScreen extends StatefulWidget {
@@ -138,12 +136,6 @@ class AddFormScreenState extends State<AddFormScreen> {
   }
 
   void _submitForm() {
-    // AddFormBloc().add(SubmitFormEvent(rows));
-    List<Team> toAdd;
-    for (var row in rows) {
-      toAdd.add(new Team(2, row.data));
-    }
-    CallsRepository().persistKey('teams', toAdd);
-    setState(() {});
+    InserimentoBloc().add(SubmitFormEvent(rows, type));
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/home/home_event.dart';
 import 'package:football_system/blocs/model/category_model.dart';
 import 'package:football_system/blocs/model/championship_model.dart';
@@ -314,6 +315,27 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       // await callsRepository.getTactics(incontro.championship.id.toString());
 
       print(modules);
+    }
+    if (event is SubmitFormEvent) {
+      //AddFormRepository().sendData(event.dataToSend);
+      List<Team> toAdd;
+      for (var row in event.dataToSend) {
+        toAdd.add(new Team(2, row.data));
+      }
+      CallsRepository().persistKey('teams', toAdd);
+      switch (event.type) {
+        case TypeAddForm.TEAM:
+          InserimentoBloc().add(GetTeamsEvent());
+          break;
+        case TypeAddForm.COACH:
+          InserimentoBloc().add(GetCoachesEvent());
+          break;
+        case TypeAddForm.PLAYER:
+          InserimentoBloc().add(GetPlayersEvent());
+          break;
+        default:
+      }
+      InserimentoBloc().add(event);
     }
   }
 

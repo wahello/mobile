@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:football_system/blocs/addForm/index.dart';
+import 'package:football_system/blocs/model/team_model.dart';
+import 'package:football_system/blocs/stuff/index.dart';
 
 class AddFormBloc extends Bloc<AddFormEvent, AddFormState> {
   // todo: check singleton for logic in project
@@ -22,9 +24,5 @@ class AddFormBloc extends Bloc<AddFormEvent, AddFormState> {
   @override
   Stream<AddFormState> mapEventToState(
     AddFormEvent event,
-  ) async* {
-    if (event is SubmitFormEvent) {
-      AddFormRepository().sendData(event.dataToSend);
-    }
-  }
+  ) async* {}
 }

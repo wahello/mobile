@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/model/module_model.dart';
 import 'package:meta/meta.dart';
 
@@ -9,6 +10,16 @@ abstract class InserimentoEvent extends Equatable {
 class InserimentoStarted extends InserimentoEvent {
   @override
   String toString() => 'InserimentoStarted';
+}
+
+class SubmitFormEvent extends InserimentoEvent {
+  final List dataToSend;
+  final TypeAddForm type;
+
+  SubmitFormEvent(this.dataToSend, this.type);
+
+  @override
+  String toString() => 'SubmitFormEvent';
 }
 
 class InserimentoLoadingEvent extends InserimentoEvent {
