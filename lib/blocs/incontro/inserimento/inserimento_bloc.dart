@@ -198,6 +198,9 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
           List<Team> teamsList =
               list.map((team) => Team.fromJson(team)).toList();
           teams = teamsList;
+          List<Team> playersFromShared =
+              await CallsRepository().readKey('teams');
+          teams.addAll(playersFromShared);
         } else {
           yield InserimentoFailure(
               error: jsonDecode(response.reasonPhrase).toString());

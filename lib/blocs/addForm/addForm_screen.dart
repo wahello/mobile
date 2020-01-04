@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/index.dart';
 import 'package:football_system/blocs/model/player_model.dart';
+import 'package:football_system/blocs/model/team_model.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/generated/i18n.dart';
 
@@ -138,11 +139,11 @@ class AddFormScreenState extends State<AddFormScreen> {
 
   void _submitForm() {
     // AddFormBloc().add(SubmitFormEvent(rows));
-    List toAdd;
+    List<Team> toAdd;
     for (var row in rows) {
-      toAdd.add(new Player(name: row.data));
+      toAdd.add(new Team(2, row.data));
     }
-    CallsRepository().persistKey('players', toAdd);
+    CallsRepository().persistKey('teams', toAdd);
     setState(() {});
   }
 }
