@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/index.dart';
+import 'package:football_system/blocs/model/player_model.dart';
+import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/generated/i18n.dart';
 
 class AddFormScreen extends StatefulWidget {
@@ -134,5 +136,13 @@ class AddFormScreenState extends State<AddFormScreen> {
         });
   }
 
-  void _submitForm() {}
+  void _submitForm() {
+    // AddFormBloc().add(SubmitFormEvent(rows));
+    List toAdd;
+    for (var row in rows) {
+      toAdd.add(new Player(name: row.data));
+    }
+    CallsRepository().persistKey('players', toAdd);
+    setState(() {});
+  }
 }
