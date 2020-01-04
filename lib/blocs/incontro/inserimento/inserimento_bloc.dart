@@ -217,6 +217,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
           List<Player> playersList =
               list.map((player) => Player.fromJson(player)).toList();
           players = playersList;
+          List playersFromShared = await CallsRepository().readKey('players');
         } else {
           yield InserimentoFailure(
               error: jsonDecode(response.reasonPhrase).toString());
