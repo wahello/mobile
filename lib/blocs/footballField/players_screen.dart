@@ -1,27 +1,55 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:football_system/blocs/footballField/FootBallField.dart';
-import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
-import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
-import 'package:football_system/blocs/incontro/inserimento/index.dart';
-import 'package:football_system/blocs/model/player_model.dart';
-import 'package:football_system/custom_icon/soccerplayer_icons.dart';
-import 'package:shared/shared.dart';
 
-class PlayerScreen extends StatefulWidget {
-  FootballFieldBloc footballFieldBloc;
-  int posizione;
+class PlayerPage extends StatefulWidget {
+  PlayerPage({Key key, this.title}) : super(key: key);
 
-  PlayerScreen({this.footballFieldBloc, this.posizione});
+  final String title;
+
   @override
-  _PlayerScreenState createState() => _PlayerScreenState();
+  _PlayerPageState createState() => _PlayerPageState();
 }
 
-class _PlayerScreenState extends State<PlayerScreen> {
-  FootballFieldBloc footballFieldBloc;
-  int posizione;
+class _PlayerPageState extends State<PlayerPage> {
+  final noteController = TextEditingController();
+  CarouselSlider carousel;
 
-  _PlayerScreenState({this.footballFieldBloc, this.posizione});
+  //#cartellino giallo
+  var yellowCard = 0;
+  //#cartellino rosso
+  var redCard = 0;
+  //#goal
+  var goal = 0;
+  //#assist
+  var assist = 0;
+
+  //note giocatore
+  var notes = [""];
+
+  void initState() {
+    super.initState();
+    noteController.addListener(() => {});
+  }
+
+  void submitNote(String note) {
+    //TODO: handle save note
+    setState(() => {notes.add(note)});
+  }
+
+  void addNewNote() {
+    notes.add('');
+    setState(() {
+      this.carousel.animateToPage(notes.length,
+          duration: Duration(milliseconds: 1500), curve: Curves.elasticInOut);
+    });
+  }
+
+  @override
+  void dispose() {
+    noteController.dispose();
+    super.dispose();
+  }
+
   Widget _buildCoverImage(Size screenSize) {
     return Container(
       height: screenSize.height / 2.6,
@@ -32,9 +60,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   Widget _buildProfileImage() {
-    Player player = footballFieldBloc.footballField.players[posizione];
-    String name = player.name;
-    String number = player.id.toString();
     return Center(
         child: Container(
       width: 150.0,
@@ -50,9 +75,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
         child: Center(
             child: Column(
           children: <Widget>[
-            Text(name,
+            Text('Cipollina',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            Text(number,
+            Text('95',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
           ],
         )),
@@ -61,12 +86,30 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   Widget _buildPlayerEventStatus(String image, String label, int count) {
+    bool disableAddAndRemove = ((label == 'C. giallo' && yellowCard == 2) ||
+        ((label == 'C. rosso' || label == 'C. giallo') && redCard == 1));
+    bool disableRemove = count == 0;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         FlatButton(
-          onPressed: () => {},
-          child: Icon(Icons.add),
+          onPressed: () => {
+            setState(() => {
+                  ++count,
+                  if (label == 'C. giallo' && redCard == 0 && count <= 2)
+                    {
+                      yellowCard = count,
+                      if (yellowCard == 2) {redCard = 1}
+                    }
+                  else if (label == 'C. rosso' && yellowCard == 0 && count == 1)
+                    {redCard = count}
+                  else if (label == 'Assist')
+                    {assist = count}
+                  else if (label == 'Goal')
+                    {goal = count}
+                })
+          },
+          child: disableAddAndRemove ? null : Icon(Icons.add),
         ),
         Container(
           width: 30,
@@ -81,8 +124,21 @@ class _PlayerScreenState extends State<PlayerScreen> {
         ),
         Text(count != null ? count.toString() : 0),
         FlatButton(
-          onPressed: () => {},
-          child: Icon(Icons.remove),
+          onPressed: () => {
+            setState(() => {
+                  if (count > 0) {count--},
+                  if (label == 'C. rosso')
+                    {redCard = count}
+                  else if (label == 'C. giallo')
+                    {yellowCard = count}
+                  else if (label == 'Assist')
+                    {assist = count}
+                  else if (label == 'Goal')
+                    {goal = count}
+                })
+          },
+          child:
+              disableAddAndRemove || disableRemove ? null : Icon(Icons.remove),
         ),
       ],
     );
@@ -118,10 +174,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                _buildPlayerEventStatus('red_card.png', 'C. rosso', 0),
-                _buildPlayerEventStatus('yellow_card.png', 'C. giallo', 1),
-                _buildPlayerEventStatus('goal.png', 'Goal', 2),
-                _buildPlayerEventStatus('assist.png', 'Assist', 2),
+                _buildPlayerEventStatus('red_card.png', 'C. rosso', redCard),
+                _buildPlayerEventStatus(
+                    'yellow_card.png', 'C. giallo', yellowCard),
+                _buildPlayerEventStatus('goal.png', 'Goal', goal),
+                _buildPlayerEventStatus('assist.png', 'Assist', assist),
                 // _buildPlayerEventStatus('red_card.png', 'Cartellino rosso', 0),
               ],
             ),
@@ -129,7 +186,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
         ));
   }
 
-  Widget _buildNotesField() {
+  Widget _buildNotesField(String note) {
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -141,11 +198,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
           scrollDirection: Axis.vertical,
           reverse: true,
           child: new TextFormField(
+            initialValue: note,
             decoration: InputDecoration(
-              suffixIcon: FlatButton(
-                  onPressed: () => {}, child: Icon(Icons.add_comment)),
+              suffixIcon:
+                  FlatButton(onPressed: () => {}, child: Icon(Icons.edit)),
             ),
             maxLines: null,
+            onSaved: (note) => {},
+            onFieldSubmitted: (note) => {submitNote(note)},
+            controller: note == null ? noteController : null,
+            textInputAction: TextInputAction.done,
           ),
         ),
       ),
@@ -153,51 +215,26 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   Widget _buildNotesCarousel(Size screenSize) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: CarouselSlider(
-        height: screenSize.height / 7,
-        //note salvate nel bloc
-        items: [
-          'molto veloce nel recupero palla',
-          'ottimo dribling',
-          'ottima resistenza'
-        ].map((note) {
-          return Builder(
-            builder: (BuildContext context) {
-              return Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 2)),
-                margin: EdgeInsets.only(left: 20, right: 20),
-                child: new Scrollbar(
-                  child: new SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    reverse: true,
-                    child: new TextFormField(
-                      initialValue: note,
-                      decoration: InputDecoration(
-                        suffixIcon: FlatButton(
-                            onPressed: () => {}, child: Icon(Icons.edit)),
-                      ),
-                      maxLines: null,
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
-        }).toList(),
-      ),
+    this.carousel = CarouselSlider(
+      height: screenSize.height / 7,
+      //note salvate nel bloc
+
+      items: notes.map((note) {
+        return Builder(
+          builder: (BuildContext context) {
+            return _buildNotesField(note);
+          },
+        );
+      }).toList(),
     );
+    return Container(margin: EdgeInsets.only(top: 10), child: this.carousel);
   }
 
   Widget _buildCarouselButtons(Size screenSize) {
     return Container(
-        margin: EdgeInsets.only(top: screenSize.height / 12.5),
+        margin: EdgeInsets.only(top: screenSize.height / 20.5),
         child: FloatingActionButton(
-          onPressed: () => {},
+          onPressed: () => {this.addNewNote()},
           child: Icon(Icons.add),
         ));
   }

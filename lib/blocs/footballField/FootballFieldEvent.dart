@@ -70,3 +70,11 @@ class FinishInstantanea extends FootballFieldEvent {
   @override
   String toString() => 'FinishInstantanea';
 }
+
+class ShowPlayerOptionsEvent extends FootballFieldEvent {
+  int currentPlayer;
+  ShowPlayerOptionsEvent({this.currentPlayer});
+
+  @override
+  String toString() => 'ShowPlayerOptionsEvent';
+}

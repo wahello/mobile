@@ -1033,11 +1033,9 @@ class InserimentoScreenState extends State<InserimentoScreen>
             });
           }
           return Container(
-
-              //
               child: PageView(
             controller: _controller,
-            physics: new AlwaysScrollableScrollPhysics(),
+            physics: AlwaysScrollableScrollPhysics(),
             children: <Widget>[
               genderScreen(state),
               championshipScreen(state),

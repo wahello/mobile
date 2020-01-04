@@ -15,16 +15,14 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
   final FootballFieldProvider footballFieldProvider = FootballFieldProvider();
   List<Player> addedPlayers;
   List<Player> availablePlayers;
+  FootballField footballField;
+  int currentPlayer;
 
   FootballFieldBloc({@required this.dimension, this.availablePlayers})
       : assert(dimension != null) {
     addedPlayers = List<Player>();
-    currentInstantanea = FootballField(dimension: this.dimension);
-    instantanee = List<FootballField>();
+    footballField = FootballField(dimension: this.dimension);
   }
-
-  FootballField currentInstantanea;
-  List<FootballField> instantanee;
 
   FootballFieldState get initialState => FootballFieldCreated();
 
@@ -52,15 +50,19 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
       availablePlayers = availablePlayers
           .where((player) => player.id != event.player.id)
           .toList();
+      footballField.players[event.posizione] = event.player;
 
       yield FootballFieldRefreshed();
     }
     if (event is EditFootballField) {
-      currentInstantanea[event.player.posizione] = event.player;
       yield FootballFieldRefreshed();
     }
     if (event is FinishInstantanea) {
       print(event.toString());
+    }
+    if (event is ShowPlayerOptionsEvent) {
+      this.currentPlayer = event.currentPlayer;
+      yield FootballFieldRefreshed();
     }
   }
 }

@@ -60,12 +60,12 @@ class FootballFieldPageState extends State<FootballFieldPage> {
 
     switch (incontro.category.name) {
       case 'Serie A':
+        category.add(13);
         category.add(9);
-        category.add(11);
         break;
       default:
+        category.add(13);
         category.add(9);
-        category.add(11);
         break;
     }
 
@@ -79,8 +79,8 @@ class FootballFieldPageState extends State<FootballFieldPage> {
         child: BlocBuilder<FootballFieldBloc, FootballFieldState>(
             builder: (BuildContext context, FootballFieldState state) {
           if (state is FootballFieldCreated ||
-              state is FootballFieldRefreshed) {
-            //TODO aggiungere lista giocatori
+              state is FootballFieldRefreshed ||
+              state is ShowPlayerOptionsState) {
             return FootballFieldScreen(
               lato: 30,
               inserimentoIncontroBloc: inserimentoBloc,
