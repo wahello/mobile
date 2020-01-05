@@ -65,75 +65,89 @@ class AddFormScreenState extends State<AddFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-          ),
-          Text(
-            label,
-            style: TextStyle(
-                fontSize: 16,
-                decorationStyle: TextDecorationStyle.solid,
-                decoration: TextDecoration.underline),
-          ),
-          Column(
-            children: <Widget>[
-              TextField(
-                controller: _controller,
-                textCapitalization: TextCapitalization.sentences,
-                onSubmitted: (text) {
-                  _addElement(text);
-                  _controller.clear();
-                },
+    return BlocListener<InserimentoBloc, InserimentoState>(
+        bloc: widget.bloc,
+        listener: (context, state) {
+          if (state is InserimentoFormError) {
+            final snackBar = SnackBar(content: Text(I18n().erroreGenerico));
+            Scaffold.of(context).showSnackBar(snackBar);
+          }
+          if (state is InserimentoFormSuccess) {
+            final snackBar = SnackBar(content: Text(I18n().inserimentoCorretto));
+            Scaffold.of(context).showSnackBar(snackBar);
+            rows.clear();
+          }
+        },
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
               ),
-              FlatButton(
-                child: Icon(Icons.add),
-                onPressed: () {
-                  _addElement(_controller.text);
-                  _controller.clear();
-                },
+              Text(
+                label,
+                style: TextStyle(
+                    fontSize: 16,
+                    decorationStyle: TextDecorationStyle.solid,
+                    decoration: TextDecoration.underline),
               ),
-            ],
-          ),
-          SingleChildScrollView(
-              child: Column(
-            children: <Widget>[
-              ListView.builder(
-                  itemCount: rows.length,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    String name = rows[index].data;
-                    return Flex(direction: Axis.horizontal, children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Text(I18n().name(name)),
-                          FlatButton(
-                            child: Icon(Icons.remove),
-                            onPressed: () {
-                              _removeElement(index);
-                            },
-                          )
-                        ],
-                      )
-                    ]);
-                  }),
-              rows.length > 0
-                  ? widget.state is InserimentoLoadingState
-                      ? Container(
-                          margin: const EdgeInsets.only(top: 20.0),
-                          child: LoadingIndicator(),
-                        )
-                      : FlatButton(
-                          onPressed: _submitForm,
-                          child: Icon(Icons.done),
-                        )
-                  : SizedBox.shrink()
-            ],
-          ))
-        ]);
+              rows.length < maxRows
+                  ? Column(
+                      children: <Widget>[
+                        TextField(
+                          controller: _controller,
+                          textCapitalization: TextCapitalization.sentences,
+                          onSubmitted: (text) {
+                            _addElement(text);
+                            _controller.clear();
+                          },
+                        ),
+                        FlatButton(
+                          child: Icon(Icons.add),
+                          onPressed: () {
+                            _addElement(_controller.text);
+                            _controller.clear();
+                          },
+                        ),
+                      ],
+                    )
+                  : SizedBox.shrink(),
+              SingleChildScrollView(
+                  child: Column(
+                children: <Widget>[
+                  ListView.builder(
+                      itemCount: rows.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext ctxt, int index) {
+                        String name = rows[index].data;
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text(name),
+                            FlatButton(
+                              child: Icon(Icons.remove),
+                              onPressed: () {
+                                _removeElement(index);
+                              },
+                            )
+                          ],
+                        );
+                      }),
+                  rows.length > 0
+                      ? widget.state is InserimentoLoadingState
+                          ? Container(
+                              margin: const EdgeInsets.only(top: 20.0),
+                              child: LoadingIndicator(),
+                            )
+                          : FlatButton(
+                              onPressed: _submitForm,
+                              child: Icon(Icons.done),
+                            )
+                      : SizedBox.shrink()
+                ],
+              ))
+            ]));
   }
 
   void _submitForm() {
