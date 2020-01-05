@@ -199,9 +199,13 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
           List<Team> teamsList =
               list.map((team) => Team.fromJson(team)).toList();
           teams = teamsList;
-          List<Team> playersFromShared =
-              await CallsRepository().readKey('teams');
-          teams.addAll(playersFromShared);
+          var playersFromShared = await CallsRepository().readKey('teams');
+          if (playersFromShared != '') {
+            List<String> teamListFromShared = playersFromShared as List;
+            for (var row in teamListFromShared) {
+              teams.add(new Team(2, row));
+            }
+          }
         } else {
           yield InserimentoFailure(
               error: jsonDecode(response.reasonPhrase).toString());
@@ -318,24 +322,23 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
     }
     if (event is SubmitFormEvent) {
       //AddFormRepository().sendData(event.dataToSend);
-      List<Team> toAdd;
+      List<String> toAdd = new List();
       for (var row in event.dataToSend) {
-        toAdd.add(new Team(2, row.data));
+        toAdd.add(row.data);
       }
       CallsRepository().persistKey('teams', toAdd);
       switch (event.type) {
         case TypeAddForm.TEAM:
-          InserimentoBloc().add(GetTeamsEvent());
+         add(GetTeamsEvent());
           break;
         case TypeAddForm.COACH:
-          InserimentoBloc().add(GetCoachesEvent());
+          add(GetCoachesEvent());
           break;
         case TypeAddForm.PLAYER:
-          InserimentoBloc().add(GetPlayersEvent());
+          add(GetPlayersEvent());
           break;
         default:
       }
-      InserimentoBloc().add(event);
     }
   }
 

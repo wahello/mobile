@@ -7,8 +7,9 @@ import 'package:football_system/generated/i18n.dart';
 
 class AddFormScreen extends StatefulWidget {
   final TypeAddForm type;
+  final InserimentoBloc bloc;
 
-  const AddFormScreen({Key key, this.type}) : super(key: key);
+  const AddFormScreen({Key key, this.type, this.bloc}) : super(key: key);
   @override
   AddFormScreenState createState() {
     return AddFormScreenState(type);
@@ -136,6 +137,6 @@ class AddFormScreenState extends State<AddFormScreen> {
   }
 
   void _submitForm() {
-    InserimentoBloc().add(SubmitFormEvent(rows, type));
+    widget.bloc.add(SubmitFormEvent(rows, type));
   }
 }

@@ -525,7 +525,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                               .toList()
                           : [],
                     ),
-                    AddFormScreen(type: TypeAddForm.TEAM),
+                    AddFormScreen(type: TypeAddForm.TEAM, bloc: inserimentoBloc,),
                     state is InserimentoLoadingState
                         ? Container(
                             margin: const EdgeInsets.only(top: 20.0),
