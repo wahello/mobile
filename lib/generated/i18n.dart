@@ -124,6 +124,10 @@ class I18n implements WidgetsLocalizations {
   String get newCoach => "Aggiungi allenatore";
   /// "Moduli"
   String get modules => "Moduli";
+  /// "L'inserimento è andato a buon fine"
+  String get inserimentoCorretto => "L'inserimento è andato a buon fine";
+  /// "Qualcosa è andato storto"
+  String get erroreGenerico => "Qualcosa è andato storto";
   /// "Nome ${name}"
   String name(String name) => "Nome ${name}";
 }
@@ -276,6 +280,12 @@ class _I18n_en_US extends I18n {
   /// "Modules"
   @override
   String get modules => "Modules";
+  /// "Insert successful"
+  @override
+  String get inserimentoCorretto => "Insert successful";
+  /// "Something wrong"
+  @override
+  String get erroreGenerico => "Something wrong";
   /// "Name ${name}"
   @override
   String name(String name) => "Name ${name}";
