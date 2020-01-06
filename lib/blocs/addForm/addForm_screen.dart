@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
-import 'package:football_system/blocs/addForm/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/generated/i18n.dart';
@@ -10,9 +9,14 @@ class AddFormScreen extends StatefulWidget {
   final TypeAddForm type;
   final InserimentoBloc bloc;
   final InserimentoState state;
+  final String categoryId;
 
   const AddFormScreen(
-      {Key key, @required this.type, @required this.bloc, @required this.state})
+      {Key key,
+      @required this.type,
+      @required this.bloc,
+      @required this.state,
+      this.categoryId})
       : super(key: key);
   @override
   AddFormScreenState createState() {
@@ -73,7 +77,8 @@ class AddFormScreenState extends State<AddFormScreen> {
             Scaffold.of(context).showSnackBar(snackBar);
           }
           if (state is InserimentoFormSuccess) {
-            final snackBar = SnackBar(content: Text(I18n().inserimentoCorretto));
+            final snackBar =
+                SnackBar(content: Text(I18n().inserimentoCorretto));
             Scaffold.of(context).showSnackBar(snackBar);
             rows.clear();
           }
@@ -151,6 +156,6 @@ class AddFormScreenState extends State<AddFormScreen> {
   }
 
   void _submitForm() {
-    widget.bloc.add(SubmitFormEvent(rows, type));
+    widget.bloc.add(SubmitFormEvent(rows, type, widget.categoryId));
   }
 }

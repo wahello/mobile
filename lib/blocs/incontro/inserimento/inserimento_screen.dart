@@ -525,6 +525,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       type: TypeAddForm.TEAM,
                       bloc: inserimentoBloc,
                       state: state,
+                      categoryId: inserimentoBloc.selectedCategories,
                     ),
                     state is InserimentoLoadingState
                         ? Container(

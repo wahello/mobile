@@ -1,3 +1,4 @@
+import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/addForm_provider.dart';
 
 class AddFormRepository {
@@ -8,7 +9,7 @@ class AddFormRepository {
   }
   AddFormRepository._internal();
 
-  Future sendData(List dataToSend) async {
-    await AddFormProvider().sendData(dataToSend);
+  Future sendData(List dataToSend, TypeAddForm type, String id) async {
+    await AddFormProvider().sendData(dataToSend, type, id);
   }
 }
