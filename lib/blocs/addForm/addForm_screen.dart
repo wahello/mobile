@@ -108,6 +108,28 @@ class AddFormScreenState extends State<AddFormScreen> {
                             _controller.clear();
                           },
                         ),
+                        type == TypeAddForm.PLAYER
+                            ? TextField(
+                                controller: _controller,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                onSubmitted: (text) {
+                                  _addElement(text);
+                                  _controller.clear();
+                                },
+                              )
+                            : SizedBox.shrink(),
+                        type == TypeAddForm.PLAYER
+                            ? TextField(
+                                controller: _controller,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                onSubmitted: (text) {
+                                  _addElement(text);
+                                  _controller.clear();
+                                },
+                              )
+                            : SizedBox.shrink(),
                         FlatButton(
                           child: Icon(Icons.add),
                           onPressed: () {

@@ -322,19 +322,13 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
     }
     if (event is SubmitFormEvent) {
       yield InserimentoLoadingState();
-      //TODO Decommentare
-      // try {
-      //   await AddFormRepository()
-      //       .sendData(event.dataToSend, event.type, event.id);
-      // } catch (error) {
-      //yield InserimentoFormError();
-      //return;
-      //}
-      List<String> toAdd = new List();
-      for (var row in event.dataToSend) {
-        toAdd.add(row.data);
+      try {
+        await AddFormRepository()
+            .sendData(event.dataToSend, event.type, event.id);
+      } catch (error) {
+        yield InserimentoFormError();
+        return;
       }
-      CallsRepository().persistKey('teams', toAdd);
       switch (event.type) {
         case TypeAddForm.TEAM:
           add(GetTeamsEvent());
