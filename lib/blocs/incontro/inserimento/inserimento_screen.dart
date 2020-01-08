@@ -640,6 +640,12 @@ class InserimentoScreenState extends State<InserimentoScreen>
                                 value
                           },
                         ),
+                        AddFormScreen(
+                          type: TypeAddForm.PLAYER,
+                          bloc: inserimentoBloc,
+                          state: state,
+                          categoryId: inserimentoBloc.selectedCategories,
+                        ),
                       ],
                     ),
                   ),
@@ -752,6 +758,12 @@ class InserimentoScreenState extends State<InserimentoScreen>
                           ],
                           onChanged: (value) =>
                               {inserimentoBloc.selectedCoach = value},
+                        ),
+                        AddFormScreen(
+                          type: TypeAddForm.COACH,
+                          bloc: inserimentoBloc,
+                          state: state,
+                          categoryId: inserimentoBloc.selectedCategories,
                         ),
                       ],
                     ),

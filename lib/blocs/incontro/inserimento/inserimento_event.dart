@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:football_system/blocs/addForm/addFormModel.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:meta/meta.dart';
 
@@ -12,7 +13,7 @@ class InserimentoStarted extends InserimentoEvent {
 }
 
 class SubmitFormEvent extends InserimentoEvent {
-  final List dataToSend;
+  final List<AddFormModel> dataToSend;
   final TypeAddForm type;
   final String id;
 

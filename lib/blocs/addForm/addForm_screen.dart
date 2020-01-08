@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:football_system/blocs/addForm/addFormModel.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/stuff/index.dart';
@@ -25,9 +26,12 @@ class AddFormScreen extends StatefulWidget {
 }
 
 class AddFormScreenState extends State<AddFormScreen> {
-  List<Text> rows;
+  List<AddFormModel> rows;
   final TypeAddForm type;
-  final _controller = TextEditingController();
+  final _nameController = TextEditingController();
+  final _numberController = TextEditingController();
+  final _dateController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   String label;
   int maxRows;
@@ -52,9 +56,10 @@ class AddFormScreenState extends State<AddFormScreen> {
     }
   }
 
-  void _addElement(String text) {
-    if (rows.length < maxRows && (text?.isNotEmpty ?? false)) {
-      rows.add(new Text(text));
+  void _addElement(String nome, String numero, String anno) {
+
+    if (rows.length < maxRows && (nome?.isNotEmpty ?? false)) {
+      rows.add(new AddFormModel(nome: nome, numero: numero, anno: anno));
     }
   }
 
@@ -98,47 +103,44 @@ class AddFormScreenState extends State<AddFormScreen> {
                     decoration: TextDecoration.underline),
               ),
               rows.length < maxRows
-                  ? Column(
-                      children: <Widget>[
-                        TextField(
-                          controller: _controller,
-                          textCapitalization: TextCapitalization.sentences,
-                          onSubmitted: (text) {
-                            _addElement(text);
-                            _controller.clear();
-                          },
-                        ),
-                        type == TypeAddForm.PLAYER
-                            ? TextField(
-                                controller: _controller,
-                                textCapitalization:
-                                    TextCapitalization.sentences,
-                                onSubmitted: (text) {
-                                  _addElement(text);
-                                  _controller.clear();
-                                },
-                              )
-                            : SizedBox.shrink(),
-                        type == TypeAddForm.PLAYER
-                            ? TextField(
-                                controller: _controller,
-                                textCapitalization:
-                                    TextCapitalization.sentences,
-                                onSubmitted: (text) {
-                                  _addElement(text);
-                                  _controller.clear();
-                                },
-                              )
-                            : SizedBox.shrink(),
-                        FlatButton(
-                          child: Icon(Icons.add),
-                          onPressed: () {
-                            _addElement(_controller.text);
-                            _controller.clear();
-                          },
-                        ),
-                      ],
-                    )
+                  ? new Form(
+                      key: _formKey,
+                      autovalidate: true,
+                      child: Column(
+                        children: <Widget>[
+                          TextField(
+                            controller: _nameController,
+                            textCapitalization: TextCapitalization.sentences,
+                            onSubmitted: (text) {
+                              if (type != TypeAddForm.PLAYER) {
+                                _addElement(text, '',''); //Valori di default tanto per coach e team non esistono valori
+                                _nameController.clear();
+                              }
+                            },
+                          ),
+                          type == TypeAddForm.PLAYER
+                              ? TextField(
+                                  controller: _dateController,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
+                                )
+                              : SizedBox.shrink(),
+                          type == TypeAddForm.PLAYER
+                              ? TextField(
+                                  controller: _numberController,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
+                                )
+                              : SizedBox.shrink(),
+                          FlatButton(
+                            child: Icon(Icons.add),
+                            onPressed: () {
+                              _addElement(_nameController.text, _numberController.text, _dateController.text);
+                              _nameController.clear();
+                            },
+                          ),
+                        ],
+                      ))
                   : SizedBox.shrink(),
               SingleChildScrollView(
                   child: Column(
@@ -147,7 +149,7 @@ class AddFormScreenState extends State<AddFormScreen> {
                       itemCount: rows.length,
                       shrinkWrap: true,
                       itemBuilder: (BuildContext ctxt, int index) {
-                        String name = rows[index].data;
+                        String name = rows[index].toString();
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
