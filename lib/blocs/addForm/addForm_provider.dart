@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
@@ -19,7 +18,6 @@ class AddFormProvider {
   Future<http.Response> sendData(
       List<AddFormModel> dataToSend, TypeAddForm type, String categoryId, String teamId) async {
     String endpoint;
-    List dataConverted = new List();
     Map<String, String> body = new Map();
     switch (type) {
       case TypeAddForm.TEAM:
@@ -65,5 +63,6 @@ class AddFormProvider {
     } catch (error) {
       print(error);
     }
+    return null;
   }
 }
