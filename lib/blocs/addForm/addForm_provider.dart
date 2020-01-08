@@ -6,6 +6,8 @@ import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared/shared.dart';
 
+import 'addFormModel.dart';
+
 class AddFormProvider {
   static final AddFormProvider _addFormProvider = AddFormProvider._internal();
   factory AddFormProvider() {
@@ -14,26 +16,53 @@ class AddFormProvider {
   AddFormProvider._internal();
 
   Future<http.Response> sendData(
-      List dataToSend, TypeAddForm type, String id) async {
+      List<AddFormModel> dataToSend, TypeAddForm type, String categoryId, String teamId) async {
     String endpoint;
+    Map<String, String> body = new Map();
     switch (type) {
       case TypeAddForm.TEAM:
+        body = {'name': dataToSend[0].nome};
         endpoint = Endpoints.domain +
             Endpoints.categories +
-            id +
             '/' +
+            categoryId +
             Endpoints.submitTeam;
+        break;
+      case TypeAddForm.PLAYER:
+        body = {
+          'name': dataToSend[0].nome,
+          'number': dataToSend[0].numero,
+          'year': dataToSend[0].anno
+        };
+        endpoint = Endpoints.domain +
+            Endpoints.teams +
+            '/' +
+            teamId +
+            Endpoints.submitPlayer;
+        break;
+      case TypeAddForm.COACH:
+        body = {'name': dataToSend[0].nome};
+        endpoint = Endpoints.domain +
+            Endpoints.teams +
+            '/' +
+            teamId +
+            Endpoints.submitCoach;
         break;
       default:
         throw new HttpException('Missing url');
     }
     final token = await CallsRepository().readKey('token');
-    http.Response _resp = await http.post(endpoint,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          HttpHeaders.authorizationHeader: token
-        },
-        body: dataToSend);
-    return _resp;
+    try {
+      http.Response _resp = await http.post(endpoint,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            HttpHeaders.authorizationHeader: token
+          },
+          body: body);
+      return _resp;
+    } catch (error) {
+      print(error);
+    }
+    return null;
   }
 }

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/index.dart';
-import 'package:football_system/blocs/home/home_event.dart';
+import 'package:http/http.dart' as http;
 import 'package:football_system/blocs/model/category_model.dart';
 import 'package:football_system/blocs/model/championship_model.dart';
 import 'package:football_system/blocs/model/coach_model.dart';
@@ -322,19 +322,17 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
     }
     if (event is SubmitFormEvent) {
       yield InserimentoLoadingState();
-      //TODO Decommentare
-      // try {
-      //   await AddFormRepository()
-      //       .sendData(event.dataToSend, event.type, event.id);
-      // } catch (error) {
-      //yield InserimentoFormError();
-      //return;
-      //}
-      List<String> toAdd = new List();
-      for (var row in event.dataToSend) {
-        toAdd.add(row.data);
+      try {
+        http.Response _resp = await AddFormRepository().sendData(
+            event.dataToSend, event.type, event.categoryId, event.teamId);
+        if (_resp?.statusCode != 200) {
+          yield InserimentoFormError();
+          return;
+        }
+      } catch (error) {
+        yield InserimentoFormError();
+        return;
       }
-      CallsRepository().persistKey('teams', toAdd);
       switch (event.type) {
         case TypeAddForm.TEAM:
           add(GetTeamsEvent());

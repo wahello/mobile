@@ -1,5 +1,5 @@
-import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
-import 'package:football_system/blocs/addForm/addForm_provider.dart';
+import 'package:football_system/blocs/addForm/index.dart';
+import 'package:http/http.dart' as http;
 
 class AddFormRepository {
   static final AddFormRepository _addFormRepository =
@@ -9,7 +9,7 @@ class AddFormRepository {
   }
   AddFormRepository._internal();
 
-  Future sendData(List dataToSend, TypeAddForm type, String id) async {
-    await AddFormProvider().sendData(dataToSend, type, id);
+  Future<http.Response> sendData(List<AddFormModel> dataToSend, TypeAddForm type, String categoryId, String teamId) async {
+    return await AddFormProvider().sendData(dataToSend, type, categoryId,teamId);
   }
 }

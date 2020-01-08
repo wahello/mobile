@@ -47,5 +47,8 @@
   "modules": "Modules",
   "inserimentoCorretto":"Insert successful",
   "erroreGenerico":"Something wrong",
-  "name": "Name {name}"
+  "nameWithAttribute": "Name {name}",
+  "nome": "Name",
+  "anno": "Year",
+  "numero": "Number"
 }

@@ -129,7 +129,13 @@ class I18n implements WidgetsLocalizations {
   /// "Qualcosa è andato storto"
   String get erroreGenerico => "Qualcosa è andato storto";
   /// "Nome ${name}"
-  String name(String name) => "Nome ${name}";
+  String nameWithAttribute(String name) => "Nome ${name}";
+  /// "Nome"
+  String get nome => "Nome";
+  /// "Anno"
+  String get anno => "Anno";
+  /// "Numero"
+  String get numero => "Numero";
 }
 
 class _I18n_it_IT extends I18n {
@@ -288,7 +294,16 @@ class _I18n_en_US extends I18n {
   String get erroreGenerico => "Something wrong";
   /// "Name ${name}"
   @override
-  String name(String name) => "Name ${name}";
+  String nameWithAttribute(String name) => "Name ${name}";
+  /// "Name"
+  @override
+  String get nome => "Name";
+  /// "Year"
+  @override
+  String get anno => "Year";
+  /// "Number"
+  @override
+  String get numero => "Number";
 
   @override
   TextDirection get textDirection => TextDirection.ltr;
