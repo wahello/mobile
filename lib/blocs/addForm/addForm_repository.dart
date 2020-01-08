@@ -10,7 +10,7 @@ class AddFormRepository {
   }
   AddFormRepository._internal();
 
-  Future sendData(List<AddFormModel> dataToSend, TypeAddForm type, String id) async {
-    await AddFormProvider().sendData(dataToSend, type, id);
+  Future sendData(List<AddFormModel> dataToSend, TypeAddForm type, String categoryId, String teamId) async {
+    await AddFormProvider().sendData(dataToSend, type, categoryId,teamId);
   }
 }

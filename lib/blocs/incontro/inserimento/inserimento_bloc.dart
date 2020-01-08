@@ -324,7 +324,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       yield InserimentoLoadingState();
       try {
         await AddFormRepository()
-            .sendData(event.dataToSend, event.type, event.id);
+            .sendData(event.dataToSend, event.type, event.categoryId, event.teamId);
       } catch (error) {
         yield InserimentoFormError();
         return;

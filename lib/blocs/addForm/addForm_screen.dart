@@ -11,13 +11,15 @@ class AddFormScreen extends StatefulWidget {
   final InserimentoBloc bloc;
   final InserimentoState state;
   final String categoryId;
+  final String teamId;
 
   const AddFormScreen(
       {Key key,
       @required this.type,
       @required this.bloc,
       @required this.state,
-      this.categoryId})
+      this.categoryId,
+      this.teamId})
       : super(key: key);
   @override
   AddFormScreenState createState() {
@@ -32,6 +34,10 @@ class AddFormScreenState extends State<AddFormScreen> {
   final _numberController = TextEditingController();
   final _dateController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final FocusNode _nameFocus = FocusNode();
+  final FocusNode _yearFocus = FocusNode();
+  final FocusNode _numberFocus = FocusNode();
+  ScrollController _scrollController = new ScrollController();
 
   String label;
   int maxRows;
@@ -57,7 +63,6 @@ class AddFormScreenState extends State<AddFormScreen> {
   }
 
   void _addElement(String nome, String numero, String anno) {
-
     if (rows.length < maxRows && (nome?.isNotEmpty ?? false)) {
       rows.add(new AddFormModel(nome: nome, numero: numero, anno: anno));
     }
@@ -88,98 +93,144 @@ class AddFormScreenState extends State<AddFormScreen> {
             rows.clear();
           }
         },
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              ),
-              Text(
-                label,
-                style: TextStyle(
-                    fontSize: 16,
-                    decorationStyle: TextDecorationStyle.solid,
-                    decoration: TextDecoration.underline),
-              ),
-              rows.length < maxRows
-                  ? new Form(
-                      key: _formKey,
-                      autovalidate: true,
+        child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  ),
+                  Text(
+                    label,
+                    style: TextStyle(
+                        fontSize: 16,
+                        decorationStyle: TextDecorationStyle.solid,
+                        decoration: TextDecoration.underline),
+                  ),
+                  rows.length < maxRows
+                      ? new Form(
+                          key: _formKey,
+                          autovalidate: true,
+                          child: Column(
+                            children: <Widget>[
+                              TextField(
+                                focusNode: _nameFocus,
+                                textInputAction: type != TypeAddForm.PLAYER
+                                    ? TextInputAction.done
+                                    : TextInputAction.next,
+                                decoration:
+                                    new InputDecoration(hintText: I18n().nome),
+                                controller: _nameController,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                onSubmitted: (text) {
+                                  if (type != TypeAddForm.PLAYER) {
+                                    _addElement(text, '',
+                                        ''); //Valori di default tanto per coach e team non esistono valori
+                                    _nameController.clear();
+                                  } else {
+                                    _fieldFocusChange(
+                                        context, _nameFocus, _yearFocus);
+                                  }
+                                },
+                              ),
+                              type == TypeAddForm.PLAYER
+                                  ? TextField(
+                                      focusNode: _yearFocus,
+                                      textInputAction: TextInputAction.next,
+                                      decoration: new InputDecoration(
+                                          hintText: I18n().anno),
+                                      controller: _dateController,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      onSubmitted: (text) {
+                                        _fieldFocusChange(
+                                            context, _yearFocus, _numberFocus);
+                                      },
+                                    )
+                                  : SizedBox.shrink(),
+                              type == TypeAddForm.PLAYER
+                                  ? TextField(
+                                      focusNode: _numberFocus,
+                                      textInputAction: TextInputAction.done,
+                                      decoration: new InputDecoration(
+                                          hintText: I18n().numero),
+                                      controller: _numberController,
+                                      onSubmitted: (value) {
+                                        _numberFocus.unfocus();
+                                      },
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                    )
+                                  : SizedBox.shrink(),
+                              FlatButton(
+                                child: Icon(Icons.add),
+                                onPressed: () {
+                                  _addElement(
+                                      _nameController.text,
+                                      _numberController.text,
+                                      _dateController.text);
+                                  _nameController.clear();
+                                  _numberController.clear();
+                                  _dateController.clear();
+                                  _scrollController.animateTo(
+                                    0.0,
+                                    curve: Curves.easeOut,
+                                    duration: const Duration(milliseconds: 300),
+                                  );
+                                },
+                              ),
+                            ],
+                          ))
+                      : SizedBox.shrink(),
+                  SingleChildScrollView(
                       child: Column(
-                        children: <Widget>[
-                          TextField(
-                            controller: _nameController,
-                            textCapitalization: TextCapitalization.sentences,
-                            onSubmitted: (text) {
-                              if (type != TypeAddForm.PLAYER) {
-                                _addElement(text, '',''); //Valori di default tanto per coach e team non esistono valori
-                                _nameController.clear();
-                              }
-                            },
-                          ),
-                          type == TypeAddForm.PLAYER
-                              ? TextField(
-                                  controller: _dateController,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
+                    children: <Widget>[
+                      ListView.builder(
+                          controller: _scrollController,
+                          itemCount: rows.length,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext ctxt, int index) {
+                            String name = rows[index].toString();
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Text(name),
+                                FlatButton(
+                                  child: Icon(Icons.remove),
+                                  onPressed: () {
+                                    _removeElement(index);
+                                  },
                                 )
-                              : SizedBox.shrink(),
-                          type == TypeAddForm.PLAYER
-                              ? TextField(
-                                  controller: _numberController,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
+                              ],
+                            );
+                          }),
+                      rows.length > 0
+                          ? widget.state is InserimentoLoadingState
+                              ? Container(
+                                  margin: const EdgeInsets.only(top: 20.0),
+                                  child: LoadingIndicator(),
                                 )
-                              : SizedBox.shrink(),
-                          FlatButton(
-                            child: Icon(Icons.add),
-                            onPressed: () {
-                              _addElement(_nameController.text, _numberController.text, _dateController.text);
-                              _nameController.clear();
-                            },
-                          ),
-                        ],
-                      ))
-                  : SizedBox.shrink(),
-              SingleChildScrollView(
-                  child: Column(
-                children: <Widget>[
-                  ListView.builder(
-                      itemCount: rows.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext ctxt, int index) {
-                        String name = rows[index].toString();
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Text(name),
-                            FlatButton(
-                              child: Icon(Icons.remove),
-                              onPressed: () {
-                                _removeElement(index);
-                              },
-                            )
-                          ],
-                        );
-                      }),
-                  rows.length > 0
-                      ? widget.state is InserimentoLoadingState
-                          ? Container(
-                              margin: const EdgeInsets.only(top: 20.0),
-                              child: LoadingIndicator(),
-                            )
-                          : FlatButton(
-                              onPressed: _submitForm,
-                              child: Icon(Icons.done),
-                            )
-                      : SizedBox.shrink()
-                ],
-              ))
-            ]));
+                              : FlatButton(
+                                  onPressed: _submitForm,
+                                  child: Icon(Icons.done),
+                                )
+                          : SizedBox.shrink()
+                    ],
+                  ))
+                ])));
   }
 
   void _submitForm() {
-    widget.bloc.add(SubmitFormEvent(rows, type, widget.categoryId));
+    widget.bloc
+        .add(SubmitFormEvent(rows, type, widget.categoryId, widget.teamId));
+  }
+
+  void _fieldFocusChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
   }
 }

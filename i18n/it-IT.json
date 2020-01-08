@@ -47,5 +47,8 @@
   "modules": "Moduli",
   "inserimentoCorretto":"L'inserimento è andato a buon fine",
   "erroreGenerico":"Qualcosa è andato storto",
-  "name": "Nome {name}"
+  "nameWithAttribute": "Nome {name}",
+  "nome": "Nome",
+  "anno": "Anno",
+  "numero": "Numero"
 }

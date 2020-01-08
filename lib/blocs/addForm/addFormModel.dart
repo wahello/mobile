@@ -23,8 +23,8 @@ class AddFormModel {
 
   @override
   String toString() {
-    return 'Nome: $nome' + numero != ''
-        ? ' numero: $numero'
-        : '' + anno != '' ? ' anno: $anno' : '';
+    return '$nome' + (numero != ''
+        ? ' $numero'
+        : '') + (anno != '' ? ' $anno' : '');
   }
 }

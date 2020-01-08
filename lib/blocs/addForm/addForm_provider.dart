@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
@@ -16,50 +17,53 @@ class AddFormProvider {
   AddFormProvider._internal();
 
   Future<http.Response> sendData(
-      List<AddFormModel> dataToSend, TypeAddForm type, String id) async {
+      List<AddFormModel> dataToSend, TypeAddForm type, String categoryId, String teamId) async {
     String endpoint;
-    List dataConverted;
+    List dataConverted = new List();
+    Map<String, String> body = new Map();
     switch (type) {
       case TypeAddForm.TEAM:
-        for (var d in dataToSend) {
-          dataConverted.add(d.getTeamFromModel());
-        }
+        body = {'name': dataToSend[0].nome};
         endpoint = Endpoints.domain +
             Endpoints.categories +
-            id +
             '/' +
+            categoryId +
             Endpoints.submitTeam;
         break;
       case TypeAddForm.PLAYER:
-        for (var d in dataToSend) {
-          dataConverted.add(d.getPlayerFromModel());
-        }
+        body = {
+          'name': dataToSend[0].nome,
+          'number': dataToSend[0].numero,
+          'year': dataToSend[0].anno
+        };
         endpoint = Endpoints.domain +
-            Endpoints.categories +
-            id +
+            Endpoints.teams +
             '/' +
-            Endpoints.submitTeam;
+            teamId +
+            Endpoints.submitPlayer;
         break;
       case TypeAddForm.COACH:
-        for (var d in dataToSend) {
-          dataConverted.add(d.getCoachFromModel());
-        }
+        body = {'name': dataToSend[0].nome};
         endpoint = Endpoints.domain +
-            Endpoints.categories +
-            id +
+            Endpoints.teams +
             '/' +
-            Endpoints.submitTeam;
+            teamId +
+            Endpoints.submitCoach;
         break;
       default:
         throw new HttpException('Missing url');
     }
     final token = await CallsRepository().readKey('token');
-    http.Response _resp = await http.post(endpoint,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          HttpHeaders.authorizationHeader: token
-        },
-        body: dataConverted);
-    return _resp;
+    try {
+      http.Response _resp = await http.post(endpoint,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            HttpHeaders.authorizationHeader: token
+          },
+          body: body);
+      return _resp;
+    } catch (error) {
+      print(error);
+    }
   }
 }
