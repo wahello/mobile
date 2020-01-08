@@ -999,30 +999,19 @@ class InserimentoScreenState extends State<InserimentoScreen>
       }
     }
     if (step == 2) {
-      if (inserimentoBloc.matches == null || inserimentoBloc.matches.isEmpty) {
-        inserimentoBloc.add(GetMatchesEvent());
-      }
+      inserimentoBloc.add(GetMatchesEvent());
     }
     if (step == 3) {
-      if (inserimentoBloc.categories == null ||
-          inserimentoBloc.categories.isEmpty) {
-        inserimentoBloc.add(GetCategoriesEvent());
-      }
+      inserimentoBloc.add(GetCategoriesEvent());
     }
     if (step == 4) {
-      if (inserimentoBloc.teams == null || inserimentoBloc.teams.isEmpty) {
-        inserimentoBloc.add(GetTeamsEvent());
-      }
+      inserimentoBloc.add(GetTeamsEvent());
     }
     if (step == 5) {
-      if (inserimentoBloc.players == null || inserimentoBloc.players.isEmpty) {
-        inserimentoBloc.add(GetPlayersEvent());
-      }
+      inserimentoBloc.add(GetPlayersEvent());
     }
     if (step == 6) {
-      if (inserimentoBloc.coaches == null || inserimentoBloc.coaches.isEmpty) {
-        inserimentoBloc.add(GetCoachesEvent());
-      }
+      inserimentoBloc.add(GetCoachesEvent());
     }
     if (step == 7) {
       inserimentoBloc.add(InserisciModuloEvent());
