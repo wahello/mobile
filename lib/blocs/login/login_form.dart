@@ -38,7 +38,8 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
   LoginBloc get _loginBloc => widget.loginBloc;
 
   Widget homePage(state) {
-    return new Container(
+    return SingleChildScrollView(
+        child: Container(
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         color: MainColors.PRIMARY,
@@ -117,11 +118,12 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
           ),
         ],
       ),
-    );
+    ));
   }
 
   Widget loginPage(state) {
-    return new Container(
+    return SingleChildScrollView(
+        child: Container(
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         color: MainColors.SECONDARY,
@@ -296,7 +298,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget recoverPassword(state) {
@@ -577,7 +579,7 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
               height: MediaQuery.of(context).size.height,
               child: PageView(
                 controller: _controller,
-                physics: new AlwaysScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: <Widget>[
                   homePage(state),
                   loginPage(state),

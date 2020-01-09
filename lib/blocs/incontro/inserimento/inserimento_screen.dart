@@ -27,6 +27,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
     with TickerProviderStateMixin {
   InserimentoBloc inserimentoBloc = new InserimentoBloc();
   CallsRepository callsRepository = new CallsRepository();
+  ScrollController _scrollController = new ScrollController();
 
   var _controller = PageController();
 
@@ -56,7 +57,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       (MediaQuery.of(context).size.height * 0.5)) /
                   2),
           FormBuilder(
-            autovalidate: true,
+            autovalidate: false,
             child: Column(
               children: <Widget>[
                 FormBuilderDropdown(
@@ -143,7 +144,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       (MediaQuery.of(context).size.height * 0.5)) /
                   2),
           FormBuilder(
-              autovalidate: true,
+              autovalidate: false,
               child: Column(children: <Widget>[
                 FormBuilderDropdown(
                   readOnly:
@@ -248,7 +249,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     (MediaQuery.of(context).size.height * 0.5)) /
                 2),
         FormBuilder(
-            autovalidate: true,
+            autovalidate: false,
             child: Column(children: <Widget>[
               FormBuilderDropdown(
                 readOnly: inserimentoBloc.selectedGender != null ? false : true,
@@ -392,7 +393,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     (MediaQuery.of(context).size.height * 0.5)) /
                 2),
         FormBuilder(
-            autovalidate: true,
+            autovalidate: false,
             child: Column(children: <Widget>[
               FormBuilderDropdown(
                 readOnly:
@@ -498,7 +499,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                           (MediaQuery.of(context).size.height * 0.5)) /
                       2),
               FormBuilder(
-                  autovalidate: true,
+                  autovalidate: false,
                   child: Column(children: <Widget>[
                     FormBuilderDropdown(
                       onChanged: (value) =>
@@ -591,13 +592,14 @@ class InserimentoScreenState extends State<InserimentoScreen>
                             ],
                           )
                   ])),
-            ],
+            ]
           ),
         )));
   }
 
   Widget playersScreen(state) {
     return SingleChildScrollView(
+      controller: _scrollController,
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -615,7 +617,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 children: <Widget>[
                   Container(
                     child: ListView(
-                      addRepaintBoundaries: true,
+                      controller: _scrollController,
                       shrinkWrap: true,
                       children: <Widget>[
                         FormBuilderCheckboxList(
@@ -735,7 +737,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 SizedBox(height: 150),
                 FormBuilder(
                   key: FormKey.coachesKey,
-                  autovalidate: true,
+                  autovalidate: false,
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -857,7 +859,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
             SizedBox(height: 150),
             FormBuilder(
               key: FormKey.modulesKey,
-              autovalidate: true,
+              autovalidate: false,
               child: Column(
                 children: <Widget>[
                   Container(
