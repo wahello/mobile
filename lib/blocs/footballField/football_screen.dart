@@ -26,7 +26,7 @@ class _FootballFieldPageNewState extends State<FootballFieldPageNew> {
     List<List<PlayerModel>> positions = List<List<PlayerModel>>.generate(
         9, (_) => List<PlayerModel>.generate(11, (_) => null));
 
-    inserimentoBloc.incontro.module.positions.forEach((position) {
+    for (var position in inserimentoBloc.incontro.module.positions) {
       List<String> xy = position.split(",");
       int x = int.parse(xy[0]);
       int y = int.parse(xy[1]);
@@ -37,9 +37,8 @@ class _FootballFieldPageNewState extends State<FootballFieldPageNew> {
         xPosition: xy[0],
         yPosition: xy[1],
       );
-
-      viewBloc = ViewBloc(positions: positions);
-    });
+    }
+    viewBloc = ViewBloc(positions: positions);
   }
 
   @override
