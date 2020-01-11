@@ -12,7 +12,6 @@ import 'package:football_system/blocs/stuff/field.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/custom_icon/soccer_icons_icons.dart';
 import 'package:football_system/custom_icon/soccerplayer_icons.dart';
-import 'package:overlay_container/overlay_container.dart';
 import 'options_screen.dart';
 import 'package:shared/shared.dart';
 
