@@ -97,6 +97,11 @@ class GetCoachesState extends InserimentoState {
   String toString() => 'GetCoachesState';
 }
 
+class RefreshState extends InserimentoState {
+  @override
+  String toString() => 'RefreshState';
+}
+
 class InserisciIncontroState extends InserimentoState {
   final Incontro incontro;
 
@@ -113,4 +118,18 @@ class CaricamentoModuliState extends InserimentoState {
 
   @override
   String toString() => 'CaricamentoModuliState';
+}
+
+class InserimentoFormError extends InserimentoState {
+  InserimentoFormError();
+
+  @override
+  String toString() => 'InserimentoFormError';
+}
+
+class InserimentoFormSuccess extends InserimentoState {
+  InserimentoFormSuccess();
+
+  @override
+  String toString() => 'InserimentoFormSuccess';
 }

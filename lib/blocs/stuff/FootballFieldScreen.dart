@@ -54,7 +54,7 @@ class Module442State extends State<Module442> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FootballFieldBloc, FootballFieldState>(
-        bloc: FootballFieldBloc(dimension: [11, 11]), //TODO: rendere dinamico
+        bloc: FootballFieldBloc(dimension: [13, 9]), //TODO: rendere dinamico
         builder: (BuildContext context, FootballFieldState state) {
           return Container(
               child: GridView.count(

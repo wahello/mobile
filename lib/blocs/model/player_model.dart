@@ -12,7 +12,7 @@ class Player {
   String ruolo;
   String numero;
   String posizione;
-  Player({this.id, this.name, this.ruolo, this.posizione});
+  Player({this.numero, this.id, this.name, this.ruolo, this.posizione});
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
   Map<String, dynamic> toJson() => _$PlayerToJson(this);
 }

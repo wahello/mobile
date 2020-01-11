@@ -1,51 +1,27 @@
 import 'package:football_system/blocs/model/player_model.dart';
 
 class FootballField {
-  //campo da gioco
-  List<List<Player>> matrix;
-  //lista giocatori da piazzare
-  //ogni qual volta si schiera un giocatore nel campo , questo viene rimosso dalla lista
-  List<Player> players;
+  //lista giocatori campo
+  List<List<Player>> players;
   List<int> dimension;
+  List<List<String>> positions;
 
-  FootballField({this.dimension, this.players}) {
-    matrix = List.generate(dimension[0], (_) => List<Player>(dimension[1]));
+  FootballField({this.dimension, this.players, this.positions}) {
+    players = List<List<Player>>.generate(
+        dimension[0], (_) => List<Player>(dimension[1]));
 
-    clearField();
-  }
+    for (int i = 0; i < positions.length; i++) {
+      List<String> xy = positions[i][0].split(",");
 
-  /*
-  usage: 
-    FootballField footballField = FootballField(11,11);
-    Player occupato = footballField['1,1'];
-   */
+      int x = int.parse(xy[0]) - 1;
+      int y = int.parse(xy[1]);
 
-  operator [](String xy) {
-    List<String> XY = xy.split(',');
-
-    int x = int.parse(XY[0]);
-    int y = int.parse(XY[1]);
-
-    return matrix[x][y];
-  }
-
-  /*
-  usage: 
-    FootballField footballField = FootballField(11,11);
-    footballField['1,1'] = Player();
-   */
-  operator []=(String xy, Player value) {
-    List<String> XY = xy.split(',');
-
-    int x = int.parse(XY[0]);
-    int y = int.parse(XY[1]);
-
-    matrix[x][y] = value;
-  }
-
-  void clearField() {
-    matrix.forEach((row) => {
-          row.forEach((value) => {value = null})
-        });
+      players[y][x] = Player(
+          id: 0,
+          name: "aggiungi",
+          numero: "",
+          posizione: positions[i][0],
+          ruolo: "");
+    }
   }
 }

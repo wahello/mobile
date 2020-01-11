@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:football_system/blocs/home/home_event.dart';
+import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
+import 'package:football_system/blocs/addForm/index.dart';
+import 'package:http/http.dart' as http;
 import 'package:football_system/blocs/model/category_model.dart';
 import 'package:football_system/blocs/model/championship_model.dart';
 import 'package:football_system/blocs/model/coach_model.dart';
@@ -198,6 +200,13 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
           List<Team> teamsList =
               list.map((team) => Team.fromJson(team)).toList();
           teams = teamsList;
+          var playersFromShared = await CallsRepository().readKey('teams');
+          if (playersFromShared != '') {
+            List<String> teamListFromShared = playersFromShared as List;
+            for (var row in teamListFromShared) {
+              teams.add(new Team(2, row));
+            }
+          }
         } else {
           yield InserimentoFailure(
               error: jsonDecode(response.reasonPhrase).toString());
@@ -306,56 +315,41 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
     }
     if (event is InserisciModuloEvent) {
       //chiamo il be per farmi restituire i moduli per la categoria scelta
-      this.modules = await modulesByCategoryId(selectedChampionships);
-      // await callsRepository.getTactics(incontro.championship.id.toString());
+      var response = await callsRepository.getTactics("4");
+
+      var list = jsonDecode(response.body) as List;
+      List<Module> modulesList =
+          list.map((module) => Module.fromJson(module)).toList();
+      modules = modulesList;
 
       print(modules);
     }
-  }
-
-  Future<List<Module>> modulesByCategoryId(String categoryId) async {
-    return await Future.delayed(
-      Duration(seconds: 2),
-      () => [
-        new Module(
-            createdAt: '2019-12-08',
-            id: 1,
-            name: '4-4-2',
-            positions: [
-              '1,2',
-              '6,3',
-              '4,1',
-              '10,5',
-              '1,6',
-              '6,5',
-              '4,7',
-              '10,3',
-              '8,7',
-              '8,1',
-              '12,4'
-            ],
-            profileId: 1,
-            updatedAt: '2019-12-08'),
-        new Module(
-            createdAt: '2019-12-08',
-            id: 2,
-            name: '4-3-3',
-            positions: [
-              '1,2',
-              '6,3',
-              '4,1',
-              '10,5',
-              '1,6',
-              '6,5',
-              '6,5',
-              '6,3',
-              '8,7',
-              '8,1',
-              '12,4'
-            ],
-            profileId: 1,
-            updatedAt: '2019-12-08')
-      ],
-    );
+    if (event is SubmitFormEvent) {
+      yield InserimentoLoadingState();
+      try {
+        http.Response _resp = await AddFormRepository().sendData(
+            event.dataToSend, event.type, event.categoryId, event.teamId);
+        if (_resp?.statusCode != 200) {
+          yield InserimentoFormError();
+          return;
+        }
+      } catch (error) {
+        yield InserimentoFormError();
+        return;
+      }
+      switch (event.type) {
+        case TypeAddForm.TEAM:
+          add(GetTeamsEvent());
+          break;
+        case TypeAddForm.COACH:
+          add(GetCoachesEvent());
+          break;
+        case TypeAddForm.PLAYER:
+          add(GetPlayersEvent());
+          break;
+        default:
+      }
+      yield InserimentoFormSuccess();
+    }
   }
 }

@@ -1,12 +1,14 @@
 {
     "defaultLocale": "it-IT",
     "locales": [
-        "it-IT"
+        "it-IT",
+        "en-US"
     ],
     "localePath": "i18n",
     "generatedPath": "lib/generated",
     "ltr": [
-        "it-IT"
+        "it-IT",
+        "en-US"
     ],
     "rtl": []
 }

@@ -39,6 +39,8 @@ dependencies:
   localstorage: ^2.0.0
   sms_autofill: ^1.1.0
   json_annotation: ^3.0.0
+  carousel_slider: ^1.3.0
+  overlay_container: ^0.0.4+1
   shared:
     git:
       url: git@github.com:football-system/shared.git
@@ -52,7 +54,9 @@ dev_dependencies:
 
 dependency_overrides:
   shared:
-    path: "../shared/"
+    git:
+      url: git@github.com:football-system/shared.git
+      ref: develop
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -65,6 +69,15 @@ flutter:
   uses-material-design: true
   assets:
     - assets/A1QA94rgGUL._AC_SY879_.jpg
+    - assets/images/background.jpg
+    - assets/images/maglia.png
+    - assets/images/maglia-1.jpg
+    - assets/images/maglia-2.png
+    - assets/images/yellow_card.png
+    - assets/images/red_card.png
+    - assets/images/goal.png
+    - assets/images/football_field.jpg
+    - assets/images/assist.png
   fonts:
     - family: Soccerplayer
       fonts:

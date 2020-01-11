@@ -7,12 +7,19 @@ part of 'module_model.dart';
 // **************************************************************************
 
 Module _$ModuleFromJson(Map<String, dynamic> json) {
+  List<List<String>> _positions = List.generate(
+      json['positions'].length, (_) => List.generate(1, (_) => ""));
+
+  for (int i = 0; i < json['positions'].length; i++) {
+    _positions[i][0] = json['positions'][i][0].toString();
+  }
+  print(_positions);
   return Module(
     id: json['id'] as int,
     createdAt: json['createdAt'] as String,
     updatedAt: json['updatedAt'] as String,
-    name: json['name'] as String,
-    positions: (json['positions'] as List)?.map((e) => e as String)?.toList(),
+    name: json['name'].toString(),
+    positions: _positions,
     profileId: json['profileId'] as int,
   )..deletedAt = json['deletedAt'] as String;
 }

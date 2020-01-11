@@ -31,10 +31,18 @@ class SimpleBlocDelegate extends BlocDelegate {
 class FootballFieldPage extends StatefulWidget {
   final InserimentoBloc inserimentoBloc;
 
-  FootballFieldPage({this.inserimentoBloc});
+  FootballFieldBloc footballFieldBloc;
+
+  FootballFieldPage({this.inserimentoBloc}) {
+    footballFieldBloc = FootballFieldBloc(
+        dimension: [9, 11],
+        availablePlayers: inserimentoBloc.incontro.players,
+        module: inserimentoBloc.incontro.module);
+  }
   @override
   FootballFieldPageState createState() {
-    return FootballFieldPageState(inserimentoBloc);
+    return FootballFieldPageState(
+        inserimentoBloc: inserimentoBloc, footballFieldBloc: footballFieldBloc);
   }
 }
 
@@ -43,10 +51,7 @@ class FootballFieldPageState extends State<FootballFieldPage> {
   InserimentoBloc inserimentoBloc;
   List<int> dimension;
 
-  FootballFieldPageState(this.inserimentoBloc) {
-    dimension = getDimensionFromCategory(inserimentoBloc.incontro);
-    footballFieldBloc = FootballFieldBloc(dimension: dimension);
-  }
+  FootballFieldPageState({this.inserimentoBloc, this.footballFieldBloc});
 
   List getPlayersSelected(InserimentoBloc inserimentoBloc) {
     return inserimentoBloc.selectedPlayers;
@@ -72,22 +77,10 @@ class FootballFieldPageState extends State<FootballFieldPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FootballFieldBloc>(
-        builder: (BuildContext context) => footballFieldBloc,
-        child: BlocBuilder<FootballFieldBloc, FootballFieldState>(
-            builder: (BuildContext context, FootballFieldState state) {
-          if (state is FootballFieldCreated) {
-            //TODO aggiungere lista giocatori
-            return FootballFieldScreen(
-              lato: 30,
-              playersFromBloc: inserimentoBloc.incontro.players,
-              moduloScelto: inserimentoBloc.incontro.module,
-            );
-          } else {
-            Container(
-              child: Text('STATO != FootballFieldCreated'),
-            );
-          }
-        }));
+    return FootballFieldScreen(
+      lato: 30,
+      inserimentoIncontroBloc: inserimentoBloc,
+      footballFieldBloc: footballFieldBloc,
+    );
   }
 }

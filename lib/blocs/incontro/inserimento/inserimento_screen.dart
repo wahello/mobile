@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
+import 'package:football_system/blocs/addForm/index.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldPage.dart';
-import 'package:football_system/blocs/footballField/FootballFieldState.dart';
+import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
 import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
-import 'package:football_system/blocs/model/module_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
-import 'package:football_system/blocs/stuff/footballField.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/generated/i18n.dart';
 import 'package:shared/shared.dart';
@@ -29,6 +29,11 @@ class InserimentoScreenState extends State<InserimentoScreen>
     with TickerProviderStateMixin {
   InserimentoBloc inserimentoBloc = new InserimentoBloc();
   CallsRepository callsRepository = new CallsRepository();
+  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollControllerForPlayers = new ScrollController();
+
+  // Variabile di classe per gestire l'ovveride del back button
+  int step;
 
   var _controller = PageController();
 
@@ -58,7 +63,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       (MediaQuery.of(context).size.height * 0.5)) /
                   2),
           FormBuilder(
-            autovalidate: true,
+            autovalidate: false,
             child: Column(
               children: <Widget>[
                 FormBuilderDropdown(
@@ -145,7 +150,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       (MediaQuery.of(context).size.height * 0.5)) /
                   2),
           FormBuilder(
-              autovalidate: true,
+              autovalidate: false,
               child: Column(children: <Widget>[
                 FormBuilderDropdown(
                   readOnly:
@@ -250,7 +255,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     (MediaQuery.of(context).size.height * 0.5)) /
                 2),
         FormBuilder(
-            autovalidate: true,
+            autovalidate: false,
             child: Column(children: <Widget>[
               FormBuilderDropdown(
                 readOnly: inserimentoBloc.selectedGender != null ? false : true,
@@ -394,7 +399,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     (MediaQuery.of(context).size.height * 0.5)) /
                 2),
         FormBuilder(
-            autovalidate: true,
+            autovalidate: false,
             child: Column(children: <Widget>[
               FormBuilderDropdown(
                 readOnly:
@@ -484,109 +489,118 @@ class InserimentoScreenState extends State<InserimentoScreen>
   }
 
   Widget teamScreen(state) {
-    return Center(
-        child: Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: MainColors.SECONDARY,
-      ),
-      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-              height: (MediaQuery.of(context).size.height -
-                      (MediaQuery.of(context).size.height * 0.5)) /
-                  2),
-          FormBuilder(
-              autovalidate: true,
-              child: Column(children: <Widget>[
-                FormBuilderDropdown(
-                  onChanged: (value) => {inserimentoBloc.selectedTeam = value},
-                  attribute: "team",
-                  decoration: InputDecoration(labelText: I18n().teams),
-                  initialValue: inserimentoBloc.teams != null
-                      ? inserimentoBloc.selectedTeam
-                      : null,
-                  hint: Text(I18n().selectTeam),
-                  validators: [
-                    FormBuilderValidators.required(
-                        errorText: I18n().obbligatorio)
-                  ],
-                  items: inserimentoBloc.teams != null
-                      ? inserimentoBloc.teams
-                          .map((team) => DropdownMenuItem(
-                              value: team.id.toString(),
-                              child: Text(team.name.toString())))
-                          .toList()
-                      : [],
-                ),
-                state is InserimentoLoadingState
-                    ? Container(
-                        margin: const EdgeInsets.only(top: 20.0),
-                        child: LoadingIndicator(),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width / 3,
-                            margin: const EdgeInsets.only(top: 20.0),
-                            alignment: Alignment.centerLeft,
-                            child: FlatButton(
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(30.0),
-                              ),
-                              color: MainColors.PRIMARY,
-                              onPressed: () => goToStep(3),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 20.0,
-                                horizontal: 20.0,
-                              ),
-                              child: Text(
-                                I18n().indietro,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: MainColors.TEXT_NEGATIVE,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 3,
-                            margin: const EdgeInsets.only(top: 20.0),
-                            alignment: Alignment.centerRight,
-                            child: FlatButton(
-                              disabledColor: MainColors.DISABLED,
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(30.0),
-                              ),
-                              color: MainColors.PRIMARY,
-                              onPressed: inserimentoBloc.selectedTeam != null
-                                  ? () => goToStep(5)
-                                  : null,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 20.0,
-                                horizontal: 20.0,
-                              ),
-                              child: Text(
-                                I18n().avanti,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: MainColors.TEXT_NEGATIVE,
-                                    fontWeight: FontWeight.bold),
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
+            child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: MainColors.SECONDARY,
+          ),
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+          child: Column(children: <Widget>[
+            SizedBox(
+                height: (MediaQuery.of(context).size.height -
+                        (MediaQuery.of(context).size.height * 0.5)) /
+                    2),
+            FormBuilder(
+                autovalidate: false,
+                child: Column(children: <Widget>[
+                  FormBuilderDropdown(
+                    onChanged: (value) =>
+                        {inserimentoBloc.selectedTeam = value},
+                    attribute: "team",
+                    decoration: InputDecoration(labelText: I18n().teams),
+                    initialValue: inserimentoBloc.teams != null
+                        ? inserimentoBloc.selectedTeam
+                        : null,
+                    hint: Text(I18n().selectTeam),
+                    validators: [
+                      FormBuilderValidators.required(
+                          errorText: I18n().obbligatorio)
+                    ],
+                    items: inserimentoBloc.teams != null
+                        ? inserimentoBloc.teams
+                            .map((team) => DropdownMenuItem(
+                                value: team.id.toString(),
+                                child: Text(team.name.toString())))
+                            .toList()
+                        : [],
+                  ),
+                  AddFormScreen(
+                    type: TypeAddForm.TEAM,
+                    bloc: inserimentoBloc,
+                    state: state,
+                    categoryId: inserimentoBloc.selectedCategories,
+                    teamId: inserimentoBloc.selectedTeam,
+                  ),
+                  state is InserimentoLoadingState
+                      ? Container(
+                          margin: const EdgeInsets.only(top: 20.0),
+                          child: LoadingIndicator(),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              margin: const EdgeInsets.only(top: 20.0),
+                              alignment: Alignment.centerLeft,
+                              child: FlatButton(
+                                shape: new RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(30.0),
+                                ),
+                                color: MainColors.PRIMARY,
+                                onPressed: () => goToStep(3),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 20.0,
+                                  horizontal: 20.0,
+                                ),
+                                child: Text(
+                                  I18n().indietro,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: MainColors.TEXT_NEGATIVE,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-              ])),
-        ],
-      ),
-    ));
+                            Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              margin: const EdgeInsets.only(top: 20.0),
+                              alignment: Alignment.centerRight,
+                              child: FlatButton(
+                                disabledColor: MainColors.DISABLED,
+                                shape: new RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(30.0),
+                                ),
+                                color: MainColors.PRIMARY,
+                                onPressed: inserimentoBloc.selectedTeam != null
+                                    ? () => goToStep(5)
+                                    : null,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 20.0,
+                                  horizontal: 20.0,
+                                ),
+                                child: Text(
+                                  I18n().avanti,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: MainColors.TEXT_NEGATIVE,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                ])),
+          ]),
+        )));
   }
 
   Widget playersScreen(state) {
-    return Center(
+    return SingleChildScrollView(
+      controller: _scrollControllerForPlayers,
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -594,6 +608,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
         ),
         padding: const EdgeInsets.only(left: 20.0, right: 20.0),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             SizedBox(height: MediaQuery.of(context).size.height / 8),
             FormBuilder(
@@ -602,8 +617,8 @@ class InserimentoScreenState extends State<InserimentoScreen>
               child: Column(
                 children: <Widget>[
                   Container(
-                    height: MediaQuery.of(context).size.height / 2,
                     child: ListView(
+                      controller: _scrollControllerForPlayers,
                       shrinkWrap: true,
                       children: <Widget>[
                         FormBuilderCheckboxList(
@@ -632,6 +647,13 @@ class InserimentoScreenState extends State<InserimentoScreen>
                         ),
                       ],
                     ),
+                  ),
+                  AddFormScreen(
+                    type: TypeAddForm.PLAYER,
+                    bloc: inserimentoBloc,
+                    state: state,
+                    categoryId: inserimentoBloc.selectedCategories,
+                    teamId: inserimentoBloc.selectedTeam,
                   ),
                   state is InserimentoLoadingState
                       ? Container(
@@ -702,228 +724,245 @@ class InserimentoScreenState extends State<InserimentoScreen>
   }
 
   Widget coachesScreen(state) {
-    return Center(
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: MainColors.SECONDARY,
-        ),
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 150),
-            FormBuilder(
-              key: FormKey.coachesKey,
-              autovalidate: true,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: <Widget>[
-                        FormBuilderRadio(
-                          activeColor: MainColors.PRIMARY,
-                          decoration:
-                              InputDecoration(labelText: I18n().coaches),
-                          attribute: "coaches",
-                          initialValue: inserimentoBloc.coaches != null
-                              ? inserimentoBloc.selectedCoach
-                              : null,
-                          options: inserimentoBloc.coaches != null
-                              ? inserimentoBloc.coaches
-                                  .map((coach) => FormBuilderFieldOption(
-                                      value: coach.id.toString(),
-                                      child: Text(coach.name.toString())))
-                                  .toList()
-                              : [],
-                          validators: [
-                            FormBuilderValidators.required(
-                                errorText: I18n().obbligatorio)
-                          ],
-                          onChanged: (value) =>
-                              {inserimentoBloc.selectedCoach = value},
-                        ),
-                      ],
-                    ),
-                  ),
-                  state is InserimentoLoadingState
-                      ? Container(
-                          margin: const EdgeInsets.only(top: 20.0),
-                          child: LoadingIndicator(),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              margin: const EdgeInsets.only(top: 20.0),
-                              alignment: Alignment.centerLeft,
-                              child: FlatButton(
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(30.0),
-                                ),
-                                color: MainColors.PRIMARY,
-                                onPressed: () => goToStep(5),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 20.0,
-                                  horizontal: 20.0,
-                                ),
-                                child: Text(
-                                  I18n().indietro,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: MainColors.TEXT_NEGATIVE,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              margin: const EdgeInsets.only(top: 20.0),
-                              alignment: Alignment.centerRight,
-                              child: FlatButton(
-                                disabledColor: MainColors.DISABLED,
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(30.0),
-                                ),
-                                color: MainColors.PRIMARY,
-                                onPressed: () {
-                                  goToStep(7);
-                                },
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 20.0,
-                                  horizontal: 20.0,
-                                ),
-                                child: Text(
-                                  I18n().avanti,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: MainColors.TEXT_NEGATIVE,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                ],
-              ),
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: MainColors.SECONDARY,
             ),
-          ],
-        ),
-      ),
-    );
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 150),
+                FormBuilder(
+                  key: FormKey.coachesKey,
+                  autovalidate: false,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        child: ListView(
+                          shrinkWrap: true,
+                          children: <Widget>[
+                            FormBuilderRadio(
+                              activeColor: MainColors.PRIMARY,
+                              decoration:
+                                  InputDecoration(labelText: I18n().coaches),
+                              attribute: "coaches",
+                              initialValue: inserimentoBloc.coaches != null
+                                  ? inserimentoBloc.selectedCoach
+                                  : null,
+                              options: inserimentoBloc.coaches != null
+                                  ? inserimentoBloc.coaches
+                                      .map((coach) => FormBuilderFieldOption(
+                                          value: coach.id.toString(),
+                                          child: Text(coach.name.toString())))
+                                      .toList()
+                                  : [],
+                              validators: [
+                                FormBuilderValidators.required(
+                                    errorText: I18n().obbligatorio)
+                              ],
+                              onChanged: (value) =>
+                                  {inserimentoBloc.selectedCoach = value},
+                            ),
+                            AddFormScreen(
+                              type: TypeAddForm.COACH,
+                              bloc: inserimentoBloc,
+                              state: state,
+                              categoryId: inserimentoBloc.selectedCategories,
+                              teamId: inserimentoBloc.selectedTeam,
+                            ),
+                          ],
+                        ),
+                      ),
+                      state is InserimentoLoadingState
+                          ? Container(
+                              margin: const EdgeInsets.only(top: 20.0),
+                              child: LoadingIndicator(),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  margin: const EdgeInsets.only(top: 20.0),
+                                  alignment: Alignment.centerLeft,
+                                  child: FlatButton(
+                                    shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(30.0),
+                                    ),
+                                    color: MainColors.PRIMARY,
+                                    onPressed: () => goToStep(5),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 20.0,
+                                      horizontal: 20.0,
+                                    ),
+                                    child: Text(
+                                      I18n().indietro,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: MainColors.TEXT_NEGATIVE,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  margin: const EdgeInsets.only(top: 20.0),
+                                  alignment: Alignment.centerRight,
+                                  child: FlatButton(
+                                    disabledColor: MainColors.DISABLED,
+                                    shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(30.0),
+                                    ),
+                                    color: MainColors.PRIMARY,
+                                    onPressed: () {
+                                      goToStep(7);
+                                    },
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 20.0,
+                                      horizontal: 20.0,
+                                    ),
+                                    child: Text(
+                                      I18n().avanti,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: MainColors.TEXT_NEGATIVE,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget moduleScreen(InserimentoState state) {
-    return Center(
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: MainColors.SECONDARY,
-        ),
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 150),
-            FormBuilder(
-              key: FormKey.modulesKey,
-              autovalidate: true,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: <Widget>[
-                        FormBuilderRadio(
-                          activeColor: MainColors.PRIMARY,
-                          decoration:
-                              InputDecoration(labelText: I18n().modules),
-                          attribute: "modules",
-                          initialValue: inserimentoBloc.modules != null
-                              ? inserimentoBloc.selectedModule
-                              : null,
-                          options: inserimentoBloc.modules != null
-                              ? inserimentoBloc.modules
-                                  .map((module) => FormBuilderFieldOption(
-                                      value: module.id.toString(),
-                                      child: Text(module.name.toString())))
-                                  .toList()
-                              : [],
-                          validators: [
-                            FormBuilderValidators.required(
-                                errorText: I18n().obbligatorio)
-                          ],
-                          onChanged: (value) =>
-                              {inserimentoBloc.selectedModule = value},
-                        ),
-                      ],
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: Center(
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: MainColors.SECONDARY,
+          ),
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 150),
+              FormBuilder(
+                key: FormKey.modulesKey,
+                autovalidate: false,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: ListView(
+                        controller: _scrollController,
+                        shrinkWrap: true,
+                        children: <Widget>[
+                          FormBuilderRadio(
+                            activeColor: MainColors.PRIMARY,
+                            decoration:
+                                InputDecoration(labelText: I18n().modules),
+                            attribute: "modules",
+                            initialValue: inserimentoBloc.modules != null
+                                ? inserimentoBloc.selectedModule
+                                : null,
+                            options: inserimentoBloc.modules != null
+                                ? inserimentoBloc.modules
+                                    .map((module) => FormBuilderFieldOption(
+                                        value: module.id.toString(),
+                                        child: Text(module.name.toString())))
+                                    .toList()
+                                : [],
+                            validators: [
+                              FormBuilderValidators.required(
+                                  errorText: I18n().obbligatorio)
+                            ],
+                            onChanged: (value) =>
+                                {inserimentoBloc.selectedModule = value},
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  inserimentoBloc.modules == null
-                      ? Container(
-                          margin: const EdgeInsets.only(top: 20.0),
-                          child: LoadingIndicator(),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              margin: const EdgeInsets.only(top: 20.0),
-                              alignment: Alignment.centerLeft,
-                              child: FlatButton(
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(30.0),
-                                ),
-                                color: MainColors.PRIMARY,
-                                onPressed: () => goToStep(6),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 20.0,
-                                  horizontal: 20.0,
-                                ),
-                                child: Text(
-                                  I18n().indietro,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: MainColors.TEXT_NEGATIVE,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              margin: const EdgeInsets.only(top: 20.0),
-                              alignment: Alignment.centerRight,
-                              child: FlatButton(
-                                disabledColor: MainColors.DISABLED,
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(30.0),
-                                ),
-                                color: inserimentoBloc.selectedModule == null
-                                    ? MainColors.DISABLED
-                                    : MainColors.PRIMARY,
-                                onPressed: () {
-                                  goToStep(8);
-                                },
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 20.0,
-                                  horizontal: 20.0,
-                                ),
-                                child: Text(
-                                  I18n().avanti,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: MainColors.TEXT_NEGATIVE,
-                                      fontWeight: FontWeight.bold),
+                    inserimentoBloc.modules == null
+                        ? Container(
+                            margin: const EdgeInsets.only(top: 20.0),
+                            child: LoadingIndicator(),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                margin: const EdgeInsets.only(top: 20.0),
+                                alignment: Alignment.centerLeft,
+                                child: FlatButton(
+                                  shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(30.0),
+                                  ),
+                                  color: MainColors.PRIMARY,
+                                  onPressed: () => goToStep(6),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20.0,
+                                    horizontal: 20.0,
+                                  ),
+                                  child: Text(
+                                    I18n().indietro,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: MainColors.TEXT_NEGATIVE,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                ],
+                              Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                margin: const EdgeInsets.only(top: 20.0),
+                                alignment: Alignment.centerRight,
+                                child: FlatButton(
+                                  disabledColor: MainColors.DISABLED,
+                                  shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(30.0),
+                                  ),
+                                  color: inserimentoBloc.selectedModule == null
+                                      ? MainColors.DISABLED
+                                      : MainColors.PRIMARY,
+                                  onPressed: () {
+                                    goToStep(8);
+                                  },
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20.0,
+                                    horizontal: 20.0,
+                                  ),
+                                  child: Text(
+                                    I18n().avanti,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: MainColors.TEXT_NEGATIVE,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -932,7 +971,14 @@ class InserimentoScreenState extends State<InserimentoScreen>
   Widget incontroScreen() {
     return inserimentoBloc.incontro != null &&
             inserimentoBloc.incontro.module != null
-        ? FootballFieldPage(inserimentoBloc: inserimentoBloc)
+        ? FootballFieldScreen(
+            inserimentoIncontroBloc: inserimentoBloc,
+            footballFieldBloc: FootballFieldBloc(
+                dimension: [9, 11],
+                availablePlayers: inserimentoBloc.incontro.players,
+                module: inserimentoBloc.incontro.module),
+            lato: 30,
+          )
         : LoadingIndicator();
   }
 
@@ -957,6 +1003,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
   }
 
   void goToStep(int step) {
+    this.step = step;
     if (step == 0) {
       if (inserimentoBloc.genders == null || inserimentoBloc.genders.isEmpty) {
         inserimentoBloc.add(GetGendersEvent());
@@ -969,30 +1016,19 @@ class InserimentoScreenState extends State<InserimentoScreen>
       }
     }
     if (step == 2) {
-      if (inserimentoBloc.matches == null || inserimentoBloc.matches.isEmpty) {
-        inserimentoBloc.add(GetMatchesEvent());
-      }
+      inserimentoBloc.add(GetMatchesEvent());
     }
     if (step == 3) {
-      if (inserimentoBloc.categories == null ||
-          inserimentoBloc.categories.isEmpty) {
-        inserimentoBloc.add(GetCategoriesEvent());
-      }
+      inserimentoBloc.add(GetCategoriesEvent());
     }
     if (step == 4) {
-      if (inserimentoBloc.teams == null || inserimentoBloc.teams.isEmpty) {
-        inserimentoBloc.add(GetTeamsEvent());
-      }
+      inserimentoBloc.add(GetTeamsEvent());
     }
     if (step == 5) {
-      if (inserimentoBloc.players == null || inserimentoBloc.players.isEmpty) {
-        inserimentoBloc.add(GetPlayersEvent());
-      }
+      inserimentoBloc.add(GetPlayersEvent());
     }
     if (step == 6) {
-      if (inserimentoBloc.coaches == null || inserimentoBloc.coaches.isEmpty) {
-        inserimentoBloc.add(GetCoachesEvent());
-      }
+      inserimentoBloc.add(GetCoachesEvent());
     }
     if (step == 7) {
       inserimentoBloc.add(InserisciModuloEvent());
@@ -1027,25 +1063,26 @@ class InserimentoScreenState extends State<InserimentoScreen>
               );
             });
           }
-          return Container(
-
-              //
-              child: PageView(
-            controller: _controller,
-            physics: new AlwaysScrollableScrollPhysics(),
-            children: <Widget>[
-              genderScreen(state),
-              championshipScreen(state),
-              matchScreen(state),
-              categoryScreen(state),
-              teamScreen(state),
-              playersScreen(state),
-              coachesScreen(state),
-              moduleScreen(state),
-              incontroScreen(),
-            ],
-            scrollDirection: Axis.horizontal,
-          ));
+          return WillPopScope(
+              onWillPop: () {
+                goToStep(step - 1);
+                return Future.delayed(Duration(seconds: 1));
+              },
+              child: Container(
+                  child: PageView(
+                      controller: _controller,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: <Widget>[
+                    genderScreen(state),
+                    championshipScreen(state),
+                    matchScreen(state),
+                    categoryScreen(state),
+                    teamScreen(state),
+                    playersScreen(state),
+                    coachesScreen(state),
+                    moduleScreen(state),
+                    incontroScreen(),
+                  ])));
         });
   }
 

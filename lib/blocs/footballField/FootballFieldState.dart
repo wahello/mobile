@@ -29,3 +29,10 @@ class FootballFieldEdit extends FootballFieldState {
     return 'FootballFieldEdit';
   }
 }
+
+class ShowPlayerOptionsState extends FootballFieldState {
+  @override
+  String toString() {
+    return 'ShowPlayerOptionsState';
+  }
+}
