@@ -18,7 +18,7 @@ Incontro _$IncontroFromJson(Map<String, dynamic> json) {
         .map((e) => Player.fromJson(e as Map<String, dynamic>))
         .toList(),
     Coach.fromJson(json['coach'] as Map<String, dynamic>),
-  );
+  )..module = Module.fromJson(json['module'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$IncontroToJson(Incontro instance) => <String, dynamic>{
@@ -30,4 +30,5 @@ Map<String, dynamic> _$IncontroToJson(Incontro instance) => <String, dynamic>{
       'team': instance.team,
       'players': instance.players,
       'coach': instance.coach,
+      'module': instance.module,
     };
