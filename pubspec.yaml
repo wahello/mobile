@@ -40,6 +40,7 @@ dependencies:
   sms_autofill: ^1.1.0
   json_annotation: ^3.0.0
   carousel_slider: ^1.3.0
+  overlay_container: ^0.0.4+1
   shared:
     git:
       url: git@github.com:football-system/shared.git
@@ -73,6 +74,7 @@ flutter:
     - assets/images/yellow_card.png
     - assets/images/red_card.png
     - assets/images/goal.png
+    - assets/images/football_field.jpg
     - assets/images/assist.png
   fonts:
     - family: Soccerplayer
