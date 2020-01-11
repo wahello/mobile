@@ -6,7 +6,6 @@ import 'package:football_system/blocs/addForm/index.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldPage.dart';
 import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
-import 'package:football_system/blocs/footballField/football_screen.dart';
 import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/model/player_model.dart';
