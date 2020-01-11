@@ -54,7 +54,9 @@ dev_dependencies:
 
 dependency_overrides:
   shared:
-    path: "../shared/"
+    git:
+      url: git@github.com:football-system/shared.git
+      ref: develop
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
