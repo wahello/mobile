@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
+import 'package:football_system/blocs/footballField/football_screen.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/model/incontro_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
@@ -31,10 +32,18 @@ class SimpleBlocDelegate extends BlocDelegate {
 class FootballFieldPage extends StatefulWidget {
   final InserimentoBloc inserimentoBloc;
 
-  FootballFieldPage({this.inserimentoBloc});
+  FootballFieldBloc footballFieldBloc;
+
+  FootballFieldPage({this.inserimentoBloc}) {
+    footballFieldBloc = FootballFieldBloc(
+        dimension: [9, 11],
+        availablePlayers: inserimentoBloc.incontro.players,
+        module: inserimentoBloc.incontro.module);
+  }
   @override
   FootballFieldPageState createState() {
-    return FootballFieldPageState(inserimentoBloc);
+    return FootballFieldPageState(
+        inserimentoBloc: inserimentoBloc, footballFieldBloc: footballFieldBloc);
   }
 }
 
@@ -43,12 +52,7 @@ class FootballFieldPageState extends State<FootballFieldPage> {
   InserimentoBloc inserimentoBloc;
   List<int> dimension;
 
-  FootballFieldPageState(this.inserimentoBloc) {
-    dimension = getDimensionFromCategory(inserimentoBloc.incontro);
-    footballFieldBloc = FootballFieldBloc(
-        dimension: dimension,
-        availablePlayers: inserimentoBloc.incontro.players);
-  }
+  FootballFieldPageState({this.inserimentoBloc, this.footballFieldBloc});
 
   List getPlayersSelected(InserimentoBloc inserimentoBloc) {
     return inserimentoBloc.selectedPlayers;
@@ -60,12 +64,12 @@ class FootballFieldPageState extends State<FootballFieldPage> {
 
     switch (incontro.category.name) {
       case 'Serie A':
-        category.add(13);
         category.add(9);
+        category.add(11);
         break;
       default:
-        category.add(13);
         category.add(9);
+        category.add(11);
         break;
     }
 
@@ -74,23 +78,10 @@ class FootballFieldPageState extends State<FootballFieldPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FootballFieldBloc>(
-        builder: (BuildContext context) => footballFieldBloc,
-        child: BlocBuilder<FootballFieldBloc, FootballFieldState>(
-            builder: (BuildContext context, FootballFieldState state) {
-          if (state is FootballFieldCreated ||
-              state is FootballFieldRefreshed ||
-              state is ShowPlayerOptionsState) {
-            return FootballFieldScreen(
-              lato: 30,
-              inserimentoIncontroBloc: inserimentoBloc,
-              footballFieldBloc: footballFieldBloc,
-            );
-          } else {
-            Container(
-              child: Text('STATO != FootballFieldCreated'),
-            );
-          }
-        }));
+    return FootballFieldScreen(
+      lato: 30,
+      inserimentoIncontroBloc: inserimentoBloc,
+      footballFieldBloc: footballFieldBloc,
+    );
   }
 }

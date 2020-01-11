@@ -1,223 +1,288 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
+import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/stuff/event.dart';
 import 'package:football_system/blocs/stuff/note.dart';
 import 'package:football_system/custom_icon/soccer_icons_icons.dart';
 import 'package:shared/shared.dart';
 
 class OptionsScreen extends StatefulWidget {
-  FootballFieldBloc footbalFieldBloc;
+  int x;
+  int y;
+  FootballFieldBloc footballFieldBloc;
+  OptionsScreen({this.x, this.y, this.footballFieldBloc});
 
-  OptionsScreen({this.footbalFieldBloc});
   @override
-  _OptionsScreenState createState() => _OptionsScreenState();
+  _OptionsScreenState createState() =>
+      _OptionsScreenState(footballFieldBloc: footballFieldBloc, x: x, y: y);
 }
 
 class _OptionsScreenState extends State<OptionsScreen> {
-  FootballFieldBloc footbalFieldBloc;
-  TextEditingController _noteFieldController;
-  var _tapIndex;
+  final noteController = TextEditingController();
+  FootballFieldBloc footballFieldBloc;
+  CarouselSlider carousel;
+  int x;
+  int y;
 
-  _OptionsScreenState({this.footbalFieldBloc});
+  _OptionsScreenState({this.footballFieldBloc, this.x, this.y});
+  //#cartellino giallo
+  var yellowCard = 0;
+  //#cartellino rosso
+  var redCard = 0;
+  //#goal
+  var goal = 0;
+  //#assist
+  var assist = 0;
+
+  //note giocatore
+  var notes = [""];
+
+  void initState() {
+    super.initState();
+    noteController.addListener(() => {});
+  }
+
+  void submitNote(String note) {
+    //TODO: handle save note
+    setState(() => {notes.add(note)});
+  }
+
+  void addNewNote() {
+    notes.add('');
+    setState(() {
+      this.carousel.animateToPage(notes.length,
+          duration: Duration(milliseconds: 1500), curve: Curves.elasticInOut);
+    });
+  }
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-      child: Column(
-        children: <Widget>[
-          FlatButton(
-              onPressed: openAlertBox,
-              child: Center(
-                  child: Row(
-                children: <Widget>[
-                  Text('Add note'),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  ),
-                  Icon(Icons.note_add)
-                ],
-              ))),
-          FlatButton(
-              onPressed: () {
-                _showEventMenu(footbalFieldBloc.currentPlayer);
-              },
-              child: Center(
-                  child: Row(
-                children: <Widget>[
-                  Text('Events'),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                  ),
-                  Icon(Icons.shuffle)
-                ],
-              ))),
-          FlatButton(
-              onPressed: () {
-                footbalFieldBloc.add(RemoveFootballPlayerFromField(
-                    footbalFieldBloc
-                        .addedPlayers[footbalFieldBloc.currentPlayer]));
-              },
-              child: Center(
-                  child: Row(
-                children: <Widget>[
-                  Text('Remove'),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                  ),
-                  Icon(Icons.delete)
-                ],
-              )))
-        ],
+  void dispose() {
+    noteController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildCoverImage(Size screenSize) {
+    return Container(
+      height: screenSize.height / 2.6,
+      decoration: BoxDecoration(
+        color: Color(0xFFEFF4F7),
+      ),
+    );
+  }
+
+  Widget _buildProfileImage() {
+    return Center(
+        child: Container(
+      width: 150.0,
+      height: 150.0,
+      decoration: BoxDecoration(
+          color: Color(0xFFEFF4F7),
+          image: DecorationImage(
+              image: AssetImage('assets/images/maglia.png'), fit: BoxFit.cover),
+          border: Border.all(width: 4.0, color: Colors.black),
+          borderRadius: BorderRadius.circular(80.0)),
+      child: Container(
+        margin: EdgeInsets.only(top: 60.0),
+        child: Center(
+            child: Column(
+          children: <Widget>[
+            Text(footballFieldBloc.footballField.players[x][y].name,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(footballFieldBloc.footballField.players[x][y].id.toString(),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+          ],
+        )),
       ),
     ));
   }
 
-  void _showEventMenu(int index) {
-    showModalBottomSheet<void>(
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return Container(
-            child: Column(
+  Widget _buildPlayerEventStatus(String image, String label, int count) {
+    bool disableAddAndRemove = ((label == 'C. giallo' && yellowCard == 2) ||
+        ((label == 'C. rosso' || label == 'C. giallo') && redCard == 1));
+    bool disableRemove = count == 0;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        FlatButton(
+          onPressed: () => {
+            setState(() => {
+                  ++count,
+                  if (label == 'C. giallo' && redCard == 0 && count <= 2)
+                    {
+                      yellowCard = count,
+                      if (yellowCard == 2) {redCard = 1}
+                    }
+                  else if (label == 'C. rosso' && yellowCard == 0 && count == 1)
+                    {redCard = count}
+                  else if (label == 'Assist')
+                    {assist = count}
+                  else if (label == 'Goal')
+                    {goal = count}
+                })
+          },
+          child: disableAddAndRemove
+              ? null
+              : Icon(
+                  Icons.add,
+                  color: MainColors.PRIMARY,
+                ),
+        ),
+        Container(
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+              image:
+                  DecorationImage(image: AssetImage('assets/images/' + image))),
+        ),
+        Text(
+          label,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Text(count != null ? count.toString() : 0),
+        FlatButton(
+          onPressed: () => {
+            setState(() => {
+                  if (count > 0) {count--},
+                  if (label == 'C. rosso')
+                    {redCard = count}
+                  else if (label == 'C. giallo')
+                    {yellowCard = count}
+                  else if (label == 'Assist')
+                    {assist = count}
+                  else if (label == 'Goal')
+                    {goal = count}
+                })
+          },
+          child:
+              disableAddAndRemove || disableRemove ? null : Icon(Icons.remove),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRedCard(int count) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/red_card.png'))),
+        ),
+        Text(
+          'Cartellino rosso',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Text(count != null ? count.toString() : 0)
+      ],
+    );
+  }
+
+  Widget _buildPlayerStatus() {
+    return Container(
+        height: 180.0,
+        margin: EdgeInsets.only(top: 8.0),
+        decoration: BoxDecoration(color: Color(0xFFEFF4F7)),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                FlatButton(
-                  onPressed: () {
-                    addEvent(footbalFieldBloc.addedPlayers[index].id,
-                        EventType.yellowCard, 0); //TODO recuperare istantaneaID
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        SoccerIcons.yellowCard,
-                        color: Colors.yellow,
-                      ),
-                      Text('Cartellino Giallo')
-                    ],
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    addEvent(footbalFieldBloc.addedPlayers[index].id,
-                        EventType.redCard, 0); //TODO recuperare istantaneaID
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        SoccerIcons.redCard,
-                        color: Colors.red,
-                      ),
-                      Text('Cartellino Rosso')
-                    ],
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    addEvent(footbalFieldBloc.addedPlayers[index].id,
-                        EventType.goal, 0); //TODO recuperare istantaneaID
-                  },
-                  child: Row(
-                    children: <Widget>[Icon(SoccerIcons.goal), Text('Goal')],
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    addEvent(
-                        footbalFieldBloc.addedPlayers[index].id,
-                        EventType.substitution,
-                        0); //TODO recuperare istantaneaID
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Icon(SoccerIcons.substitution),
-                      Text('Substituion')
-                    ],
-                  ),
-                )
+                _buildPlayerEventStatus('red_card.png', 'C. rosso', redCard),
+                _buildPlayerEventStatus(
+                    'yellow_card.png', 'C. giallo', yellowCard),
+                _buildPlayerEventStatus('goal.png', 'Goal', goal),
+                _buildPlayerEventStatus('assist.png', 'Assist', assist),
+                // _buildPlayerEventStatus('red_card.png', 'Cartellino rosso', 0),
               ],
             ),
-          );
-        });
+          ],
+        ));
   }
 
-  void addEvent(int playerId, EventType type, int instId) {
-    //TODO recuperare lista eventi da incontro
-    Event(playerId, type, instId);
-    //TODO aggiungere alla lista
-  }
-
-  openAlertBox() {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(32.0))),
-            contentPadding: EdgeInsets.only(top: 10.0),
-            content: Container(
-              width: 300.0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          "Player's note",
-                          style: TextStyle(fontSize: 24.0),
-                        )
-                      ]),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                    height: 4.0,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 30.0, right: 30.0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Add note",
-                        border: InputBorder.none,
-                      ),
-                      maxLines: 8,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      saveNote(_noteFieldController.text,
-                          footbalFieldBloc.addedPlayers[_tapIndex].id);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(32.0),
-                            bottomRight: Radius.circular(32.0)),
-                      ),
-                      child: Text(
-                        "Confirm note",
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+  Widget _buildNotesField(String note) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(width: 2)),
+      margin: EdgeInsets.only(left: 20, right: 20),
+      child: new Scrollbar(
+        child: new SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          reverse: true,
+          child: new TextFormField(
+            initialValue: note,
+            decoration: InputDecoration(
+              suffixIcon:
+                  FlatButton(onPressed: () => {}, child: Icon(Icons.edit)),
             ),
-          );
-        });
+            maxLines: null,
+            onSaved: (note) => {},
+            onFieldSubmitted: (note) => {submitNote(note)},
+            controller: note == null ? noteController : null,
+            textInputAction: TextInputAction.done,
+          ),
+        ),
+      ),
+    );
   }
 
-  void saveNote(String note, playerId) {
-    //TODO recuperare lista note da incontro
-    Note(playerId, note);
-    //TODO aggiungere alla lista
+  Widget _buildNotesCarousel(Size screenSize) {
+    this.carousel = CarouselSlider(
+      height: screenSize.height / 7,
+      //note salvate nel bloc
+
+      items: notes.map((note) {
+        return Builder(
+          builder: (BuildContext context) {
+            return _buildNotesField(note);
+          },
+        );
+      }).toList(),
+    );
+    return Container(margin: EdgeInsets.only(top: 10), child: this.carousel);
+  }
+
+  Widget _buildCarouselButtons(Size screenSize) {
+    return Container(
+        margin: EdgeInsets.only(top: screenSize.height / 20.5),
+        child: FloatingActionButton(
+          backgroundColor: MainColors.PRIMARY,
+          onPressed: () => {this.addNewNote()},
+          child: Icon(Icons.add),
+        ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: MainColors.PRIMARY,
+        ),
+        body: Stack(
+          children: <Widget>[
+            SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: screenSize.height / 30.0),
+                    _buildProfileImage(),
+                    _buildPlayerStatus(),
+                    _buildNotesCarousel(screenSize),
+                    _buildCarouselButtons(screenSize)
+                  ],
+                ),
+              ),
+            )
+          ],
+        ));
   }
 }

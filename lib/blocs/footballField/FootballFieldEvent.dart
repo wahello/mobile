@@ -17,9 +17,10 @@ class CreateFootballField extends FootballFieldEvent {
 
 class AddFootballPlayerToField extends FootballFieldEvent {
   final Player player;
-  final int posizione;
+  final int x;
+  final int y;
 
-  AddFootballPlayerToField({this.player, this.posizione});
+  AddFootballPlayerToField({this.player, this.x, this.y});
 
   @override
   String toString() => 'AddFootballPlayerToField';

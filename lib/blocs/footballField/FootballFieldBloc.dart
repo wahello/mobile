@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+import 'package:football_system/blocs/model/module_model.dart';
 
 import 'FootBallField.dart';
 import 'FootballFieldEvent.dart';
@@ -16,12 +17,15 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
   List<Player> addedPlayers;
   List<Player> availablePlayers;
   FootballField footballField;
+  Module module;
   int currentPlayer;
 
-  FootballFieldBloc({@required this.dimension, this.availablePlayers})
+  FootballFieldBloc(
+      {@required this.dimension, this.availablePlayers, this.module})
       : assert(dimension != null) {
     addedPlayers = List<Player>();
-    footballField = FootballField(dimension: this.dimension);
+    footballField =
+        FootballField(dimension: this.dimension, positions: module.positions);
   }
 
   FootballFieldState get initialState => FootballFieldCreated();
@@ -50,7 +54,7 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
       availablePlayers = availablePlayers
           .where((player) => player.id != event.player.id)
           .toList();
-      footballField.players[event.posizione] = event.player;
+      footballField.players[event.x][event.y] = event.player;
 
       yield FootballFieldRefreshed();
     }

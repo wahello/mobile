@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/index.dart';
+import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldPage.dart';
+import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
+import 'package:football_system/blocs/footballField/football_screen.dart';
 import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/model/player_model.dart';
@@ -962,7 +965,13 @@ class InserimentoScreenState extends State<InserimentoScreen>
   Widget incontroScreen() {
     return inserimentoBloc.incontro != null &&
             inserimentoBloc.incontro.module != null
-        ? FootballFieldPage(inserimentoBloc: inserimentoBloc)
+        ? FootballFieldScreen(
+            inserimentoIncontroBloc: inserimentoBloc,
+            footballFieldBloc: FootballFieldBloc(
+                dimension: [9, 11],
+                availablePlayers: inserimentoBloc.incontro.players),
+            lato: 30,
+          )
         : LoadingIndicator();
   }
 

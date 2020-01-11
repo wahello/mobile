@@ -6,9 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared/shared.dart';
 
 class CallsProvider {
-
-static final CallsProvider _callsProvider =
-      CallsProvider._internal();
+  static final CallsProvider _callsProvider = CallsProvider._internal();
   factory CallsProvider() {
     return _callsProvider;
   }
@@ -122,9 +120,9 @@ static final CallsProvider _callsProvider =
     final token = await CallsRepository().readKey('token');
     http.Response _respAuth = await http.get(
         Endpoints.domain +
-            Endpoints.categories +
+            Endpoints.profiles +
             "/" +
-            categoryId +
+            "4" +
             Endpoints.tactics,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
