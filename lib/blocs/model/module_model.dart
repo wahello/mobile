@@ -9,7 +9,7 @@ class Module {
   String updatedAt;
   String deletedAt;
   String name;
-  List<String> positions;
+  List<List<String>> positions;
   int profileId;
 
   Module(

@@ -31,6 +31,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
   InserimentoBloc inserimentoBloc = new InserimentoBloc();
   CallsRepository callsRepository = new CallsRepository();
   ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollControllerForPlayers = new ScrollController();
 
   // Variabile di classe per gestire l'ovveride del back button
   int step;
@@ -600,7 +601,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
 
   Widget playersScreen(state) {
     return SingleChildScrollView(
-      controller: _scrollController,
+      controller: _scrollControllerForPlayers,
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -618,7 +619,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 children: <Widget>[
                   Container(
                     child: ListView(
-                      controller: _scrollController,
+                      controller: _scrollControllerForPlayers,
                       shrinkWrap: true,
                       children: <Widget>[
                         FormBuilderCheckboxList(
@@ -848,115 +849,121 @@ class InserimentoScreenState extends State<InserimentoScreen>
   }
 
   Widget moduleScreen(InserimentoState state) {
-    return Center(
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: MainColors.SECONDARY,
-        ),
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 150),
-            FormBuilder(
-              key: FormKey.modulesKey,
-              autovalidate: false,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: <Widget>[
-                        FormBuilderRadio(
-                          activeColor: MainColors.PRIMARY,
-                          decoration:
-                              InputDecoration(labelText: I18n().modules),
-                          attribute: "modules",
-                          initialValue: inserimentoBloc.modules != null
-                              ? inserimentoBloc.selectedModule
-                              : null,
-                          options: inserimentoBloc.modules != null
-                              ? inserimentoBloc.modules
-                                  .map((module) => FormBuilderFieldOption(
-                                      value: module.id.toString(),
-                                      child: Text(module.name.toString())))
-                                  .toList()
-                              : [],
-                          validators: [
-                            FormBuilderValidators.required(
-                                errorText: I18n().obbligatorio)
-                          ],
-                          onChanged: (value) =>
-                              {inserimentoBloc.selectedModule = value},
-                        ),
-                      ],
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: Center(
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: MainColors.SECONDARY,
+          ),
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 150),
+              FormBuilder(
+                key: FormKey.modulesKey,
+                autovalidate: false,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: ListView(
+                        controller: _scrollController,
+                        shrinkWrap: true,
+                        children: <Widget>[
+                          FormBuilderRadio(
+                            activeColor: MainColors.PRIMARY,
+                            decoration:
+                                InputDecoration(labelText: I18n().modules),
+                            attribute: "modules",
+                            initialValue: inserimentoBloc.modules != null
+                                ? inserimentoBloc.selectedModule
+                                : null,
+                            options: inserimentoBloc.modules != null
+                                ? inserimentoBloc.modules
+                                    .map((module) => FormBuilderFieldOption(
+                                        value: module.id.toString(),
+                                        child: Text(module.name.toString())))
+                                    .toList()
+                                : [],
+                            validators: [
+                              FormBuilderValidators.required(
+                                  errorText: I18n().obbligatorio)
+                            ],
+                            onChanged: (value) =>
+                                {inserimentoBloc.selectedModule = value},
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  inserimentoBloc.modules == null
-                      ? Container(
-                          margin: const EdgeInsets.only(top: 20.0),
-                          child: LoadingIndicator(),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              margin: const EdgeInsets.only(top: 20.0),
-                              alignment: Alignment.centerLeft,
-                              child: FlatButton(
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(30.0),
-                                ),
-                                color: MainColors.PRIMARY,
-                                onPressed: () => goToStep(6),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 20.0,
-                                  horizontal: 20.0,
-                                ),
-                                child: Text(
-                                  I18n().indietro,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: MainColors.TEXT_NEGATIVE,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              margin: const EdgeInsets.only(top: 20.0),
-                              alignment: Alignment.centerRight,
-                              child: FlatButton(
-                                disabledColor: MainColors.DISABLED,
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(30.0),
-                                ),
-                                color: inserimentoBloc.selectedModule == null
-                                    ? MainColors.DISABLED
-                                    : MainColors.PRIMARY,
-                                onPressed: () {
-                                  goToStep(8);
-                                },
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 20.0,
-                                  horizontal: 20.0,
-                                ),
-                                child: Text(
-                                  I18n().avanti,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: MainColors.TEXT_NEGATIVE,
-                                      fontWeight: FontWeight.bold),
+                    inserimentoBloc.modules == null
+                        ? Container(
+                            margin: const EdgeInsets.only(top: 20.0),
+                            child: LoadingIndicator(),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                margin: const EdgeInsets.only(top: 20.0),
+                                alignment: Alignment.centerLeft,
+                                child: FlatButton(
+                                  shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(30.0),
+                                  ),
+                                  color: MainColors.PRIMARY,
+                                  onPressed: () => goToStep(6),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20.0,
+                                    horizontal: 20.0,
+                                  ),
+                                  child: Text(
+                                    I18n().indietro,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: MainColors.TEXT_NEGATIVE,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                ],
+                              Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                margin: const EdgeInsets.only(top: 20.0),
+                                alignment: Alignment.centerRight,
+                                child: FlatButton(
+                                  disabledColor: MainColors.DISABLED,
+                                  shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(30.0),
+                                  ),
+                                  color: inserimentoBloc.selectedModule == null
+                                      ? MainColors.DISABLED
+                                      : MainColors.PRIMARY,
+                                  onPressed: () {
+                                    goToStep(8);
+                                  },
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20.0,
+                                    horizontal: 20.0,
+                                  ),
+                                  child: Text(
+                                    I18n().avanti,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: MainColors.TEXT_NEGATIVE,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -969,7 +976,8 @@ class InserimentoScreenState extends State<InserimentoScreen>
             inserimentoIncontroBloc: inserimentoBloc,
             footballFieldBloc: FootballFieldBloc(
                 dimension: [9, 11],
-                availablePlayers: inserimentoBloc.incontro.players),
+                availablePlayers: inserimentoBloc.incontro.players,
+                module: inserimentoBloc.incontro.module),
             lato: 30,
           )
         : LoadingIndicator();

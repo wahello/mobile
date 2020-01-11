@@ -20,7 +20,6 @@ class FootballFieldScreen extends StatefulWidget {
   InserimentoBloc inserimentoIncontroBloc;
   FootballFieldBloc footballFieldBloc;
   final double lato;
-  final Field posizioni = Field();
 
   FootballFieldScreen(
       {Key key,
@@ -62,7 +61,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
     List<int> indexesList = List<int>();
 
     for (int i = 0; i < module.positions.length; i++) {
-      List<String> xy = module.positions[i].split(',');
+      List<String> xy = module.positions[i][0].split(',');
       int x = int.parse(xy[0]);
       int y = int.parse(xy[1]);
       //TODO : rendere dinamico
@@ -145,11 +144,37 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
       return GestureDetector(
         // This does not give the tap position ...
         onTap: () => {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => OptionsScreen(
-                      x: x, y: y, footballFieldBloc: footballFieldBloc)))
+          if (footballFieldBloc.footballField.players[x][y].id.toString() ==
+              "0")
+            {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ListPlayerScreen(
+                            x: x,
+                            y: y,
+                            footballFieldBloc: footballFieldBloc,
+                            inserimentoBloc: inserimentoIncontroBloc,
+                          )))
+            }
+          else
+            {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OptionsScreen(
+                          x: x, y: y, footballFieldBloc: footballFieldBloc)))
+            }
+        },
+        onDoubleTap: () => {
+          footballFieldBloc.availablePlayers
+              .add(footballFieldBloc.footballField.players[x][y]),
+          footballFieldBloc.footballField.players[x][y] = Player(
+              id: 0,
+              name: "aggiungi",
+              numero: "",
+              posizione: "$x,$y",
+              ruolo: "")
         }, //Salvo la cella che ho toccato
         child: Column(
           children: <Widget>[
@@ -159,33 +184,29 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("assets/images/maglia.png")))),
-            Text("ibraibraibraibra"),
-            Text("80")
+            Text(footballFieldBloc.footballField.players[x][y].name),
+            Text(footballFieldBloc.footballField.players[x][y].id.toString() ==
+                    "0"
+                ? ""
+                : footballFieldBloc.footballField.players[x][y].id.toString())
           ],
         ),
       );
     } else {
       // Ritorno un placeholder
       return GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ListPlayerScreen(
-                        x: x,
-                        y: y,
-                        footballFieldBloc: footballFieldBloc,
-                        inserimentoBloc: inserimentoIncontroBloc,
-                      )));
-        },
-        child: Center(
-          child: Stack(
-            children: <Widget>[
-              player_image,
-            ],
-          ),
-        ),
-      );
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ListPlayerScreen(
+                          x: x,
+                          y: y,
+                          footballFieldBloc: footballFieldBloc,
+                          inserimentoBloc: inserimentoIncontroBloc,
+                        )));
+          },
+          child: Container());
     }
   }
 }
@@ -227,7 +248,8 @@ class ListPlayerScreenState extends State<ListPlayerScreen> {
                   .map((player) => ListTile(
                         onTap: () => {
                           footballFieldBloc.add(AddFootballPlayerToField(
-                              player: player, x: widget.x, y: widget.y))
+                              player: player, x: widget.x, y: widget.y)),
+                          Navigator.pop(context)
                         },
                         title: Container(
                           child: Stack(
