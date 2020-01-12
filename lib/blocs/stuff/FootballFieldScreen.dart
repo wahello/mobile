@@ -146,7 +146,7 @@ class Module442State extends State<Module442> {
                 ),
                 Row(
                   children: <Widget>[
-                    Text(players[index].numero),
+                    Text(players[index].number),
                     Text(players[index].name)
                   ],
                 )
@@ -264,7 +264,7 @@ class PlayerMenuState extends State<PlayerMenu> {
                             Padding(
                               padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                             ),
-                            Text(widget.players[index].numero ?? '15'),
+                            Text(widget.players[index].number ?? '15'),
                           ],
                         )));
                   })
