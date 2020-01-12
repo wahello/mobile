@@ -4,13 +4,13 @@ import 'package:football_system/blocs/model/team_model.dart';
 
 class AddFormModel {
   final String nome;
-  final String numero;
+  final String number;
   final String anno;
 
-  AddFormModel({this.nome, this.numero, this.anno});
+  AddFormModel({this.nome, this.number, this.anno});
 
   Player getPlayerFromModel() {
-    return new Player(name: this.nome, numero: this.numero);
+    return new Player(name: this.nome, number: this.number);
   }
 
   Team getTeamFromModel() {
@@ -23,8 +23,8 @@ class AddFormModel {
 
   @override
   String toString() {
-    return '$nome' + (numero != ''
-        ? ' $numero'
-        : '') + (anno != '' ? ' $anno' : '');
+    return '$nome' +
+        (number != '' ? ' $number' : '') +
+        (anno != '' ? ' $anno' : '');
   }
 }

@@ -19,7 +19,7 @@ class FootballField {
       players[y][x] = Player(
           id: 0,
           name: "aggiungi",
-          numero: "",
+          number: "",
           posizione: positions[i][0],
           ruolo: "");
     }

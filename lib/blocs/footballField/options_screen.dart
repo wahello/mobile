@@ -21,7 +21,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
   int x;
   int y;
 
-  _OptionsScreenState({this.footballFieldBloc, this.x, this.y});
+  _OptionsScreenState({this.footballFieldBloc, this.x, this.y}) {
+    notes = footballFieldBloc.footballField.players[x][y].notes;
+  }
   //#cartellino giallo
   var yellowCard = 0;
   //#cartellino rosso
@@ -32,7 +34,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
   var assist = 0;
 
   //note giocatore
-  var notes = [""];
+  List<String> notes;
 
   void initState() {
     super.initState();
@@ -41,7 +43,12 @@ class _OptionsScreenState extends State<OptionsScreen> {
 
   void submitNote(String note) {
     //TODO: handle save note
-    setState(() => {notes.add(note)});
+
+    setState(() => {
+          notes.add(note),
+          footballFieldBloc.footballField.players[x][y].notes =
+              notes.where((note) => note != "").toList()
+        });
   }
 
   void addNewNote() {
@@ -85,7 +92,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
           children: <Widget>[
             Text(footballFieldBloc.footballField.players[x][y].name,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            Text(footballFieldBloc.footballField.players[x][y].id.toString(),
+            Text(footballFieldBloc.footballField.players[x][y].number,
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
           ],
         )),

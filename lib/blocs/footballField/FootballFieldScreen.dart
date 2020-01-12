@@ -33,13 +33,6 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
   InserimentoBloc inserimentoIncontroBloc;
   FootballFieldBloc footballFieldBloc;
 
-  Widget player_image = Container(
-      width: 30,
-      height: 30,
-      decoration: BoxDecoration(
-          image:
-              DecorationImage(image: AssetImage("assets/images/maglia.png"))));
-
   List<Player> players;
 
   List<int> convertedPositions;
@@ -86,41 +79,17 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: List.generate(
                               9,
-                              (i) => Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: List.generate(
-                                        11,
-                                        (j) => _getPlayerOrPlaceHolder(
-                                            i, j, state)),
+                              (i) => SingleChildScrollView(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: List.generate(
+                                          11,
+                                          (j) => _getPlayerOrPlaceHolder(
+                                              i, j, state)),
+                                    ),
                                   )),
                         )
-                        // Container(
-                        //     // margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                        //     child: GridView.count(
-                        //         crossAxisSpacing: 10,
-                        //         crossAxisCount: 5,
-                        //         children: List.generate(
-                        //             9 * 5,
-                        //             (index) => (convertedPositions
-                        //                     .contains(index))
-                        //                 ? (state is FootballFieldCreated ||
-                        //                         state is FootballFieldRefreshed)
-                        //                     ? _getPlayerOrPlaceHolder(
-                        //                         index, state)
-                        //                     : state is FootballFieldEdit
-                        //                         ? player_image
-                        //                         : Container(
-                        //                             decoration: BoxDecoration(
-                        //                             color: Colors.black,
-                        //                             shape: BoxShape.rectangle,
-                        //                           ))
-                        //                 : Container(
-                        //                     width: 1,
-                        //                     height: 1,
-                        //                     decoration: BoxDecoration(
-                        //                         border: Border.all(width: 1)),
-                        //                   ))))
                       ]))));
         });
   }
@@ -156,28 +125,60 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
             }
         },
         onDoubleTap: () => {
+          footballFieldBloc.footballField.players[x][y].notes = [""],
           footballFieldBloc.availablePlayers
               .add(footballFieldBloc.footballField.players[x][y]),
           footballFieldBloc.footballField.players[x][y] = Player(
               id: 0,
               name: "aggiungi",
-              numero: "",
+              number: "",
               posizione: "$x,$y",
               ruolo: "")
         }, //Salvo la cella che ho toccato
         child: Column(
           children: <Widget>[
             Container(
-                width: 30,
-                height: 30,
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("assets/images/maglia.png")))),
-            Text(footballFieldBloc.footballField.players[x][y].name),
-            Text(footballFieldBloc.footballField.players[x][y].id.toString() ==
-                    "0"
-                ? ""
-                : footballFieldBloc.footballField.players[x][y].id.toString())
+            Container(
+              padding: EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 2), color: Colors.white),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    footballFieldBloc.footballField.players[x][y].name,
+                    style: TextStyle(
+                        color: MainColors.PRIMARY,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 5),
+                    decoration: BoxDecoration(
+                        color: Colors.blueGrey,
+                        border: footballFieldBloc.footballField.players[x][y].id
+                                    .toString() ==
+                                "0"
+                            ? null
+                            : Border.all(width: 1)),
+                    child: Text(
+                      footballFieldBloc.footballField.players[x][y].id
+                                  .toString() ==
+                              "0"
+                          ? ""
+                          : footballFieldBloc.footballField.players[x][y].number
+                              .toString(),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
+            )
           ],
         ),
       );
@@ -261,7 +262,7 @@ class ListPlayerScreenState extends State<ListPlayerScreen> {
                                 child: Column(
                                   children: <Widget>[
                                     Text(
-                                      player.id.toString(),
+                                      player.number,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
