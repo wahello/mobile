@@ -314,8 +314,12 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       }
     }
     if (event is InserisciModuloEvent) {
+      var category = categories.singleWhere(
+          (category) => category.id == int.parse(selectedCategories));
+
       //chiamo il be per farmi restituire i moduli per la categoria scelta
-      var response = await callsRepository.getTactics("4");
+      var response =
+          await callsRepository.getTactics(category.profileId.toString());
 
       var list = jsonDecode(response.body) as List;
       List<Module> modulesList =
