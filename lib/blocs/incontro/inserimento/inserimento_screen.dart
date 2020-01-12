@@ -638,8 +638,9 @@ class InserimentoScreenState extends State<InserimentoScreen>
                           validators: [
                             FormBuilderValidators.required(
                                 errorText: I18n().obbligatorio),
-                            FormBuilderValidators.minLength(
-                                11) //TODO PARAMETRIZZARE
+                            FormBuilderValidators.minLength(11,
+                                errorText: I18n().minimoNumeroGiocatori(
+                                    '11')) //TODO PARAMETRIZZARE
                           ],
                           onChanged: (value) => {
                             inserimentoBloc.selectedPlayersFromCheckBoxList =
@@ -697,9 +698,13 @@ class InserimentoScreenState extends State<InserimentoScreen>
                                   borderRadius: new BorderRadius.circular(30.0),
                                 ),
                                 color: MainColors.PRIMARY,
-                                onPressed: () {
-                                  goToStep(6);
-                                },
+                                onPressed: (inserimentoBloc
+                                                .selectedPlayersFromCheckBoxList
+                                                ?.length ??
+                                            0) >=
+                                        11
+                                    ? () => goToStep(6)
+                                    : null,
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 20.0,
                                   horizontal: 20.0,
