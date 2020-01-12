@@ -6,6 +6,7 @@ part 'category_model.g.dart';
 class Category {
   int id;
   String name;
+  int profileId;
 
   Category(this.id, this.name);
   factory Category.fromJson(Map<String, dynamic> json) =>
