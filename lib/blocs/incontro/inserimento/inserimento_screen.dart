@@ -637,7 +637,9 @@ class InserimentoScreenState extends State<InserimentoScreen>
                               : [],
                           validators: [
                             FormBuilderValidators.required(
-                                errorText: I18n().obbligatorio)
+                                errorText: I18n().obbligatorio),
+                            FormBuilderValidators.minLength(
+                                11) //TODO PARAMETRIZZARE
                           ],
                           onChanged: (value) => {
                             inserimentoBloc.selectedPlayersFromCheckBoxList =
