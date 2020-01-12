@@ -4,7 +4,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/index.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
-import 'package:football_system/blocs/footballField/FootballFieldPage.dart';
 import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
 import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
