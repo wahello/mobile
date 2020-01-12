@@ -506,8 +506,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 autovalidate: false,
                 child: Column(children: <Widget>[
                   FormBuilderDropdown(
-                    onChanged: (value) =>
-                        {inserimentoBloc.selectedTeam = value},
+                    onChanged: (value) => {_changeTeam(value)},
                     attribute: "team",
                     decoration: InputDecoration(labelText: I18n().teams),
                     initialValue: inserimentoBloc.teams != null
@@ -595,6 +594,13 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 ])),
           ]),
         )));
+  }
+
+  void _changeTeam(String value) {
+    if (inserimentoBloc.selectedTeam != value) {
+      inserimentoBloc.selectedPlayersFromCheckBoxList?.clear();
+    }
+    inserimentoBloc.selectedTeam = value;
   }
 
   Widget playersScreen(state) {
