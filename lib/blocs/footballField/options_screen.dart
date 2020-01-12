@@ -1,12 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
-import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
-import 'package:football_system/blocs/footballField/FootballFieldState.dart';
-import 'package:football_system/blocs/model/player_model.dart';
-import 'package:football_system/blocs/stuff/event.dart';
-import 'package:football_system/blocs/stuff/note.dart';
-import 'package:football_system/custom_icon/soccer_icons_icons.dart';
 import 'package:shared/shared.dart';
 
 class OptionsScreen extends StatefulWidget {

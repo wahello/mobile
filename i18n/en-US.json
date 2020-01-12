@@ -45,10 +45,11 @@
   "newTeam": "Add team",
   "newCoach": "Add coach",
   "modules": "Modules",
-  "inserimentoCorretto":"Insert successful",
-  "erroreGenerico":"Something wrong",
+  "inserimentoCorretto": "Insert successful",
+  "erroreGenerico": "Something wrong",
   "nameWithAttribute": "Name {name}",
   "nome": "Name",
   "anno": "Year",
-  "numero": "Number"
+  "numero": "Number",
+  "minimoNumeroGiocatori": "At least {numero} players must be selected"
 }

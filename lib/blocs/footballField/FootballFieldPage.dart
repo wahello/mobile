@@ -1,12 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
-import 'package:football_system/blocs/footballField/FootballFieldState.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/model/incontro_model.dart';
-import 'package:football_system/blocs/model/player_model.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override

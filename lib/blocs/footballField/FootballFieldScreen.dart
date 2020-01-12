@@ -3,15 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
-import 'package:football_system/blocs/footballField/players_screen.dart';
 import 'package:football_system/blocs/incontro/inserimento/inserimento_bloc.dart';
 import 'package:football_system/blocs/model/module_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
-import 'package:football_system/blocs/stuff/event.dart';
-import 'package:football_system/blocs/stuff/field.dart';
 import 'package:football_system/blocs/stuff/index.dart';
-import 'package:football_system/custom_icon/soccer_icons_icons.dart';
-import 'package:football_system/custom_icon/soccerplayer_icons.dart';
 import 'options_screen.dart';
 import 'package:shared/shared.dart';
 
@@ -68,11 +63,6 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
     }
 
     return indexesList;
-  }
-
-  void _plus1() {
-    // This is how you close the popup menu and return user selection.
-    Navigator.pop<int>(context, 1);
   }
 
   @override
