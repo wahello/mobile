@@ -45,10 +45,11 @@
   "newTeam": "Aggiungi squadra",
   "newCoach": "Aggiungi allenatore",
   "modules": "Moduli",
-  "inserimentoCorretto":"L'inserimento è andato a buon fine",
-  "erroreGenerico":"Qualcosa è andato storto",
+  "inserimentoCorretto": "L'inserimento è andato a buon fine",
+  "erroreGenerico": "Qualcosa è andato storto",
   "nameWithAttribute": "Nome {name}",
   "nome": "Nome",
   "anno": "Anno",
-  "numero": "Numero"
+  "numero": "Numero",
+  "minimoNumeroGiocatori": "Devi selezionare almeno {numero} giocatori"
 }

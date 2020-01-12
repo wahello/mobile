@@ -136,6 +136,8 @@ class I18n implements WidgetsLocalizations {
   String get anno => "Anno";
   /// "Numero"
   String get numero => "Numero";
+  /// "Devi selezionare almeno ${numero} giocatori"
+  String minimoNumeroGiocatori(String numero) => "Devi selezionare almeno ${numero} giocatori";
 }
 
 class _I18n_it_IT extends I18n {
@@ -304,6 +306,9 @@ class _I18n_en_US extends I18n {
   /// "Number"
   @override
   String get numero => "Number";
+  /// "At least ${numero} players must be selected"
+  @override
+  String minimoNumeroGiocatori(String numero) => "At least ${numero} players must be selected";
 
   @override
   TextDirection get textDirection => TextDirection.ltr;
