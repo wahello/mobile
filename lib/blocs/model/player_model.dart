@@ -10,9 +10,10 @@ class Player {
   final int id;
   final String name;
   String ruolo;
-  String numero;
+  String number;
   String posizione;
-  Player({this.numero, this.id, this.name, this.ruolo, this.posizione});
+  List<String> notes = [""].toList();
+  Player({this.number, this.id, this.name, this.ruolo, this.posizione});
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
   Map<String, dynamic> toJson() => _$PlayerToJson(this);
 }

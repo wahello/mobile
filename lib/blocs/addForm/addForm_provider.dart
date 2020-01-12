@@ -15,8 +15,8 @@ class AddFormProvider {
   }
   AddFormProvider._internal();
 
-  Future<http.Response> sendData(
-      List<AddFormModel> dataToSend, TypeAddForm type, String categoryId, String teamId) async {
+  Future<http.Response> sendData(List<AddFormModel> dataToSend,
+      TypeAddForm type, String categoryId, String teamId) async {
     String endpoint;
     Map<String, String> body = new Map();
     switch (type) {
@@ -31,7 +31,7 @@ class AddFormProvider {
       case TypeAddForm.PLAYER:
         body = {
           'name': dataToSend[0].nome,
-          'number': dataToSend[0].numero,
+          'number': dataToSend[0].number,
           'year': dataToSend[0].anno
         };
         endpoint = Endpoints.domain +
