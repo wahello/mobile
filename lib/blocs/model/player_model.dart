@@ -12,6 +12,14 @@ class Player {
   String ruolo;
   String number;
   String posizione;
+  //#cartellino giallo
+  var yellowCard = 0;
+  //#cartellino rosso
+  var redCard = 0;
+  //#goal
+  var goal = 0;
+  //#assist
+  var assist = 0;
   List<String> notes = [""].toList();
   Player({this.number, this.id, this.name, this.ruolo, this.posizione});
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);

@@ -23,6 +23,10 @@ class _OptionsScreenState extends State<OptionsScreen> {
 
   _OptionsScreenState({this.footballFieldBloc, this.x, this.y}) {
     notes = footballFieldBloc.footballField.players[x][y].notes;
+    yellowCard = footballFieldBloc.footballField.players[x][y].yellowCard;
+    redCard = footballFieldBloc.footballField.players[x][y].redCard;
+    goal = footballFieldBloc.footballField.players[x][y].goal;
+    assist = footballFieldBloc.footballField.players[x][y].assist;
   }
   //#cartellino giallo
   var yellowCard = 0;
@@ -114,14 +118,34 @@ class _OptionsScreenState extends State<OptionsScreen> {
                   if (label == 'C. giallo' && redCard == 0 && count <= 2)
                     {
                       yellowCard = count,
-                      if (yellowCard == 2) {redCard = 1}
+                      footballFieldBloc.footballField.players[x][y].yellowCard =
+                          yellowCard,
+                      if (yellowCard == 2)
+                        {
+                          redCard = 1,
+                          footballFieldBloc
+                              .footballField.players[x][y].redCard = 1,
+                          footballFieldBloc.footballField.players[x][y]
+                              .yellowCard = yellowCard
+                        }
                     }
                   else if (label == 'C. rosso' && yellowCard == 0 && count == 1)
-                    {redCard = count}
+                    {
+                      redCard = count,
+                      footballFieldBloc.footballField.players[x][y].redCard =
+                          redCard
+                    }
                   else if (label == 'Assist')
-                    {assist = count}
+                    {
+                      assist = count,
+                      footballFieldBloc.footballField.players[x][y].assist =
+                          assist
+                    }
                   else if (label == 'Goal')
-                    {goal = count}
+                    {
+                      goal = count,
+                      footballFieldBloc.footballField.players[x][y].goal = goal
+                    }
                 })
           },
           child: disableAddAndRemove
@@ -148,13 +172,28 @@ class _OptionsScreenState extends State<OptionsScreen> {
             setState(() => {
                   if (count > 0) {count--},
                   if (label == 'C. rosso')
-                    {redCard = count}
+                    {
+                      redCard = count,
+                      footballFieldBloc.footballField.players[x][y].redCard =
+                          redCard = redCard
+                    }
                   else if (label == 'C. giallo')
-                    {yellowCard = count}
+                    {
+                      yellowCard = count,
+                      footballFieldBloc.footballField.players[x][y].yellowCard =
+                          yellowCard
+                    }
                   else if (label == 'Assist')
-                    {assist = count}
+                    {
+                      assist = count,
+                      footballFieldBloc.footballField.players[x][y].assist =
+                          assist
+                    }
                   else if (label == 'Goal')
-                    {goal = count}
+                    {
+                      goal = count,
+                      footballFieldBloc.footballField.players[x][y].goal = goal
+                    }
                 })
           },
           child:
