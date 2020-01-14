@@ -122,7 +122,7 @@ class CallsProvider {
         Endpoints.domain +
             Endpoints.profiles +
             "/" +
-            "4" +
+            categoryId +
             Endpoints.tactics,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
