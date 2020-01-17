@@ -13,10 +13,14 @@ import 'package:shared/shared.dart';
 class FootballFieldScreen extends StatefulWidget {
   InserimentoBloc inserimentoIncontroBloc;
   FootballFieldBloc footballFieldBloc;
+  final Function(Widget) notifyParent;
+  final Function(Widget) notifyAction;
   final double lato;
 
   FootballFieldScreen(
       {Key key,
+      this.notifyAction,
+      this.notifyParent,
       @required this.lato,
       this.inserimentoIncontroBloc,
       this.footballFieldBloc})
@@ -65,6 +69,20 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
 
   @override
   Widget build(BuildContext context) {
+    widget.notifyAction(DropdownButton<String>(
+      value: "Squadra 1",
+      iconSize: 24,
+      elevation: 16,
+      style: TextStyle(color: Colors.black),
+      items: <String>['Squadra 1', 'Squadra 2']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (String value) {},
+    ));
     return BlocBuilder<FootballFieldBloc, FootballFieldState>(
         bloc: footballFieldBloc,
         builder: (BuildContext context, FootballFieldState state) {

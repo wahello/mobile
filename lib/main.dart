@@ -51,7 +51,15 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  Text appBarTitleText = new Text(I18n().appName);
+  Widget appBarTitleText = new Text(I18n().appName);
+  List<Widget> actions = [
+    Container(
+      child: FlatButton(
+        child: Icon(Icons.exit_to_app),
+        onPressed: () => {},
+      ),
+    ),
+  ];
   AuthenticationBloc authenticationBloc;
   HomeBloc homeBloc;
   LoginBloc loginBloc;
@@ -83,10 +91,18 @@ class _AppState extends State<App> {
 
   UserRepository get userRepository => widget.userRepository;
 
-  void updateAppBarTitle(String title) {
+  void updateAppBarTitle(Widget widget) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        appBarTitleText = Text(title);
+        appBarTitleText = widget;
+      });
+    });
+  }
+
+  void updateAppBarActions(Widget widget) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        actions = [widget];
       });
     });
   }
@@ -127,8 +143,16 @@ class _AppState extends State<App> {
             }
             if (state is AuthenticationAuthenticated || state is OTPRequired) {
               return Scaffold(
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.endFloat,
+                  floatingActionButton: FloatingActionButton(
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.home),
+                    onPressed: () => {},
+                  ),
                   appBar: AppBar(
                     title: appBarTitleText,
+                    actions: actions,
                     backgroundColor: MainColors.PRIMARY,
                   ),
                   body: Container(
@@ -140,6 +164,7 @@ class _AppState extends State<App> {
                           padding: EdgeInsets.all(3.0),
                           child: Home(
                             notifyParent: updateAppBarTitle,
+                            notifyAction: updateAppBarActions,
                             callsRepository: callsRepository,
                             userRepository: userRepository,
                           ))));

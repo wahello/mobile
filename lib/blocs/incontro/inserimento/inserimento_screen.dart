@@ -16,7 +16,12 @@ import 'package:shared/shared.dart';
 import '../../stuff/index.dart';
 
 class InserimentoScreen extends StatefulWidget {
+  final Function(Widget) notifyParent;
+  final Function(Widget) notifyAction;
+
   const InserimentoScreen({
+    this.notifyAction,
+    this.notifyParent,
     Key key,
   }) : super(key: key);
 
@@ -980,10 +985,13 @@ class InserimentoScreenState extends State<InserimentoScreen>
     );
   }
 
-  Widget incontroScreen() {
+  Widget incontroScreen(
+      Function(Widget) notifyParent, Function(Widget) notifyAction) {
     return inserimentoBloc.incontro != null &&
             inserimentoBloc.incontro.module != null
         ? FootballFieldScreen(
+            notifyParent: notifyParent,
+            notifyAction: notifyAction,
             inserimentoIncontroBloc: inserimentoBloc,
             footballFieldBloc: FootballFieldBloc(
                 dimension: [9, 11],
@@ -1093,7 +1101,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     playersScreen(state),
                     coachesScreen(state),
                     moduleScreen(state),
-                    incontroScreen(),
+                    incontroScreen(widget.notifyParent, widget.notifyAction),
                   ])));
         });
   }

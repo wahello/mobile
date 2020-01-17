@@ -3,9 +3,11 @@ import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/generated/i18n.dart';
 
 class InserimentoPage extends StatefulWidget {
-  final Function(String) notifyParent;
+  final Function(Widget) notifyParent;
+  final Function(Widget) notifyAction;
 
   InserimentoPage({
+    this.notifyAction,
     Key key,
     this.notifyParent,
   }) : super(key: key);
@@ -23,8 +25,9 @@ class _InserimentoPageState extends State<InserimentoPage> {
   @override
   @override
   Widget build(BuildContext context) {
-    widget.notifyParent(I18n().inserimentoIncontro);
-    return InserimentoScreen();
+    widget.notifyParent(Text(I18n().inserimentoIncontro));
+    return InserimentoScreen(
+        notifyParent: widget.notifyParent, notifyAction: widget.notifyAction);
   }
 
   @override
