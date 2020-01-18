@@ -140,12 +140,14 @@ class _AppState extends State<App> {
                     FloatingActionButton(
                       backgroundColor: MainColors.PRIMARY,
                       child: Icon(Icons.home),
+                      heroTag: "home",
                       onPressed: () => {},
                     ),
                     Divider(
                       endIndent: MediaQuery.of(context).size.width / 5,
                     ),
                     FloatingActionButton(
+                      heroTag: "exit",
                       backgroundColor: MainColors.PRIMARY,
                       child: Icon(Icons.exit_to_app),
                       onPressed: () => {},
