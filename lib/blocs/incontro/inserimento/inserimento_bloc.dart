@@ -49,10 +49,12 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   List selectedPlayersAway = [];
   String selectedCoachHome;
   String selectedCoachAway;
-  Incontro incontro;
+  Incontro incontroHome;
+  Incontro incontroAway;
   List<Note> notes;
   List<Event> event;
   List<Module> modules;
+  int activeTeam; //1 o 2
 
   String getTeamNameById(String id) {
     if (id != null && id != "") {
@@ -313,7 +315,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
             .map((player) => playersAway
                 .singleWhere((giocatore) => giocatore.id.toString() == player))
             .toList();
-        incontro = new Incontro(
+        incontroHome = new Incontro(
           new Gender(
               int.parse(selectedGender),
               genders
@@ -358,21 +360,58 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
                   .singleWhere(
                       (coach) => coach.id.toString() == selectedCoachHome)
                   .name),
+        );
+        incontroHome.module = modules.singleWhere(
+            (module) => module.id.toString() == selectedModuleHome.toString());
+
+        incontroAway = new Incontro(
+          new Gender(
+              int.parse(selectedGender),
+              genders
+                  .singleWhere(
+                      (gender) => gender.id.toString() == selectedGender)
+                  .name),
+          new Category(
+              int.parse(selectedCategories),
+              categories
+                  .singleWhere((category) =>
+                      category.id.toString() == selectedCategories)
+                  .name),
+          new Championship(
+              int.parse(selectedChampionships),
+              championships
+                  .singleWhere((championship) =>
+                      championship.id.toString() == selectedChampionships)
+                  .name),
+          new Partita(
+              int.parse(selectedMatches),
+              matches
+                  .singleWhere(
+                      (match) => match.id.toString() == selectedMatches)
+                  .name),
+          selectedTournament != null
+              ? new Tournament(
+                  int.parse(selectedTournament),
+                  tournaments
+                      .singleWhere((tournament) =>
+                          tournament.id.toString() == selectedTournament)
+                      .name)
+              : null,
           new Team(
-              int.parse(selectedTeamHome),
+              int.parse(selectedTeamAway),
               teams
-                  .singleWhere((team) => team.id.toString() == selectedTeamHome)
+                  .singleWhere((team) => team.id.toString() == selectedTeamAway)
                   .name),
           giocatoriAway,
           new Coach(
-              int.parse(selectedCoachHome),
-              coachesHome
+              int.parse(selectedCoachAway),
+              coachesAway
                   .singleWhere(
-                      (coach) => coach.id.toString() == selectedCoachHome)
+                      (coach) => coach.id.toString() == selectedCoachAway)
                   .name),
         );
-        incontro.moduleHome = modules.singleWhere(
-            (module) => module.id.toString() == selectedModuleHome.toString());
+        incontroAway.module = modules.singleWhere(
+            (module) => module.id.toString() == selectedModuleAway.toString());
       } catch (error) {
         yield InserimentoFailure(error: error.toString());
       }

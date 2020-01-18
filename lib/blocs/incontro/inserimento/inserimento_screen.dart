@@ -1515,17 +1515,37 @@ class InserimentoScreenState extends State<InserimentoScreen>
 
   Widget incontroScreen(
       Function(Widget) notifyParent, Function(Widget) notifyAction) {
-    return inserimentoBloc.incontro != null &&
-            inserimentoBloc.incontro.module != null
-        ? FootballFieldScreen(
-            notifyParent: notifyParent,
-            notifyAction: notifyAction,
-            inserimentoIncontroBloc: inserimentoBloc,
-            footballFieldBloc: FootballFieldBloc(
-                dimension: [9, 11],
-                availablePlayers: inserimentoBloc.incontro.players,
-                module: inserimentoBloc.incontro.module),
-            lato: 30,
+    return ((inserimentoBloc.incontroHome != null &&
+                inserimentoBloc.incontroHome.module != null) &&
+            inserimentoBloc.incontroAway != null &&
+            inserimentoBloc.incontroAway.module != null)
+        ? PageView(
+            controller: null,
+            scrollDirection: Axis.horizontal,
+            children: <Widget>[
+              FootballFieldScreen(
+                isHome: true,
+                notifyParent: notifyParent,
+                notifyAction: notifyAction,
+                inserimentoIncontroBloc: inserimentoBloc,
+                footballFieldBloc: FootballFieldBloc(
+                    dimension: [9, 11],
+                    availablePlayers: inserimentoBloc.incontroHome.players,
+                    module: inserimentoBloc.incontroHome.module),
+                lato: 30,
+              ),
+              FootballFieldScreen(
+                isHome: false,
+                notifyParent: notifyParent,
+                notifyAction: notifyAction,
+                inserimentoIncontroBloc: inserimentoBloc,
+                footballFieldBloc: FootballFieldBloc(
+                    dimension: [9, 11],
+                    availablePlayers: inserimentoBloc.incontroAway.players,
+                    module: inserimentoBloc.incontroAway.module),
+                lato: 30,
+              )
+            ],
           )
         : LoadingIndicator();
   }
@@ -1649,7 +1669,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     playersScreenAway(state),
                     coachesScreenAway(state),
                     moduleScreenAway(state),
-                    incontroScreen(),
+                    incontroScreen(widget.notifyParent, widget.notifyAction),
                   ])));
         });
   }

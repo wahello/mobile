@@ -15,15 +15,13 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
 
   final FootballFieldProvider footballFieldProvider = FootballFieldProvider();
   List<Player> addedPlayers;
-  List<Player> availablePlayersHome;
-  List<Player> availablePlayersAway;
+  List<Player> availablePlayers;
   FootballField footballField;
-  Module moduleHome;
-  Module moduleAway;
+  Module module;
   int currentPlayer;
 
   FootballFieldBloc(
-      {@required this.dimension, this.availablePlayersHome, this.moduleHome, this.availablePlayersAway})
+      {@required this.dimension, this.availablePlayers, this.module})
       : assert(dimension != null) {
     addedPlayers = List<Player>();
     footballField =

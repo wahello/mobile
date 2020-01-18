@@ -18,17 +18,13 @@ class Incontro {
   Championship championship;
   Partita match;
   Tournament tournament;
-  Team teamHome;
-  Team teamAway;
-  List<Player> playersHome;
-  Coach coachHome;
-  Module moduleHome;
-  List<Player> playersAway;
-  Coach coachAway;
-  Module moduleAway;
+  Team team;
+  List<Player> players;
+  Coach coach;
+  Module module;
 
   Incontro(this.gender, this.category, this.championship, this.match,
-      this.tournament, this.teamHome, this.playersHome, this.coachHome, this.teamAway, this.playersAway, this.coachAway);
+      this.tournament, this.team, this.players, this.coach);
   factory Incontro.fromJson(Map<String, dynamic> json) =>
       _$IncontroFromJson(json);
   Map<String, dynamic> toJson() => _$IncontroToJson(this);
