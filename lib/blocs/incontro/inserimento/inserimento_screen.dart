@@ -609,6 +609,25 @@ class InserimentoScreenState extends State<InserimentoScreen>
   }
 
   Widget playersScreen(state) {
+    if (inserimentoBloc.selectedTeam != null &&
+        inserimentoBloc.selectedTeam != "") {
+      widget.notifyAction(DropdownButton<String>(
+        value: inserimentoBloc.getTeamNameById(inserimentoBloc.selectedTeam),
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: Colors.black),
+        items: <String>[
+          inserimentoBloc.getTeamNameById(inserimentoBloc.selectedTeam),
+          "Squadra avversaria"
+        ].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (String value) {},
+      ));
+    }
     return SingleChildScrollView(
       controller: _scrollControllerForPlayers,
       child: Container(
@@ -1036,15 +1055,19 @@ class InserimentoScreenState extends State<InserimentoScreen>
       }
     }
     if (step == 2) {
+      widget.notifyAction(null);
       inserimentoBloc.add(GetMatchesEvent());
     }
     if (step == 3) {
+      widget.notifyAction(null);
       inserimentoBloc.add(GetCategoriesEvent());
     }
     if (step == 4) {
+      widget.notifyAction(null);
       inserimentoBloc.add(GetTeamsEvent());
     }
     if (step == 5) {
+      widget.notifyAction(null);
       inserimentoBloc.add(GetPlayersEvent());
     }
     if (step == 6) {

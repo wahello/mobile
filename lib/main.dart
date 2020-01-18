@@ -52,14 +52,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   Widget appBarTitleText = new Text(I18n().appName);
-  List<Widget> actions = [
-    Container(
-      child: FlatButton(
-        child: Icon(Icons.exit_to_app),
-        onPressed: () => {},
-      ),
-    ),
-  ];
+  List<Widget> actions = [];
   AuthenticationBloc authenticationBloc;
   HomeBloc homeBloc;
   LoginBloc loginBloc;
@@ -102,7 +95,7 @@ class _AppState extends State<App> {
   void updateAppBarActions(Widget widget) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        actions = [widget];
+        actions = widget != null ? [widget] : [];
       });
     });
   }
@@ -143,13 +136,21 @@ class _AppState extends State<App> {
             }
             if (state is AuthenticationAuthenticated || state is OTPRequired) {
               return Scaffold(
-                  floatingActionButtonLocation:
-                      FloatingActionButtonLocation.endFloat,
-                  floatingActionButton: FloatingActionButton(
-                    backgroundColor: Colors.grey,
-                    child: Icon(Icons.home),
-                    onPressed: () => {},
-                  ),
+                  persistentFooterButtons: <Widget>[
+                    FloatingActionButton(
+                      backgroundColor: MainColors.PRIMARY,
+                      child: Icon(Icons.home),
+                      onPressed: () => {},
+                    ),
+                    Divider(
+                      endIndent: MediaQuery.of(context).size.width / 5,
+                    ),
+                    FloatingActionButton(
+                      backgroundColor: MainColors.PRIMARY,
+                      child: Icon(Icons.exit_to_app),
+                      onPressed: () => {},
+                    )
+                  ],
                   appBar: AppBar(
                     title: appBarTitleText,
                     actions: actions,
