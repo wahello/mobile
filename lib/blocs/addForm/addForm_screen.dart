@@ -226,8 +226,8 @@ class AddFormScreenState extends State<AddFormScreen> {
   }
 
   void _submitForm() {
-    widget.bloc
-        .add(SubmitFormEvent(rows, type, widget.categoryId, widget.teamId));
+    widget.bloc.add(SubmitFormEvent(
+        rows, type, widget.categoryId, widget.teamId, widget.isHome));
   }
 
   void _fieldFocusChange(

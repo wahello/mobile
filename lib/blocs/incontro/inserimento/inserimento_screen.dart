@@ -732,16 +732,17 @@ class InserimentoScreenState extends State<InserimentoScreen>
     }
   }
 
-  Widget playersScreen(state) {
-    if (inserimentoBloc.selectedTeam != null &&
-        inserimentoBloc.selectedTeam != "") {
+  Widget playersScreenHome(state) {
+    if (inserimentoBloc.selectedTeamHome != null &&
+        inserimentoBloc.selectedTeamHome != "") {
       widget.notifyAction(DropdownButton<String>(
-        value: inserimentoBloc.getTeamNameById(inserimentoBloc.selectedTeam),
+        value:
+            inserimentoBloc.getTeamNameById(inserimentoBloc.selectedTeamHome),
         iconSize: 24,
         elevation: 16,
         style: TextStyle(color: Colors.black),
         items: <String>[
-          inserimentoBloc.getTeamNameById(inserimentoBloc.selectedTeam),
+          inserimentoBloc.getTeamNameById(inserimentoBloc.selectedTeamHome),
           "Squadra avversaria"
         ].map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
@@ -1632,24 +1633,24 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 return Future.delayed(Duration(seconds: 1));
               },
               child: Container(
-              child: PageView(
-                  controller: _controller,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: <Widget>[
-                genderScreen(state),
-                championshipScreen(state),
-                matchScreen(state),
-                categoryScreen(state),
-                teamScreenHome(state),
-                playersScreenHome(state),
-                coachesScreenHome(state),
-                moduleScreenHome(state),
-                teamScreenAway(state),
-                playersScreenAway(state),
-                coachesScreenAway(state),
-                moduleScreenAway(state),
-                incontroScreen(),
-              ])));
+                  child: PageView(
+                      controller: _controller,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: <Widget>[
+                    genderScreen(state),
+                    championshipScreen(state),
+                    matchScreen(state),
+                    categoryScreen(state),
+                    teamScreenHome(state),
+                    playersScreenHome(state),
+                    coachesScreenHome(state),
+                    moduleScreenHome(state),
+                    teamScreenAway(state),
+                    playersScreenAway(state),
+                    coachesScreenAway(state),
+                    moduleScreenAway(state),
+                    incontroScreen(),
+                  ])));
         });
   }
 
