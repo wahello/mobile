@@ -12,11 +12,13 @@ class AddFormScreen extends StatefulWidget {
   final InserimentoState state;
   final String categoryId;
   final String teamId;
+  final bool isHome;
 
   const AddFormScreen(
       {Key key,
       @required this.type,
       @required this.bloc,
+      @required this.isHome,
       @required this.state,
       this.categoryId,
       this.teamId})

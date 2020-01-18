@@ -29,18 +29,25 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   List<Partita> matches;
   List<Tournament> tournaments = [];
   List<Team> teams;
-  List<Player> players;
-  List<Coach> coaches;
+  List<Player> playersHome;
+  List<Player> playersAway;
+  List<Coach> coachesHome;
+  List<Coach> coachesAway;
   String selectedCategories;
   String selectedChampionships;
   String selectedGender;
   String selectedMatches;
   String selectedTournament;
-  String selectedTeam;
-  String selectedModule;
-  List selectedPlayersFromCheckBoxList = [];
-  List selectedPlayers = [];
-  String selectedCoach;
+  String selectedTeamHome;
+  String selectedTeamAway;
+  String selectedModuleHome;
+  String selectedModuleAway;
+  List selectedPlayersFromCheckBoxListHome = [];
+  List selectedPlayersFromCheckBoxListAway = [];
+  List selectedPlayersHome = [];
+  List selectedPlayersAway = [];
+  String selectedCoachHome;
+  String selectedCoachAway;
   Incontro incontro;
   List<Note> notes;
   List<Event> event;
@@ -190,7 +197,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       }
       yield InserimentoFinishState();
     }
-    if (event is GetTeamsEvent) {
+    if (event is GetTeamsEventHome || event is GetTeamsEventAway) {
       yield GetTeamsState();
       yield InserimentoLoadingState();
       try {
@@ -200,13 +207,6 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
           List<Team> teamsList =
               list.map((team) => Team.fromJson(team)).toList();
           teams = teamsList;
-          var playersFromShared = await CallsRepository().readKey('teams');
-          if (playersFromShared != '') {
-            List<String> teamListFromShared = playersFromShared as List;
-            for (var row in teamListFromShared) {
-              teams.add(new Team(2, row));
-            }
-          }
         } else {
           yield InserimentoFailure(
               error: jsonDecode(response.reasonPhrase).toString());
@@ -216,16 +216,16 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       }
       yield InserimentoFinishState();
     }
-    if (event is GetPlayersEvent) {
+    if (event is GetPlayersEventHome) {
       yield GetPlayersState();
       yield InserimentoLoadingState();
       try {
-        final response = await callsRepository.getPlayers(selectedTeam);
+        final response = await callsRepository.getPlayers(selectedTeamHome);
         if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
           var list = jsonDecode(response.body) as List;
           List<Player> playersList =
               list.map((player) => Player.fromJson(player)).toList();
-          players = playersList;
+          playersHome = playersList;
         } else {
           yield InserimentoFailure(
               error: jsonDecode(response.reasonPhrase).toString());
@@ -235,16 +235,54 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       }
       yield InserimentoFinishState();
     }
-    if (event is GetCoachesEvent) {
+    if (event is GetPlayersEventAway) {
+      yield GetPlayersState();
+      yield InserimentoLoadingState();
+      try {
+        final response = await callsRepository.getPlayers(selectedTeamAway);
+        if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
+          var list = jsonDecode(response.body) as List;
+          List<Player> playersList =
+              list.map((player) => Player.fromJson(player)).toList();
+          playersAway = playersList;
+        } else {
+          yield InserimentoFailure(
+              error: jsonDecode(response.reasonPhrase).toString());
+        }
+      } catch (error) {
+        yield InserimentoFailure(error: error.toString());
+      }
+      yield InserimentoFinishState();
+    }
+    if (event is GetCoachesEventHome) {
       yield GetCoachesState();
       yield InserimentoLoadingState();
       try {
-        final response = await callsRepository.getCoaches(selectedTeam);
+        final response = await callsRepository.getCoaches(selectedTeamHome);
         if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
           var list = jsonDecode(response.body) as List;
           List<Coach> coachesList =
               list.map((coach) => Coach.fromJson(coach)).toList();
-          coaches = coachesList;
+          coachesHome = coachesList;
+        } else {
+          yield InserimentoFailure(
+              error: jsonDecode(response.reasonPhrase).toString());
+        }
+      } catch (error) {
+        yield InserimentoFailure(error: error.toString());
+      }
+      yield InserimentoFinishState();
+    }
+    if (event is GetCoachesEventAway) {
+      yield GetCoachesState();
+      yield InserimentoLoadingState();
+      try {
+        final response = await callsRepository.getCoaches(selectedTeamAway);
+        if (response.statusCode == 200 && response.reasonPhrase == 'OK') {
+          var list = jsonDecode(response.body) as List;
+          List<Coach> coachesList =
+              list.map((coach) => Coach.fromJson(coach)).toList();
+          coachesAway = coachesList;
         } else {
           yield InserimentoFailure(
               error: jsonDecode(response.reasonPhrase).toString());
@@ -257,11 +295,14 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
     if (event is InserisciIncontroEvent) {
       // yield InserisciIncontroState();
       try {
-        List<Player> giocatori = selectedPlayersFromCheckBoxList
-            .map((player) => players
+        List<Player> giocatoriHome = selectedPlayersFromCheckBoxListHome
+            .map((player) => playersHome
                 .singleWhere((giocatore) => giocatore.id.toString() == player))
             .toList();
-        selectedPlayers = giocatori;
+        List<Player> giocatoriAway = selectedPlayersFromCheckBoxListHome
+            .map((player) => playersAway
+                .singleWhere((giocatore) => giocatore.id.toString() == player))
+            .toList();
         incontro = new Incontro(
           new Gender(
               int.parse(selectedGender),
@@ -296,24 +337,38 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
                       .name)
               : null,
           new Team(
-              int.parse(selectedTeam),
+              int.parse(selectedTeamHome),
               teams
-                  .singleWhere((team) => team.id.toString() == selectedTeam)
+                  .singleWhere((team) => team.id.toString() == selectedTeamHome)
                   .name),
-          giocatori,
+          giocatoriHome,
           new Coach(
-              int.parse(selectedCoach),
-              coaches
-                  .singleWhere((coach) => coach.id.toString() == selectedCoach)
+              int.parse(selectedCoachHome),
+              coachesHome
+                  .singleWhere(
+                      (coach) => coach.id.toString() == selectedCoachHome)
+                  .name),
+          new Team(
+              int.parse(selectedTeamHome),
+              teams
+                  .singleWhere((team) => team.id.toString() == selectedTeamHome)
+                  .name),
+          giocatoriAway,
+          new Coach(
+              int.parse(selectedCoachHome),
+              coachesHome
+                  .singleWhere(
+                      (coach) => coach.id.toString() == selectedCoachHome)
                   .name),
         );
-        incontro.module = modules.singleWhere(
-            (module) => module.id.toString() == selectedModule.toString());
+        incontro.moduleHome = modules.singleWhere(
+            (module) => module.id.toString() == selectedModuleHome.toString());
       } catch (error) {
         yield InserimentoFailure(error: error.toString());
       }
     }
-    if (event is InserisciModuloEvent) {
+    if (event is InserisciModuloEventHome ||
+        event is InserisciModuloEventAway) {
       var category = categories.singleWhere(
           (category) => category.id == int.parse(selectedCategories));
 
@@ -343,13 +398,19 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       }
       switch (event.type) {
         case TypeAddForm.TEAM:
-          add(GetTeamsEvent());
+          event.isHome ? add(GetTeamsEventHome()) : add(GetTeamsEventAway());
           break;
         case TypeAddForm.COACH:
-          add(GetCoachesEvent());
+          event.isHome
+              ? add(GetCoachesEventHome())
+              : add(GetCoachesEventAway());
+
           break;
         case TypeAddForm.PLAYER:
-          add(GetPlayersEvent());
+          event.isHome
+              ? add(GetPlayersEventHome())
+              : add(GetPlayersEventAway());
+
           break;
         default:
       }
