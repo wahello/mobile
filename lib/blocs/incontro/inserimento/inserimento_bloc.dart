@@ -17,6 +17,7 @@ import 'package:football_system/blocs/model/team_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
 import 'package:football_system/blocs/stuff/event.dart';
 import 'package:football_system/blocs/stuff/index.dart';
+import 'package:flutter/material.dart';
 
 import './index.dart';
 
@@ -52,6 +53,15 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   List<Note> notes;
   List<Event> event;
   List<Module> modules;
+
+  String getTeamNameById(String id) {
+    if (id != null && id != "") {
+      return teams
+          .singleWhere((team) => team.id.toString() == id.toString())
+          .name;
+    }
+    return "";
+  }
 
   @override
   InserimentoState get initialState => InitialInserimentoState();

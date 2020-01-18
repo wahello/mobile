@@ -51,7 +51,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  Text appBarTitleText = new Text(I18n().appName);
+  Widget appBarTitleText = new Text(I18n().appName);
+  List<Widget> actions = [];
   AuthenticationBloc authenticationBloc;
   HomeBloc homeBloc;
   LoginBloc loginBloc;
@@ -83,10 +84,18 @@ class _AppState extends State<App> {
 
   UserRepository get userRepository => widget.userRepository;
 
-  void updateAppBarTitle(String title) {
+  void updateAppBarTitle(Widget widget) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        appBarTitleText = Text(title);
+        appBarTitleText = widget;
+      });
+    });
+  }
+
+  void updateAppBarActions(Widget widget) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        actions = widget != null ? [widget] : [];
       });
     });
   }
@@ -127,8 +136,26 @@ class _AppState extends State<App> {
             }
             if (state is AuthenticationAuthenticated || state is OTPRequired) {
               return Scaffold(
+                  persistentFooterButtons: <Widget>[
+                    FloatingActionButton(
+                      backgroundColor: MainColors.PRIMARY,
+                      child: Icon(Icons.home),
+                      heroTag: "home",
+                      onPressed: () => {},
+                    ),
+                    Divider(
+                      endIndent: MediaQuery.of(context).size.width / 5,
+                    ),
+                    FloatingActionButton(
+                      heroTag: "exit",
+                      backgroundColor: MainColors.PRIMARY,
+                      child: Icon(Icons.exit_to_app),
+                      onPressed: () => {},
+                    )
+                  ],
                   appBar: AppBar(
                     title: appBarTitleText,
+                    actions: actions,
                     backgroundColor: MainColors.PRIMARY,
                   ),
                   body: Container(
@@ -140,6 +167,7 @@ class _AppState extends State<App> {
                           padding: EdgeInsets.all(3.0),
                           child: Home(
                             notifyParent: updateAppBarTitle,
+                            notifyAction: updateAppBarActions,
                             callsRepository: callsRepository,
                             userRepository: userRepository,
                           ))));

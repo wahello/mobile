@@ -13,10 +13,14 @@ import 'package:shared/shared.dart';
 class FootballFieldScreen extends StatefulWidget {
   InserimentoBloc inserimentoIncontroBloc;
   FootballFieldBloc footballFieldBloc;
+  final Function(Widget) notifyParent;
+  final Function(Widget) notifyAction;
   final double lato;
 
   FootballFieldScreen(
       {Key key,
+      this.notifyAction,
+      this.notifyParent,
       @required this.lato,
       this.inserimentoIncontroBloc,
       this.footballFieldBloc})

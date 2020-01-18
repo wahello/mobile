@@ -38,10 +38,12 @@ void main() {
 class Home extends StatefulWidget {
   final CallsRepository callsRepository;
   final UserRepository userRepository;
-  final Function(String) notifyParent;
+  final Function(Widget widget) notifyParent;
+  final Function(Widget widget) notifyAction;
 
   Home(
       {Key key,
+      this.notifyAction,
       this.notifyParent,
       @required this.callsRepository,
       @required this.userRepository})
@@ -71,8 +73,14 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  void updateAppBarTitle(String title) {
-    widget.notifyParent(title);
+  @override
+  void updateAppBarTitle(Widget _widget) {
+    widget.notifyParent(_widget);
+  }
+
+  @override
+  void updateAppBarActions(Widget _widget) {
+    widget.notifyAction(_widget);
   }
 
   @override
@@ -106,7 +114,9 @@ class _HomeState extends State<Home> {
                     return HomePage();
                   }
                   if (state is InserimentoIncontroState) {
-                    return InserimentoPage(notifyParent: updateAppBarTitle);
+                    return InserimentoPage(
+                        notifyParent: updateAppBarTitle,
+                        notifyAction: updateAppBarActions);
                   }
                   return SplashPage();
                 },

@@ -16,7 +16,12 @@ import 'package:shared/shared.dart';
 import '../../stuff/index.dart';
 
 class InserimentoScreen extends StatefulWidget {
+  final Function(Widget) notifyParent;
+  final Function(Widget) notifyAction;
+
   const InserimentoScreen({
+    this.notifyAction,
+    this.notifyParent,
     Key key,
   }) : super(key: key);
 
@@ -727,7 +732,26 @@ class InserimentoScreenState extends State<InserimentoScreen>
     }
   }
 
-  Widget playersScreenHome(state) {
+  Widget playersScreen(state) {
+    if (inserimentoBloc.selectedTeam != null &&
+        inserimentoBloc.selectedTeam != "") {
+      widget.notifyAction(DropdownButton<String>(
+        value: inserimentoBloc.getTeamNameById(inserimentoBloc.selectedTeam),
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: Colors.black),
+        items: <String>[
+          inserimentoBloc.getTeamNameById(inserimentoBloc.selectedTeam),
+          "Squadra avversaria"
+        ].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (String value) {},
+      ));
+    }
     return SingleChildScrollView(
       controller: _scrollControllerForPlayers,
       child: Container(
@@ -1488,10 +1512,13 @@ class InserimentoScreenState extends State<InserimentoScreen>
     );
   }
 
-  Widget incontroScreen() {
+  Widget incontroScreen(
+      Function(Widget) notifyParent, Function(Widget) notifyAction) {
     return inserimentoBloc.incontro != null &&
             inserimentoBloc.incontro.module != null
         ? FootballFieldScreen(
+            notifyParent: notifyParent,
+            notifyAction: notifyAction,
             inserimentoIncontroBloc: inserimentoBloc,
             footballFieldBloc: FootballFieldBloc(
                 dimension: [9, 11],
@@ -1536,15 +1563,19 @@ class InserimentoScreenState extends State<InserimentoScreen>
       }
     }
     if (step == 2) {
+      widget.notifyAction(null);
       inserimentoBloc.add(GetMatchesEvent());
     }
     if (step == 3) {
+      widget.notifyAction(null);
       inserimentoBloc.add(GetCategoriesEvent());
     }
     if (step == 4) {
+      widget.notifyAction(null);
       inserimentoBloc.add(GetTeamsEventHome());
     }
     if (step == 5) {
+      widget.notifyAction(null);
       inserimentoBloc.add(GetPlayersEventHome());
     }
     if (step == 6) {
@@ -1595,7 +1626,12 @@ class InserimentoScreenState extends State<InserimentoScreen>
               );
             });
           }
-          return Container(
+          return WillPopScope(
+              onWillPop: () {
+                goToStep(step - 1);
+                return Future.delayed(Duration(seconds: 1));
+              },
+              child: Container(
               child: PageView(
                   controller: _controller,
                   physics: const NeverScrollableScrollPhysics(),
@@ -1613,7 +1649,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 coachesScreenAway(state),
                 moduleScreenAway(state),
                 incontroScreen(),
-              ]));
+              ])));
         });
   }
 
