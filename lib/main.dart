@@ -129,32 +129,37 @@ class _AppState extends State<App> {
             ),
             bloc: authenticationBloc,
             listener: (BuildContext context, AuthenticationState state) {
-              // if (state is AuthenticationUninitialized) {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (context) {
-              //       return SplashPage(
-              //         key: FormKey.fliploaderkey,
-              //       );
-              //     }),
-              //   );
-              // }
+              if (state is AuthenticationUninitialized) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return SplashPage(
+                      key: FormKey.fliploaderkey,
+                    );
+                  }),
+                );
+              }
               // if (state is AuthenticationUnauthenticated) {
               //   Navigator.push(
               //     context,
-              //     MaterialPageRoute(builder: (context) {
-              //       return LoginPage(
-              //         key: FormKey.loginKey,
-              //         callsRepository: callsRepository,
-              //         userRepository: userRepository,
-              //       );
-              //     }),
-              //   );
-              // }
+              if (state is AuthenticationUnauthenticated) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return WillPopScope(
+                      key: FormKey.authenticationUnauthenticated,
+                      onWillPop: () async => false,
+                      child: LoginPage(
+                        key: FormKey.loginKey,
+                        callsRepository: callsRepository,
+                        userRepository: userRepository,
+                      ),
+                    );
+                  }),
+                );
+              }
               if (state is AuthenticationAuthenticated ||
-                  state is OTPRequired ||
-                  state is AuthenticationUnauthenticated ||
-                  state is AuthenticationUninitialized) {
+                  state is OTPRequired) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
@@ -165,15 +170,19 @@ class _AppState extends State<App> {
                             backgroundColor: MainColors.PRIMARY,
                             child: Icon(Icons.home),
                             heroTag: "home",
-                            onPressed: () =>
-                                {authenticationBloc.add(LoggedIn())},
+                            onPressed: () => {authenticationBloc.add(GoHome())},
                           ),
                           Divider(
                             indent: MediaQuery.of(context).size.width / 2.65,
                           ),
                         ],
                         appBar: AppBar(
-                          leading: Icon(Icons.exit_to_app),
+                          leading: FlatButton(
+                            key: FormKey.logoutKey,
+                            child: Icon(Icons.exit_to_app),
+                            onPressed: () =>
+                                {authenticationBloc.add(LoggedOut())},
+                          ),
                           title: appBarTitleText,
                           actions: actions,
                           backgroundColor: MainColors.PRIMARY,

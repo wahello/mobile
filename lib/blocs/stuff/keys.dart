@@ -15,4 +15,7 @@ class FormKey {
   static final materialAppKey = const Key('materialAppKey');
   static final loadingKey = const Key('loadingKey');
   static final fliploaderkey = const Key('fliploaderkey');
+  static final logoutKey = const Key('logoutKey');
+  static final authenticationUnauthenticated =
+      const Key('authenticationUnauthenticated');
 }

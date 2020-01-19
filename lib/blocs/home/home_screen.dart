@@ -69,40 +69,6 @@ class HomeScreen extends StatelessWidget {
               I18n().modificaIncontro, Icons.edit, _onModificaButtonPressed),
           makeDashboardItem(I18n().inserisciFormazioneTipo, Icons.people,
               _onFormazioneButtonPressed),
-          SizedBox(height: 180),
-          Container(
-            child: Center(
-              child: new FlatButton(
-                shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                color: MainColors.PRIMARY,
-                onPressed: () {
-                  authenticationBloc.add(LoggedOut());
-                },
-                child: new Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 20.0,
-                    horizontal: 20.0,
-                  ),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Expanded(
-                        child: Text(
-                          I18n().logout,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: MainColors.TEXT_NEGATIVE,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
