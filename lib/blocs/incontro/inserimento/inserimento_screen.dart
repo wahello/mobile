@@ -497,6 +497,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
         scrollDirection: Axis.vertical,
         child: Center(
             child: Container(
+          height: MediaQuery.of(context).size.height,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: MainColors.SECONDARY,
@@ -507,8 +508,15 @@ class InserimentoScreenState extends State<InserimentoScreen>
               SizedBox(
                   height: (MediaQuery.of(context).size.height -
                           (MediaQuery.of(context).size.height * 0.5)) /
-                      2),
-              Text(I18n().squadraDiCasa),
+                      6),
+              Text(
+                I18n().squadraDiCasa,
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                  height: (MediaQuery.of(context).size.height -
+                          (MediaQuery.of(context).size.height * 0.5)) /
+                      6),
               FormBuilder(
                   autovalidate: true,
                   child: Column(children: <Widget>[
@@ -550,7 +558,6 @@ class InserimentoScreenState extends State<InserimentoScreen>
                             children: <Widget>[
                               Container(
                                 width: MediaQuery.of(context).size.width / 3,
-                                margin: const EdgeInsets.only(top: 20.0),
                                 alignment: Alignment.centerLeft,
                                 child: FlatButton(
                                   shape: new RoundedRectangleBorder(
@@ -574,7 +581,6 @@ class InserimentoScreenState extends State<InserimentoScreen>
                               ),
                               Container(
                                 width: MediaQuery.of(context).size.width / 3,
-                                margin: const EdgeInsets.only(top: 20.0),
                                 alignment: Alignment.centerRight,
                                 child: FlatButton(
                                   disabledColor: MainColors.DISABLED,
@@ -622,8 +628,15 @@ class InserimentoScreenState extends State<InserimentoScreen>
             SizedBox(
                 height: (MediaQuery.of(context).size.height -
                         (MediaQuery.of(context).size.height * 0.5)) /
-                    2),
-            Text(I18n().squadraOspite),
+                    6),
+            Text(
+              I18n().squadraOspite,
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+                height: (MediaQuery.of(context).size.height -
+                        (MediaQuery.of(context).size.height * 0.5)) /
+                    6),
             FormBuilder(
                 autovalidate: false,
                 child: Column(children: <Widget>[
@@ -766,8 +779,18 @@ class InserimentoScreenState extends State<InserimentoScreen>
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            SizedBox(height: MediaQuery.of(context).size.height / 8),
-            Text(I18n().squadraDiCasa),
+            SizedBox(
+                height: (MediaQuery.of(context).size.height -
+                        (MediaQuery.of(context).size.height * 0.5)) /
+                    6),
+            Text(
+              I18n().squadraDiCasa,
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+                height: (MediaQuery.of(context).size.height -
+                        (MediaQuery.of(context).size.height * 0.5)) /
+                    6),
             FormBuilder(
               key: FormKey.playersKey,
               autovalidate: true,
@@ -900,8 +923,18 @@ class InserimentoScreenState extends State<InserimentoScreen>
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            SizedBox(height: MediaQuery.of(context).size.height / 8),
-            Text(I18n().squadraOspite),
+            SizedBox(
+                height: (MediaQuery.of(context).size.height -
+                        (MediaQuery.of(context).size.height * 0.5)) /
+                    6),
+            Text(
+              I18n().squadraOspite,
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+                height: (MediaQuery.of(context).size.height -
+                        (MediaQuery.of(context).size.height * 0.5)) /
+                    6),
             FormBuilder(
               key: FormKey.playersKey,
               autovalidate: true,
@@ -1035,8 +1068,18 @@ class InserimentoScreenState extends State<InserimentoScreen>
             padding: const EdgeInsets.only(left: 20.0, right: 20.0),
             child: Column(
               children: <Widget>[
-                SizedBox(height: 150),
-                Text(I18n().squadraDiCasa),
+                SizedBox(
+                    height: (MediaQuery.of(context).size.height -
+                            (MediaQuery.of(context).size.height * 0.5)) /
+                        6),
+                Text(
+                  I18n().squadraDiCasa,
+                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                    height: (MediaQuery.of(context).size.height -
+                            (MediaQuery.of(context).size.height * 0.5)) /
+                        6),
                 FormBuilder(
                   key: FormKey.coachesKey,
                   autovalidate: false,
@@ -1161,8 +1204,18 @@ class InserimentoScreenState extends State<InserimentoScreen>
             padding: const EdgeInsets.only(left: 20.0, right: 20.0),
             child: Column(
               children: <Widget>[
-                SizedBox(height: 150),
-                Text(I18n().squadraOspite),
+                SizedBox(
+                    height: (MediaQuery.of(context).size.height -
+                            (MediaQuery.of(context).size.height * 0.5)) /
+                        6),
+                Text(
+                  I18n().squadraOspite,
+                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                    height: (MediaQuery.of(context).size.height -
+                            (MediaQuery.of(context).size.height * 0.5)) /
+                        6),
                 FormBuilder(
                   key: FormKey.coachesKey,
                   autovalidate: false,
@@ -1287,7 +1340,18 @@ class InserimentoScreenState extends State<InserimentoScreen>
           padding: const EdgeInsets.only(left: 20.0, right: 20.0),
           child: Column(
             children: <Widget>[
-              SizedBox(height: 150),
+              SizedBox(
+                  height: (MediaQuery.of(context).size.height -
+                          (MediaQuery.of(context).size.height * 0.5)) /
+                      6),
+              Text(
+                I18n().squadraDiCasa,
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                  height: (MediaQuery.of(context).size.height -
+                          (MediaQuery.of(context).size.height * 0.5)) /
+                      6),
               FormBuilder(
                 key: FormKey.modulesKey,
                 autovalidate: false,
@@ -1409,7 +1473,18 @@ class InserimentoScreenState extends State<InserimentoScreen>
           padding: const EdgeInsets.only(left: 20.0, right: 20.0),
           child: Column(
             children: <Widget>[
-              SizedBox(height: 150),
+              SizedBox(
+                  height: (MediaQuery.of(context).size.height -
+                          (MediaQuery.of(context).size.height * 0.5)) /
+                      6),
+              Text(
+                I18n().squadraOspite,
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                  height: (MediaQuery.of(context).size.height -
+                          (MediaQuery.of(context).size.height * 0.5)) /
+                      6),
               FormBuilder(
                 key: FormKey.modulesKey,
                 autovalidate: false,
