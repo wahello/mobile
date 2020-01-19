@@ -55,6 +55,8 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   List<Event> event;
   List<Module> modules;
   int activeTeam; //1 o 2
+  FootballFieldBloc footballFieldBlocHome;
+  FootballFieldBloc footballFieldBlocAway;
 
   String getTeamNameById(String id) {
     if (id != null && id != "") {

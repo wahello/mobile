@@ -35,6 +35,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
   CallsRepository callsRepository = new CallsRepository();
   ScrollController _scrollController = new ScrollController();
   ScrollController _scrollControllerForPlayers = new ScrollController();
+  PageController pageController = PageController();
 
   // Variabile di classe per gestire l'ovveride del back button
   int step;
@@ -748,26 +749,6 @@ class InserimentoScreenState extends State<InserimentoScreen>
   }
 
   Widget playersScreenHome(state) {
-    if (inserimentoBloc.selectedTeamHome != null &&
-        inserimentoBloc.selectedTeamHome != "") {
-      widget.notifyAction(DropdownButton<String>(
-        value:
-            inserimentoBloc.getTeamNameById(inserimentoBloc.selectedTeamHome),
-        iconSize: 24,
-        elevation: 16,
-        style: TextStyle(color: Colors.black),
-        items: <String>[
-          inserimentoBloc.getTeamNameById(inserimentoBloc.selectedTeamHome),
-          "Squadra avversaria"
-        ].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (String value) {},
-      ));
-    }
     return SingleChildScrollView(
       controller: _scrollControllerForPlayers,
       child: Container(
@@ -1601,7 +1582,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
             inserimentoBloc.incontroAway != null &&
             inserimentoBloc.incontroAway.module != null)
         ? PageView(
-            controller: null,
+            controller: pageController,
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               FootballFieldScreen(
@@ -1609,10 +1590,11 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 notifyParent: notifyParent,
                 notifyAction: notifyAction,
                 inserimentoIncontroBloc: inserimentoBloc,
-                footballFieldBloc: FootballFieldBloc(
-                    dimension: [9, 11],
-                    availablePlayers: inserimentoBloc.incontroHome.players,
-                    module: inserimentoBloc.incontroHome.module),
+                footballFieldBloc: (inserimentoBloc.footballFieldBlocHome ??
+                    (inserimentoBloc.footballFieldBlocHome = FootballFieldBloc(
+                        dimension: [9, 11],
+                        availablePlayers: inserimentoBloc.incontroHome.players,
+                        module: inserimentoBloc.incontroHome.module))),
                 lato: 30,
               ),
               FootballFieldScreen(
@@ -1620,10 +1602,11 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 notifyParent: notifyParent,
                 notifyAction: notifyAction,
                 inserimentoIncontroBloc: inserimentoBloc,
-                footballFieldBloc: FootballFieldBloc(
-                    dimension: [9, 11],
-                    availablePlayers: inserimentoBloc.incontroAway.players,
-                    module: inserimentoBloc.incontroAway.module),
+                footballFieldBloc: (inserimentoBloc.footballFieldBlocAway ??
+                    (inserimentoBloc.footballFieldBlocAway = FootballFieldBloc(
+                        dimension: [9, 11],
+                        availablePlayers: inserimentoBloc.incontroAway.players,
+                        module: inserimentoBloc.incontroAway.module))),
                 lato: 30,
               )
             ],
