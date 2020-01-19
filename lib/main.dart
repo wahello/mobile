@@ -129,30 +129,32 @@ class _AppState extends State<App> {
             ),
             bloc: authenticationBloc,
             listener: (BuildContext context, AuthenticationState state) {
-              if (state is AuthenticationUninitialized) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return SplashPage(
-                      key: FormKey.fliploaderkey,
-                    );
-                  }),
-                );
-              }
-              if (state is AuthenticationUnauthenticated) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return LoginPage(
-                      key: FormKey.loginKey,
-                      callsRepository: callsRepository,
-                      userRepository: userRepository,
-                    );
-                  }),
-                );
-              }
+              // if (state is AuthenticationUninitialized) {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(builder: (context) {
+              //       return SplashPage(
+              //         key: FormKey.fliploaderkey,
+              //       );
+              //     }),
+              //   );
+              // }
+              // if (state is AuthenticationUnauthenticated) {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(builder: (context) {
+              //       return LoginPage(
+              //         key: FormKey.loginKey,
+              //         callsRepository: callsRepository,
+              //         userRepository: userRepository,
+              //       );
+              //     }),
+              //   );
+              // }
               if (state is AuthenticationAuthenticated ||
-                  state is OTPRequired) {
+                  state is OTPRequired ||
+                  state is AuthenticationUnauthenticated ||
+                  state is AuthenticationUninitialized) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
@@ -167,16 +169,11 @@ class _AppState extends State<App> {
                                 {authenticationBloc.add(LoggedIn())},
                           ),
                           Divider(
-                            endIndent: MediaQuery.of(context).size.width / 5,
+                            indent: MediaQuery.of(context).size.width / 2.65,
                           ),
-                          FloatingActionButton(
-                            heroTag: "exit",
-                            backgroundColor: MainColors.PRIMARY,
-                            child: Icon(Icons.exit_to_app),
-                            onPressed: () => {},
-                          )
                         ],
                         appBar: AppBar(
+                          leading: Icon(Icons.exit_to_app),
                           title: appBarTitleText,
                           actions: actions,
                           backgroundColor: MainColors.PRIMARY,
