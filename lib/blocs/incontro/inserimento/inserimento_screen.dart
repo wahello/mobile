@@ -670,7 +670,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                                   borderRadius: new BorderRadius.circular(30.0),
                                 ),
                                 color: MainColors.PRIMARY,
-                                onPressed: () => goToStep(9),
+                                onPressed: () => goToStep(7),
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 20.0,
                                   horizontal: 20.0,
@@ -696,7 +696,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                                 color: MainColors.PRIMARY,
                                 onPressed:
                                     inserimentoBloc.selectedTeamAway != null
-                                        ? () => goToStep(7)
+                                        ? () => goToStep(9)
                                         : null,
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 20.0,
@@ -719,7 +719,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
   }
 
   void _changeTeam(String value, bool isHome) {
-    if (isHome) {
+    if (!isHome) {
       if (inserimentoBloc.selectedTeamAway != value) {
         inserimentoBloc.selectedPlayersFromCheckBoxListAway?.clear();
       }
@@ -794,9 +794,9 @@ class InserimentoScreenState extends State<InserimentoScreen>
                           validators: [
                             FormBuilderValidators.required(
                                 errorText: I18n().obbligatorio),
-                            FormBuilderValidators.minLength(11,
-                                errorText: I18n().minimoNumeroGiocatori(
-                                    '11')) //TODO PARAMETRIZZARE
+                            // FormBuilderValidators.minLength(11,
+                            //     errorText: I18n().minimoNumeroGiocatori(
+                            //         '11')) //TODO PARAMETRIZZARE
                           ],
                           onChanged: (value) => {
                             inserimentoBloc
@@ -858,7 +858,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                                                 .selectedPlayersFromCheckBoxListHome
                                                 ?.length ??
                                             0) >=
-                                        11
+                                        1
                                     ? () => goToStep(6)
                                     : null,
                                 padding: const EdgeInsets.symmetric(
@@ -927,9 +927,9 @@ class InserimentoScreenState extends State<InserimentoScreen>
                           validators: [
                             FormBuilderValidators.required(
                                 errorText: I18n().obbligatorio),
-                            FormBuilderValidators.minLength(11,
-                                errorText: I18n().minimoNumeroGiocatori(
-                                    '11')) //TODO PARAMETRIZZARE
+                            // FormBuilderValidators.minLength(11,
+                            //     errorText: I18n().minimoNumeroGiocatori(
+                            //         '11')) //TODO PARAMETRIZZARE
                           ],
                           onChanged: (value) => {
                             inserimentoBloc
@@ -992,7 +992,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                                                 .selectedPlayersFromCheckBoxListAway
                                                 ?.length ??
                                             0) >=
-                                        11
+                                        1
                                     ? () => goToStep(10)
                                     : null,
                                 padding: const EdgeInsets.symmetric(

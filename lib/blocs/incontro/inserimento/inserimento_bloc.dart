@@ -311,7 +311,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
             .map((player) => playersHome
                 .singleWhere((giocatore) => giocatore.id.toString() == player))
             .toList();
-        List<Player> giocatoriAway = selectedPlayersFromCheckBoxListHome
+        List<Player> giocatoriAway = selectedPlayersFromCheckBoxListAway
             .map((player) => playersAway
                 .singleWhere((giocatore) => giocatore.id.toString() == player))
             .toList();
