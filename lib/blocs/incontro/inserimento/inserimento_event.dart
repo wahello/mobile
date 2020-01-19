@@ -17,8 +17,9 @@ class SubmitFormEvent extends InserimentoEvent {
   final TypeAddForm type;
   final String categoryId;
   final String teamId;
+  final bool isHome;
 
-  SubmitFormEvent(this.dataToSend, this.type, this.categoryId, this.teamId);
+  SubmitFormEvent(this.dataToSend, this.type, this.categoryId, this.teamId, this.isHome);
 
   @override
   String toString() => 'SubmitFormEvent';
@@ -62,11 +63,15 @@ class GetCategoriesEvent extends InserimentoEvent {
   String toString() => 'GetCategoriesEvent';
 }
 
-class GetTeamsEvent extends InserimentoEvent {
+class GetTeamsEventHome extends InserimentoEvent {
   @override
-  String toString() => 'GetTeamsEvent';
+  String toString() => 'GetTeamsEventHome';
 }
 
+class GetTeamsEventAway extends InserimentoEvent {
+  @override
+  String toString() => 'GetTeamsEventAway';
+}
 class GetTournamentsEvent extends InserimentoEvent {
   final String inputTextValue;
 
@@ -79,22 +84,35 @@ class GetTournamentsEvent extends InserimentoEvent {
       'GetTournamentsEvent { inputTextValue: $inputTextValue }';
 }
 
-class GetPlayersEvent extends InserimentoEvent {
+class GetPlayersEventHome extends InserimentoEvent {
   @override
-  String toString() => 'GetPlayersEvent';
+  String toString() => 'GetPlayersEventHome';
 }
 
-class GetCoachesEvent extends InserimentoEvent {
+class GetPlayersEventAway extends InserimentoEvent {
   @override
-  String toString() => 'GetCoachesEvent';
+  String toString() => 'GetPlayersEventAway';
+}
+class GetCoachesEventHome extends InserimentoEvent {
+  @override
+  String toString() => 'GetCoachesEventHome';
 }
 
+class GetCoachesEventAway extends InserimentoEvent {
+  @override
+  String toString() => 'GetCoachesEventAway';
+}
 class InserisciIncontroEvent extends InserimentoEvent {
   @override
   String toString() => 'InserisciIncontroEvent';
 }
 
-class InserisciModuloEvent extends InserimentoEvent {
+class InserisciModuloEventHome extends InserimentoEvent {
   @override
-  String toString() => 'InserisciModuloEvent';
+  String toString() => 'InserisciModuloEventHome';
+}
+
+class InserisciModuloEventAway extends InserimentoEvent {
+  @override
+  String toString() => 'InserisciModuloEventAway';
 }

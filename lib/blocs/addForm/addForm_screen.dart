@@ -12,11 +12,13 @@ class AddFormScreen extends StatefulWidget {
   final InserimentoState state;
   final String categoryId;
   final String teamId;
+  final bool isHome;
 
   const AddFormScreen(
       {Key key,
       @required this.type,
       @required this.bloc,
+      @required this.isHome,
       @required this.state,
       this.categoryId,
       this.teamId})
@@ -224,8 +226,8 @@ class AddFormScreenState extends State<AddFormScreen> {
   }
 
   void _submitForm() {
-    widget.bloc
-        .add(SubmitFormEvent(rows, type, widget.categoryId, widget.teamId));
+    widget.bloc.add(SubmitFormEvent(
+        rows, type, widget.categoryId, widget.teamId, widget.isHome));
   }
 
   void _fieldFocusChange(

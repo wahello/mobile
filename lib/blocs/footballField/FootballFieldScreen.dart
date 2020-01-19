@@ -13,10 +13,16 @@ import 'package:shared/shared.dart';
 class FootballFieldScreen extends StatefulWidget {
   InserimentoBloc inserimentoIncontroBloc;
   FootballFieldBloc footballFieldBloc;
+  final Function(Widget) notifyParent;
+  final Function(Widget) notifyAction;
+  final bool isHome;
   final double lato;
 
   FootballFieldScreen(
       {Key key,
+      this.isHome,
+      this.notifyAction,
+      this.notifyParent,
       @required this.lato,
       this.inserimentoIncontroBloc,
       this.footballFieldBloc})
@@ -39,24 +45,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
   final Map<String, Player> playersPlaced = new Map();
 
   FootballFieldScreenState(
-      {this.inserimentoIncontroBloc, this.footballFieldBloc}) {
-    convertedPositions =
-        convertCordinates(inserimentoIncontroBloc.incontro.module);
-  }
-
-  List<int> convertCordinates(Module module) {
-    List<int> indexesList = List<int>();
-
-    for (int i = 0; i < module.positions.length; i++) {
-      List<String> xy = module.positions[i][0].split(',');
-      int x = int.parse(xy[0]);
-      int y = int.parse(xy[1]);
-      //TODO : rendere dinamico
-      indexesList.add(x * 5 + y);
-    }
-
-    return indexesList;
-  }
+      {this.inserimentoIncontroBloc, this.footballFieldBloc});
 
   @override
   void initState() {
@@ -65,6 +54,11 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
 
   @override
   Widget build(BuildContext context) {
+    widget.notifyParent(widget.isHome
+        ? Text(inserimentoIncontroBloc
+            .getTeamNameById(inserimentoIncontroBloc.selectedTeamHome))
+        : Text(inserimentoIncontroBloc
+            .getTeamNameById(inserimentoIncontroBloc.selectedTeamAway)));
     return BlocBuilder<FootballFieldBloc, FootballFieldState>(
         bloc: footballFieldBloc,
         builder: (BuildContext context, FootballFieldState state) {
