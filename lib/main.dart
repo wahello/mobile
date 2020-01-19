@@ -103,6 +103,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
+      key: FormKey.multiBlocProviderKey,
       providers: [
         BlocProvider<AuthenticationBloc>(
           builder: (context) => authenticationBloc,
@@ -123,6 +124,7 @@ class _AppState extends State<App> {
           ),
           home: BlocListener<AuthenticationBloc, AuthenticationState>(
             child: Scaffold(
+              key: FormKey.loadingKey,
               body: LoadingIndicator(),
             ),
             bloc: authenticationBloc,
@@ -131,7 +133,9 @@ class _AppState extends State<App> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return SplashPage();
+                    return SplashPage(
+                      key: FormKey.fliploaderkey,
+                    );
                   }),
                 );
               }

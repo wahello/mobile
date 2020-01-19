@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /*
     !!!IMPORTANTE!!!
@@ -10,5 +11,8 @@ class FormKey {
   static final modulesKey = const Key('modules');
   static final loginKey = const Key('login');
   static final homeKey = const Key('homeKey');
+  static final multiBlocProviderKey = const Key('multiBlocProviderKey');
   static final materialAppKey = const Key('materialAppKey');
+  static final loadingKey = const Key('loadingKey');
+  static final fliploaderkey = const Key('fliploaderkey');
 }
