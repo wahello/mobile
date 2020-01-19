@@ -508,6 +508,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                   height: (MediaQuery.of(context).size.height -
                           (MediaQuery.of(context).size.height * 0.5)) /
                       2),
+              Text(I18n().squadraDiCasa),
               FormBuilder(
                   autovalidate: true,
                   child: Column(children: <Widget>[
@@ -622,6 +623,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 height: (MediaQuery.of(context).size.height -
                         (MediaQuery.of(context).size.height * 0.5)) /
                     2),
+            Text(I18n().squadraOspite),
             FormBuilder(
                 autovalidate: false,
                 child: Column(children: <Widget>[
@@ -765,6 +767,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             SizedBox(height: MediaQuery.of(context).size.height / 8),
+            Text(I18n().squadraDiCasa),
             FormBuilder(
               key: FormKey.playersKey,
               autovalidate: true,
@@ -898,6 +901,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             SizedBox(height: MediaQuery.of(context).size.height / 8),
+            Text(I18n().squadraOspite),
             FormBuilder(
               key: FormKey.playersKey,
               autovalidate: true,
@@ -1032,6 +1036,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
             child: Column(
               children: <Widget>[
                 SizedBox(height: 150),
+                Text(I18n().squadraDiCasa),
                 FormBuilder(
                   key: FormKey.coachesKey,
                   autovalidate: false,
@@ -1157,6 +1162,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
             child: Column(
               children: <Widget>[
                 SizedBox(height: 150),
+                Text(I18n().squadraOspite),
                 FormBuilder(
                   key: FormKey.coachesKey,
                   autovalidate: false,
