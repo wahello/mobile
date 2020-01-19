@@ -51,5 +51,7 @@
   "nome": "Nome",
   "anno": "Anno",
   "numero": "Numero",
-  "minimoNumeroGiocatori": "Devi selezionare almeno {numero} giocatori"
+  "minimoNumeroGiocatori": "Devi selezionare almeno {numero} giocatori",
+  "squadraOspite": "Squadra ospite",
+  "squadraDiCasa": "Squadra di casa"
 }

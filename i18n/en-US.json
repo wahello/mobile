@@ -51,5 +51,7 @@
   "nome": "Name",
   "anno": "Year",
   "numero": "Number",
-  "minimoNumeroGiocatori": "At least {numero} players must be selected"
+  "minimoNumeroGiocatori": "At least {numero} players must be selected",
+  "squadraOspite": "Away team",
+  "squadraDiCasa": "Home team"
 }
