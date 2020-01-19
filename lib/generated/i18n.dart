@@ -138,6 +138,10 @@ class I18n implements WidgetsLocalizations {
   String get numero => "Numero";
   /// "Devi selezionare almeno ${numero} giocatori"
   String minimoNumeroGiocatori(String numero) => "Devi selezionare almeno ${numero} giocatori";
+  /// "Squadra ospite"
+  String get squadraOspite => "Squadra ospite";
+  /// "Squadra di casa"
+  String get squadraDiCasa => "Squadra di casa";
 }
 
 class _I18n_it_IT extends I18n {
@@ -309,6 +313,12 @@ class _I18n_en_US extends I18n {
   /// "At least ${numero} players must be selected"
   @override
   String minimoNumeroGiocatori(String numero) => "At least ${numero} players must be selected";
+  /// "Away team"
+  @override
+  String get squadraOspite => "Away team";
+  /// "Home team"
+  @override
+  String get squadraDiCasa => "Home team";
 
   @override
   TextDirection get textDirection => TextDirection.ltr;
