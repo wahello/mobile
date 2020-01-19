@@ -9,4 +9,6 @@ class FormKey {
   static final coachesKey = const Key('coaches');
   static final modulesKey = const Key('modules');
   static final loginKey = const Key('login');
+  static final homeKey = const Key('homeKey');
+  static final materialAppKey = const Key('materialAppKey');
 }

@@ -115,12 +115,91 @@ class _AppState extends State<App> {
         ),
       ],
       child: MaterialApp(
-        theme: ThemeData(
-          hintColor: MainColors.PRIMARY,
-          cursorColor: MainColors.PRIMARY,
-          indicatorColor: MainColors.PRIMARY,
-        ),
-        home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          key: FormKey.materialAppKey,
+          theme: ThemeData(
+            hintColor: MainColors.PRIMARY,
+            cursorColor: MainColors.PRIMARY,
+            indicatorColor: MainColors.PRIMARY,
+          ),
+          home: BlocListener<AuthenticationBloc, AuthenticationState>(
+            child: Scaffold(
+              body: LoadingIndicator(),
+            ),
+            bloc: authenticationBloc,
+            listener: (BuildContext context, AuthenticationState state) {
+              if (state is AuthenticationUninitialized) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return SplashPage();
+                  }),
+                );
+              }
+              if (state is AuthenticationUnauthenticated) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return LoginPage(
+                      key: FormKey.loginKey,
+                      callsRepository: callsRepository,
+                      userRepository: userRepository,
+                    );
+                  }),
+                );
+              }
+              if (state is AuthenticationAuthenticated ||
+                  state is OTPRequired) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return Scaffold(
+                        key: FormKey.homeKey,
+                        persistentFooterButtons: <Widget>[
+                          FloatingActionButton(
+                            backgroundColor: MainColors.PRIMARY,
+                            child: Icon(Icons.home),
+                            heroTag: "home",
+                            onPressed: () =>
+                                {authenticationBloc.add(LoggedIn())},
+                          ),
+                          Divider(
+                            endIndent: MediaQuery.of(context).size.width / 5,
+                          ),
+                          FloatingActionButton(
+                            heroTag: "exit",
+                            backgroundColor: MainColors.PRIMARY,
+                            child: Icon(Icons.exit_to_app),
+                            onPressed: () => {},
+                          )
+                        ],
+                        appBar: AppBar(
+                          title: appBarTitleText,
+                          actions: actions,
+                          backgroundColor: MainColors.PRIMARY,
+                        ),
+                        body: Container(
+                            height: MediaQuery.of(context).size.height,
+                            decoration: BoxDecoration(
+                              color: MainColors.SECONDARY,
+                            ),
+                            child: Container(
+                                padding: EdgeInsets.all(3.0),
+                                child: Home(
+                                  notifyParent: updateAppBarTitle,
+                                  notifyAction: updateAppBarActions,
+                                  callsRepository: callsRepository,
+                                  userRepository: userRepository,
+                                ))));
+                  }),
+                );
+              }
+            },
+          )),
+    );
+  }
+}
+/*
+BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (BuildContext context, AuthenticationState state) {
             if (state is AuthenticationUninitialized) {
               return SplashPage();
@@ -141,7 +220,7 @@ class _AppState extends State<App> {
                       backgroundColor: MainColors.PRIMARY,
                       child: Icon(Icons.home),
                       heroTag: "home",
-                      onPressed: () => {},
+                      onPressed: () => {authenticationBloc.add(LoggedIn())},
                     ),
                     Divider(
                       endIndent: MediaQuery.of(context).size.width / 5,
@@ -175,7 +254,4 @@ class _AppState extends State<App> {
             return SplashPage();
           },
         ),
-      ),
-    );
-  }
-}
+ */
