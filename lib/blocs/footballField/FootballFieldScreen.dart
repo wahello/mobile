@@ -54,6 +54,11 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
 
   @override
   Widget build(BuildContext context) {
+    widget.notifyParent(widget.isHome
+        ? Text(inserimentoIncontroBloc
+            .getTeamNameById(inserimentoIncontroBloc.selectedTeamHome))
+        : Text(inserimentoIncontroBloc
+            .getTeamNameById(inserimentoIncontroBloc.selectedTeamAway)));
     return BlocBuilder<FootballFieldBloc, FootballFieldState>(
         bloc: footballFieldBloc,
         builder: (BuildContext context, FootballFieldState state) {
