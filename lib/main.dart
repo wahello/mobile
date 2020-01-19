@@ -163,7 +163,10 @@ class _AppState extends State<App> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return Scaffold(
+                    return WillPopScope(
+                      key: FormKey.authenticationAuthenticated,
+                      onWillPop: () async => false,
+                      child: Scaffold(
                         key: FormKey.homeKey,
                         persistentFooterButtons: <Widget>[
                           FloatingActionButton(
@@ -199,7 +202,8 @@ class _AppState extends State<App> {
                                   notifyAction: updateAppBarActions,
                                   callsRepository: callsRepository,
                                   userRepository: userRepository,
-                                ))));
+                                )))),
+                    );
                   }),
                 );
               }

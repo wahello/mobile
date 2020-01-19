@@ -18,4 +18,6 @@ class FormKey {
   static final logoutKey = const Key('logoutKey');
   static final authenticationUnauthenticated =
       const Key('authenticationUnauthenticated');
+  static final authenticationAuthenticated =
+      const Key('authenticationAuthenticated');
 }
