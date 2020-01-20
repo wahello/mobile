@@ -4,21 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
 class SplashPage extends StatelessWidget {
+  Key key;
+
+  SplashPage({this.key});
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+        key: this.key,
         body: new Center(
-      child: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          FlipLoader(
-              loaderBackground: Colors.red,
-              iconColor: Colors.white,
-              icon: Icons.score,
-              animationType: "full_flip"),
-        ],
-      ),
-    ));
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              FlipLoader(
+                  loaderBackground: Colors.red,
+                  iconColor: Colors.white,
+                  icon: Icons.score,
+                  animationType: "full_flip"),
+            ],
+          ),
+        ));
   }
 }
 
@@ -63,6 +67,12 @@ class _FlipLoaderState extends State<FlipLoader>
   Animation<double> rotationHorizontal;
   Animation<double> rotationVertical;
   String shape;
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {

@@ -33,6 +33,9 @@ class AuthenticationBloc
       yield AuthenticationLoading();
       yield AuthenticationAuthenticated();
     }
+    if (event is GoHome) {
+      yield AuthenticationAuthenticated();
+    }
 
     if (event is LoggedOut) {
       yield AuthenticationLoading();

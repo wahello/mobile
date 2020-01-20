@@ -103,6 +103,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
+      key: FormKey.multiBlocProviderKey,
       providers: [
         BlocProvider<AuthenticationBloc>(
           builder: (context) => authenticationBloc,
@@ -115,12 +116,104 @@ class _AppState extends State<App> {
         ),
       ],
       child: MaterialApp(
-        theme: ThemeData(
-          hintColor: MainColors.PRIMARY,
-          cursorColor: MainColors.PRIMARY,
-          indicatorColor: MainColors.PRIMARY,
-        ),
-        home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          key: FormKey.materialAppKey,
+          theme: ThemeData(
+            hintColor: MainColors.PRIMARY,
+            cursorColor: MainColors.PRIMARY,
+            indicatorColor: MainColors.PRIMARY,
+          ),
+          home: BlocListener<AuthenticationBloc, AuthenticationState>(
+            child: Scaffold(
+              key: FormKey.loadingKey,
+              body: LoadingIndicator(),
+            ),
+            bloc: authenticationBloc,
+            listener: (BuildContext context, AuthenticationState state) {
+              if (state is AuthenticationUninitialized) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return SplashPage(
+                      key: FormKey.fliploaderkey,
+                    );
+                  }),
+                );
+              }
+              // if (state is AuthenticationUnauthenticated) {
+              //   Navigator.push(
+              //     context,
+              if (state is AuthenticationUnauthenticated) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return WillPopScope(
+                      key: FormKey.authenticationUnauthenticated,
+                      onWillPop: () async => false,
+                      child: LoginPage(
+                        key: FormKey.loginKey,
+                        callsRepository: callsRepository,
+                        userRepository: userRepository,
+                      ),
+                    );
+                  }),
+                );
+              }
+              if (state is AuthenticationAuthenticated ||
+                  state is OTPRequired) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return WillPopScope(
+                      key: FormKey.authenticationAuthenticated,
+                      onWillPop: () async => false,
+                      child: Scaffold(
+                        key: FormKey.homeKey,
+                        persistentFooterButtons: <Widget>[
+                          FloatingActionButton(
+                            backgroundColor: MainColors.PRIMARY,
+                            child: Icon(Icons.home),
+                            heroTag: "home",
+                            onPressed: () => {authenticationBloc.add(GoHome())},
+                          ),
+                          Divider(
+                            indent: MediaQuery.of(context).size.width / 2.65,
+                          ),
+                        ],
+                        appBar: AppBar(
+                          leading: FlatButton(
+                            key: FormKey.logoutKey,
+                            child: Icon(Icons.exit_to_app),
+                            onPressed: () =>
+                                {authenticationBloc.add(LoggedOut())},
+                          ),
+                          title: appBarTitleText,
+                          actions: actions,
+                          backgroundColor: MainColors.PRIMARY,
+                        ),
+                        body: Container(
+                            height: MediaQuery.of(context).size.height,
+                            decoration: BoxDecoration(
+                              color: MainColors.SECONDARY,
+                            ),
+                            child: Container(
+                                padding: EdgeInsets.all(3.0),
+                                child: Home(
+                                  notifyParent: updateAppBarTitle,
+                                  notifyAction: updateAppBarActions,
+                                  callsRepository: callsRepository,
+                                  userRepository: userRepository,
+                                )))),
+                    );
+                  }),
+                );
+              }
+            },
+          )),
+    );
+  }
+}
+/*
+BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (BuildContext context, AuthenticationState state) {
             if (state is AuthenticationUninitialized) {
               return SplashPage();
@@ -141,7 +234,7 @@ class _AppState extends State<App> {
                       backgroundColor: MainColors.PRIMARY,
                       child: Icon(Icons.home),
                       heroTag: "home",
-                      onPressed: () => {},
+                      onPressed: () => {authenticationBloc.add(LoggedIn())},
                     ),
                     Divider(
                       endIndent: MediaQuery.of(context).size.width / 5,
@@ -175,7 +268,4 @@ class _AppState extends State<App> {
             return SplashPage();
           },
         ),
-      ),
-    );
-  }
-}
+ */

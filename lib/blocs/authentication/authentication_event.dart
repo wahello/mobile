@@ -25,6 +25,11 @@ class LoggedOut extends AuthenticationEvent {
   String toString() => 'LoggedOut';
 }
 
+class GoHome extends AuthenticationEvent {
+  @override
+  String toString() => 'GoHome';
+}
+
 class OTP extends AuthenticationEvent {
   final String token;
 
