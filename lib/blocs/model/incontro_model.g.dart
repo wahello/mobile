@@ -22,13 +22,14 @@ Incontro _$IncontroFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$IncontroToJson(Incontro instance) => <String, dynamic>{
-      'gender': instance.gender,
-      'category': instance.category,
-      'championship': instance.championship,
-      'match': instance.match,
-      'tournament': instance.tournament,
-      'team': instance.team,
-      'players': instance.players,
-      'coach': instance.coach,
-      'module': instance.module,
+      'gender': instance.gender.toJson(),
+      'category': instance.category.toJson(),
+      'championship': instance.championship.toJson(),
+      'match': instance.match.toJson(),
+      //FIXME: tournament è null, capire perchè
+      // 'tournament': instance.tournament.toJson(),
+      'team': instance.team.toJson(),
+      'players': instance.players.map((player) => player.toJson()),
+      'coach': instance.coach.toJson(),
+      'module': instance.module.toJson(),
     };

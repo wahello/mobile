@@ -467,5 +467,9 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       }
       yield InserimentoFormSuccess();
     }
+    if (event is SalvaIncontro) {
+        //TODO eliminare il print e chiamare il provider
+      print(incontroAway.toJson());
+    }
   }
 }
