@@ -53,6 +53,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   Widget appBarTitleText = new Text(I18n().appName);
   List<Widget> actions = [];
+  List<Widget> persistentFloatingButton = null;
   AuthenticationBloc authenticationBloc;
   HomeBloc homeBloc;
   LoginBloc loginBloc;
@@ -77,6 +78,7 @@ class _AppState extends State<App> {
       authenticationBloc: authenticationBloc,
     );
     homeBloc = HomeBloc(callsRepository: callsRepository);
+
     super.initState();
   }
 
@@ -88,6 +90,58 @@ class _AppState extends State<App> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         appBarTitleText = widget;
+      });
+    });
+  }
+
+  void activeSaveButton(Size size) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        persistentFloatingButton = [
+          Container(
+            margin: EdgeInsets.only(right: size.width / 4.72),
+            child: FloatingActionButton(
+              backgroundColor: MainColors.PRIMARY,
+              child: Icon(Icons.home),
+              heroTag: "home",
+              onPressed: () => {authenticationBloc.add(GoHome())},
+            ),
+          ),
+          Container(
+            child: FloatingActionButton(
+              backgroundColor: MainColors.PRIMARY,
+              child: Icon(Icons.save),
+              heroTag: "save",
+              onPressed: () => {},
+            ),
+          ),
+        ];
+      });
+    });
+  }
+
+  void deactiveSaveButton(Size size) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        persistentFloatingButton = [
+          Container(
+            margin: EdgeInsets.only(right: size.width / 4.72),
+            child: FloatingActionButton(
+              backgroundColor: MainColors.PRIMARY,
+              child: Icon(Icons.home),
+              heroTag: "home",
+              onPressed: () => {authenticationBloc.add(GoHome())},
+            ),
+          ),
+          Container(
+            child: FloatingActionButton(
+              backgroundColor: MainColors.DISABLED,
+              child: Icon(Icons.save),
+              heroTag: "save",
+              onPressed: () => {},
+            ),
+          ),
+        ];
       });
     });
   }
@@ -139,9 +193,6 @@ class _AppState extends State<App> {
                   }),
                 );
               }
-              // if (state is AuthenticationUnauthenticated) {
-              //   Navigator.push(
-              //     context,
               if (state is AuthenticationUnauthenticated) {
                 Navigator.push(
                   context,
@@ -167,42 +218,56 @@ class _AppState extends State<App> {
                       key: FormKey.authenticationAuthenticated,
                       onWillPop: () async => false,
                       child: Scaffold(
-                        key: FormKey.homeKey,
-                        persistentFooterButtons: <Widget>[
-                          FloatingActionButton(
-                            backgroundColor: MainColors.PRIMARY,
-                            child: Icon(Icons.home),
-                            heroTag: "home",
-                            onPressed: () => {authenticationBloc.add(GoHome())},
-                          ),
-                          Divider(
-                            indent: MediaQuery.of(context).size.width / 2.65,
-                          ),
-                        ],
-                        appBar: AppBar(
-                          leading: FlatButton(
-                            key: FormKey.logoutKey,
-                            child: Icon(Icons.exit_to_app),
-                            onPressed: () =>
-                                {authenticationBloc.add(LoggedOut())},
-                          ),
-                          title: appBarTitleText,
-                          actions: actions,
-                          backgroundColor: MainColors.PRIMARY,
-                        ),
-                        body: Container(
-                            height: MediaQuery.of(context).size.height,
-                            decoration: BoxDecoration(
-                              color: MainColors.SECONDARY,
+                          key: FormKey.homeKey,
+                          persistentFooterButtons: (persistentFloatingButton ??
+                              [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      right: MediaQuery.of(context).size.width /
+                                          4.72),
+                                  child: FloatingActionButton(
+                                    backgroundColor: MainColors.PRIMARY,
+                                    child: Icon(Icons.home),
+                                    heroTag: "home",
+                                    onPressed: () =>
+                                        {authenticationBloc.add(GoHome())},
+                                  ),
+                                ),
+                                Container(
+                                  child: FloatingActionButton(
+                                    backgroundColor: Colors.grey,
+                                    child: Icon(Icons.save),
+                                    heroTag: "save",
+                                    onPressed: () => {},
+                                  ),
+                                ),
+                              ]),
+                          appBar: AppBar(
+                            leading: FlatButton(
+                              key: FormKey.logoutKey,
+                              child: Icon(Icons.exit_to_app),
+                              onPressed: () =>
+                                  {authenticationBloc.add(LoggedOut())},
                             ),
-                            child: Container(
-                                padding: EdgeInsets.all(3.0),
-                                child: Home(
-                                  notifyParent: updateAppBarTitle,
-                                  notifyAction: updateAppBarActions,
-                                  callsRepository: callsRepository,
-                                  userRepository: userRepository,
-                                )))),
+                            title: appBarTitleText,
+                            actions: actions,
+                            backgroundColor: MainColors.PRIMARY,
+                          ),
+                          body: Container(
+                              height: MediaQuery.of(context).size.height,
+                              decoration: BoxDecoration(
+                                color: MainColors.SECONDARY,
+                              ),
+                              child: Container(
+                                  padding: EdgeInsets.all(3.0),
+                                  child: Home(
+                                      notifyParent: updateAppBarTitle,
+                                      notifyAction: updateAppBarActions,
+                                      callsRepository: callsRepository,
+                                      userRepository: userRepository,
+                                      activeSaveButton: activeSaveButton,
+                                      deactiveSaveButton:
+                                          deactiveSaveButton)))),
                     );
                   }),
                 );

@@ -40,9 +40,13 @@ class Home extends StatefulWidget {
   final UserRepository userRepository;
   final Function(Widget widget) notifyParent;
   final Function(Widget widget) notifyAction;
+  final Function(Size size) activeSaveButton;
+  final Function(Size size) deactiveSaveButton;
 
   Home(
       {Key key,
+      this.deactiveSaveButton,
+      this.activeSaveButton,
       this.notifyAction,
       this.notifyParent,
       @required this.callsRepository,
@@ -93,6 +97,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    widget.deactiveSaveButton(MediaQuery.of(context).size);
     return MultiBlocProvider(
         providers: [
           BlocProvider<AuthenticationBloc>(
@@ -115,8 +120,10 @@ class _HomeState extends State<Home> {
                   }
                   if (state is InserimentoIncontroState) {
                     return InserimentoPage(
-                        notifyParent: updateAppBarTitle,
-                        notifyAction: updateAppBarActions);
+                      notifyParent: updateAppBarTitle,
+                      notifyAction: updateAppBarActions,
+                      activeSaveButton: widget.activeSaveButton,
+                    );
                   }
                   return SplashPage();
                 },

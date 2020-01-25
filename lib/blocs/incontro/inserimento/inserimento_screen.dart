@@ -18,8 +18,10 @@ import '../../stuff/index.dart';
 class InserimentoScreen extends StatefulWidget {
   final Function(Widget) notifyParent;
   final Function(Widget) notifyAction;
+  final Function(Size) activeSaveButton;
 
   const InserimentoScreen({
+    this.activeSaveButton,
     this.notifyAction,
     this.notifyParent,
     Key key,
@@ -1575,8 +1577,8 @@ class InserimentoScreenState extends State<InserimentoScreen>
     );
   }
 
-  Widget incontroScreen(
-      Function(Widget) notifyParent, Function(Widget) notifyAction) {
+  Widget incontroScreen(Function(Widget) notifyParent,
+      Function(Widget) notifyAction, Function(Size) activeSaveButton) {
     return ((inserimentoBloc.incontroHome != null &&
                 inserimentoBloc.incontroHome.module != null) &&
             inserimentoBloc.incontroAway != null &&
@@ -1586,6 +1588,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               FootballFieldScreen(
+                activeSaveButton: activeSaveButton,
                 isHome: true,
                 notifyParent: notifyParent,
                 notifyAction: notifyAction,
@@ -1598,6 +1601,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                 lato: 30,
               ),
               FootballFieldScreen(
+                activeSaveButton: activeSaveButton,
                 isHome: false,
                 notifyParent: notifyParent,
                 notifyAction: notifyAction,
@@ -1733,7 +1737,8 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     playersScreenAway(state),
                     coachesScreenAway(state),
                     moduleScreenAway(state),
-                    incontroScreen(widget.notifyParent, widget.notifyAction),
+                    incontroScreen(widget.notifyParent, widget.notifyAction,
+                        widget.activeSaveButton),
                   ])));
         });
   }

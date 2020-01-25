@@ -15,11 +15,13 @@ class FootballFieldScreen extends StatefulWidget {
   FootballFieldBloc footballFieldBloc;
   final Function(Widget) notifyParent;
   final Function(Widget) notifyAction;
+  final Function(Size) activeSaveButton;
   final bool isHome;
   final double lato;
 
   FootballFieldScreen(
       {Key key,
+      this.activeSaveButton,
       this.isHome,
       this.notifyAction,
       this.notifyParent,
@@ -54,6 +56,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
 
   @override
   Widget build(BuildContext context) {
+    widget.activeSaveButton(MediaQuery.of(context).size);
     widget.notifyParent(widget.isHome
         ? Text(inserimentoIncontroBloc
             .getTeamNameById(inserimentoIncontroBloc.selectedTeamHome))
