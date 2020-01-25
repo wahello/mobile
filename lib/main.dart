@@ -12,6 +12,7 @@ import 'package:shared/shared.dart';
 import 'blocs/authentication/index.dart';
 import 'blocs/login/index.dart';
 import 'blocs/user/index.dart';
+import 'blocs/incontro/inserimento/index.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -94,7 +95,7 @@ class _AppState extends State<App> {
     });
   }
 
-  void activeSaveButton(Size size) {
+  void activeSaveButton(Size size, InserimentoBloc inserimentoBloc) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         persistentFloatingButton = [
@@ -112,7 +113,7 @@ class _AppState extends State<App> {
               backgroundColor: MainColors.PRIMARY,
               child: Icon(Icons.save),
               heroTag: "save",
-              onPressed: () => {},
+              onPressed: () => {inserimentoBloc.add(SalvaIncontro())},
             ),
           ),
         ];

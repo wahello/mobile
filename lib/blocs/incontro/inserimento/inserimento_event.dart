@@ -116,3 +116,8 @@ class InserisciModuloEventAway extends InserimentoEvent {
   @override
   String toString() => 'InserisciModuloEventAway';
 }
+
+class SalvaIncontro extends InserimentoEvent {
+  @override
+  String toString() => 'SalvaIncontro';
+}

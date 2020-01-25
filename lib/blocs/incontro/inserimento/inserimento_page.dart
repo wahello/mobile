@@ -5,7 +5,7 @@ import 'package:football_system/generated/i18n.dart';
 class InserimentoPage extends StatefulWidget {
   final Function(Widget) notifyParent;
   final Function(Widget) notifyAction;
-  final Function(Size) activeSaveButton;
+  final Function(Size, InserimentoBloc) activeSaveButton;
 
   InserimentoPage({
     this.activeSaveButton,

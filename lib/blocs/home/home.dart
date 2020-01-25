@@ -40,7 +40,7 @@ class Home extends StatefulWidget {
   final UserRepository userRepository;
   final Function(Widget widget) notifyParent;
   final Function(Widget widget) notifyAction;
-  final Function(Size size) activeSaveButton;
+  final Function(Size size, InserimentoBloc) activeSaveButton;
   final Function(Size size) deactiveSaveButton;
 
   Home(

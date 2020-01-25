@@ -18,7 +18,7 @@ import '../../stuff/index.dart';
 class InserimentoScreen extends StatefulWidget {
   final Function(Widget) notifyParent;
   final Function(Widget) notifyAction;
-  final Function(Size) activeSaveButton;
+  final Function(Size, InserimentoBloc) activeSaveButton;
 
   const InserimentoScreen({
     this.activeSaveButton,
@@ -1577,8 +1577,10 @@ class InserimentoScreenState extends State<InserimentoScreen>
     );
   }
 
-  Widget incontroScreen(Function(Widget) notifyParent,
-      Function(Widget) notifyAction, Function(Size) activeSaveButton) {
+  Widget incontroScreen(
+      Function(Widget) notifyParent,
+      Function(Widget) notifyAction,
+      Function(Size, InserimentoBloc) activeSaveButton) {
     return ((inserimentoBloc.incontroHome != null &&
                 inserimentoBloc.incontroHome.module != null) &&
             inserimentoBloc.incontroAway != null &&
