@@ -13,6 +13,7 @@ part 'incontro_model.g.dart';
 
 @JsonSerializable(nullable: false)
 class Incontro {
+  var jersey;
   Gender gender;
   Category category;
   Championship championship;
@@ -23,8 +24,8 @@ class Incontro {
   Coach coach;
   Module module;
 
-  Incontro(this.gender, this.category, this.championship, this.match,
-      this.tournament, this.team, this.players, this.coach);
+  Incontro(this.jersey, this.gender, this.category, this.championship,
+      this.match, this.tournament, this.team, this.players, this.coach);
   factory Incontro.fromJson(Map<String, dynamic> json) =>
       _$IncontroFromJson(json);
   Map<String, dynamic> toJson() => _$IncontroToJson(this);

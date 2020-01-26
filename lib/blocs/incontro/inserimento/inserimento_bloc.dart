@@ -12,6 +12,7 @@ import 'package:football_system/blocs/model/gender_model.dart';
 import 'package:football_system/blocs/model/incontro_model.dart';
 import 'package:football_system/blocs/model/match_model.dart';
 import 'package:football_system/blocs/model/module_model.dart';
+import 'package:football_system/blocs/model/game_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/team_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
@@ -325,6 +326,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
                 .singleWhere((giocatore) => giocatore.id.toString() == player))
             .toList();
         incontroHome = new Incontro(
+          jerseyNameHome,
           new Gender(
               int.parse(selectedGender),
               genders
@@ -374,6 +376,7 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
             (module) => module.id.toString() == selectedModuleHome.toString());
 
         incontroAway = new Incontro(
+          jerseyNameAway,
           new Gender(
               int.parse(selectedGender),
               genders
@@ -475,8 +478,20 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       yield InserimentoFormSuccess();
     }
     if (event is SalvaIncontro) {
-        //TODO eliminare il print e chiamare il provider
+      //TODO eliminare il print e chiamare il provider
       print(incontroAway.toJson());
+
+      List<Incontro> teamHome = List<Incontro>();
+      teamHome.add(incontroHome);
+      teamHome.add(incontroAway);
+
+      List<Incontro> teamAway = List<Incontro>();
+      teamAway.add(incontroAway);
+
+      Game game = Game(teamHome, teamAway);
+      var test = json.encode(game.toJson().toString());
+
+      print(test);
     }
   }
 }

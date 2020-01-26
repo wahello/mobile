@@ -8,6 +8,7 @@ part of 'incontro_model.dart';
 
 Incontro _$IncontroFromJson(Map<String, dynamic> json) {
   return Incontro(
+    json['jersey'],
     Gender.fromJson(json['gender'] as Map<String, dynamic>),
     Category.fromJson(json['category'] as Map<String, dynamic>),
     Championship.fromJson(json['championship'] as Map<String, dynamic>),
@@ -22,6 +23,7 @@ Incontro _$IncontroFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$IncontroToJson(Incontro instance) => <String, dynamic>{
+      'jersey': instance.jersey,
       'gender': instance.gender.toJson(),
       'category': instance.category.toJson(),
       'championship': instance.championship.toJson(),
