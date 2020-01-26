@@ -9,6 +9,7 @@ class FormKey {
   static final playersKey = const Key('players');
   static final coachesKey = const Key('coaches');
   static final modulesKey = const Key('modules');
+  static final jerseyKey = const Key('modules');
   static final loginKey = const Key('login');
   static final homeKey = const Key('homeKey');
   static final multiBlocProviderKey = const Key('multiBlocProviderKey');

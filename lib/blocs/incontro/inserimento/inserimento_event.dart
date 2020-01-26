@@ -112,6 +112,12 @@ class InserisciModuloEventHome extends InserimentoEvent {
   String toString() => 'InserisciModuloEventHome';
 }
 
+
+class ChooseJerseyEvent extends InserimentoEvent {
+  @override
+  String toString() => 'ChooseJerseyEvent';
+}
+
 class InserisciModuloEventAway extends InserimentoEvent {
   @override
   String toString() => 'InserisciModuloEventAway';
