@@ -50,6 +50,7 @@ class FootballFieldBloc extends Bloc<FootballFieldEvent, FootballFieldState> {
     }
     if (event is AddFootballPlayerToField) {
       //indice della lista che userò per fare il pop del player
+      event.player.posizione = event.x.toString() + "," + event.y.toString();
       addedPlayers.add(event.player);
       availablePlayers = availablePlayers
           .where((player) => player.id != event.player.id)

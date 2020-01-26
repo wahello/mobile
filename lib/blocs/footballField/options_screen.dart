@@ -23,10 +23,10 @@ class _OptionsScreenState extends State<OptionsScreen> {
 
   _OptionsScreenState({this.footballFieldBloc, this.x, this.y}) {
     notes = footballFieldBloc.footballField.players[x][y].notes;
-    yellowCard = footballFieldBloc.footballField.players[x][y].yellowCard;
-    redCard = footballFieldBloc.footballField.players[x][y].redCard;
-    goal = footballFieldBloc.footballField.players[x][y].goal;
-    assist = footballFieldBloc.footballField.players[x][y].assist;
+    yellowCard = footballFieldBloc.footballField.players[x][y].yellowCard ?? 0;
+    redCard = footballFieldBloc.footballField.players[x][y].redCard ?? 0;
+    goal = footballFieldBloc.footballField.players[x][y].goal ?? 0;
+    assist = footballFieldBloc.footballField.players[x][y].assist ?? 0;
   }
   //#cartellino giallo
   var yellowCard = 0;
@@ -166,7 +166,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
           label,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        Text(count != null ? count.toString() : 0),
+        Text(count != null ? count.toString() : "0"),
         FlatButton(
           onPressed: () => {
             setState(() => {

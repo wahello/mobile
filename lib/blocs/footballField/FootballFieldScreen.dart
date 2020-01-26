@@ -128,11 +128,12 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
           footballFieldBloc.availablePlayers
               .add(footballFieldBloc.footballField.players[x][y]),
           footballFieldBloc.footballField.players[x][y] = Player(
-              id: 0,
-              name: "aggiungi",
-              number: "",
-              posizione: "$x,$y",
-              ruolo: "")
+            id: 0,
+            name: "aggiungi",
+            number: "",
+            posizione: "$x,$y",
+            ruolo: "",
+          )
         }, //Salvo la cella che ho toccato
         child: Column(
           children: <Widget>[
