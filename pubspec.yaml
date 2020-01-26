@@ -73,6 +73,11 @@ flutter:
     - assets/images/maglia.png
     - assets/images/maglia-1.jpg
     - assets/images/maglia-2.png
+    - assets/images/maglia-arancione.png
+    - assets/images/maglia-blu.png
+    - assets/images/maglia-bianca.png
+    - assets/images/maglia-gialla.png
+    - assets/images/maglia-rossa.png
     - assets/images/yellow_card.png
     - assets/images/red_card.png
     - assets/images/goal.png

@@ -1577,6 +1577,198 @@ class InserimentoScreenState extends State<InserimentoScreen>
     );
   }
 
+  Widget jerseyPage(InserimentoState state) {
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: Center(
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: MainColors.SECONDARY,
+          ),
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                  height: (MediaQuery.of(context).size.height -
+                          (MediaQuery.of(context).size.height * 0.5)) /
+                      6),
+              Text(
+                I18n().squadraDiCasa,
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                  height: (MediaQuery.of(context).size.height -
+                          (MediaQuery.of(context).size.height * 0.5)) /
+                      6),
+              FormBuilder(
+                key: FormKey.jerseyKey,
+                autovalidate: false,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: ListView(
+                        controller: _scrollController,
+                        shrinkWrap: true,
+                        children: <Widget>[
+                          FormBuilderRadio(
+                            activeColor: MainColors.PRIMARY,
+                            decoration: InputDecoration(
+                                labelText: I18n().divisaSquadraDiCasa),
+                            attribute: "jerseys",
+                            initialValue: inserimentoBloc.jerseyName != null
+                                ? inserimentoBloc.jerseyNameHome
+                                : null,
+                            options: inserimentoBloc.jerseyName != null
+                                ? inserimentoBloc.jerseyName
+                                    .map((jersey) => FormBuilderFieldOption(
+                                        value: jersey,
+                                        child: Container(
+                                          child: Text(''),
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(jersey))),
+                                        )))
+                                    .toList()
+                                : [],
+                            validators: [
+                              FormBuilderValidators.required(
+                                  errorText: I18n().obbligatorio)
+                            ],
+                            onChanged: (value) =>
+                                {inserimentoBloc.jerseyNameHome = value},
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                        height: (MediaQuery.of(context).size.height -
+                                (MediaQuery.of(context).size.height * 0.5)) /
+                            6),
+                    Text(
+                      I18n().squadraOspite,
+                      style: TextStyle(
+                          fontSize: 25.0, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                        height: (MediaQuery.of(context).size.height -
+                                (MediaQuery.of(context).size.height * 0.5)) /
+                            6),
+                    Container(
+                      child: ListView(
+                        controller: _scrollController,
+                        shrinkWrap: true,
+                        children: <Widget>[
+                          FormBuilderRadio(
+                            activeColor: MainColors.PRIMARY,
+                            decoration:
+                                InputDecoration(labelText: I18n().divisaSquadraOspite),
+                            attribute: "jerseys",
+                            initialValue: inserimentoBloc.jerseyName != null
+                                ? inserimentoBloc.jerseyNameAway
+                                : null,
+                            options: inserimentoBloc.jerseyName != null
+                                ? inserimentoBloc.jerseyName
+                                    .map((jersey) => FormBuilderFieldOption(
+                                        value: jersey,
+                                        child: Container(
+                                          child: Text(''),
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(jersey))),
+                                        )))
+                                    .toList()
+                                : [],
+                            validators: [
+                              FormBuilderValidators.required(
+                                  errorText: I18n().obbligatorio)
+                            ],
+                            onChanged: (value) =>
+                                {inserimentoBloc.jerseyNameAway = value},
+                          ),
+                        ],
+                      ),
+                    ),
+                    state is InserimentoLoadingState
+                        ? Container(
+                            margin: const EdgeInsets.only(top: 20.0),
+                            child: LoadingIndicator(),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                margin: const EdgeInsets.only(top: 20.0),
+                                alignment: Alignment.centerLeft,
+                                child: FlatButton(
+                                  shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(30.0),
+                                  ),
+                                  color: MainColors.PRIMARY,
+                                  onPressed: () => goToStep(11),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20.0,
+                                    horizontal: 20.0,
+                                  ),
+                                  child: Text(
+                                    I18n().indietro,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: MainColors.TEXT_NEGATIVE,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                margin: const EdgeInsets.only(top: 20.0),
+                                alignment: Alignment.centerRight,
+                                child: FlatButton(
+                                  disabledColor: MainColors.DISABLED,
+                                  shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(30.0),
+                                  ),
+                                  color:
+                                      (inserimentoBloc.jerseyNameHome == null ||
+                                              inserimentoBloc.jerseyNameAway ==
+                                                  null)
+                                          ? MainColors.DISABLED
+                                          : MainColors.PRIMARY,
+                                  onPressed: () {
+                                    goToStep(13);
+                                  },
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20.0,
+                                    horizontal: 20.0,
+                                  ),
+                                  child: Text(
+                                    I18n().avanti,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: MainColors.TEXT_NEGATIVE,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget incontroScreen(
       Function(Widget) notifyParent,
       Function(Widget) notifyAction,
@@ -1688,8 +1880,11 @@ class InserimentoScreenState extends State<InserimentoScreen>
       inserimentoBloc.add((InserisciModuloEventAway()));
     }
     if (step == 12) {
+      inserimentoBloc.add(ChooseJerseyEvent());
+    }
+    if (step == 13) {
       if (inserimentoBloc.selectedModuleAway == null)
-        step = 11;
+        step = 12;
       else
         inserimentoBloc.add(InserisciIncontroEvent());
     }
@@ -1739,6 +1934,7 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     playersScreenAway(state),
                     coachesScreenAway(state),
                     moduleScreenAway(state),
+                    jerseyPage(state),
                     incontroScreen(widget.notifyParent, widget.notifyAction,
                         widget.activeSaveButton),
                   ])));

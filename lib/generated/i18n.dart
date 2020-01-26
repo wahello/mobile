@@ -142,6 +142,10 @@ class I18n implements WidgetsLocalizations {
   String get squadraOspite => "Squadra ospite";
   /// "Squadra di casa"
   String get squadraDiCasa => "Squadra di casa";
+  /// "Divisa squadra di casa"
+  String get divisaSquadraDiCasa => "Divisa squadra di casa";
+  /// "Divisa squadra ospite"
+  String get divisaSquadraOspite => "Divisa squadra ospite";
 }
 
 class _I18n_it_IT extends I18n {
@@ -319,6 +323,12 @@ class _I18n_en_US extends I18n {
   /// "Home team"
   @override
   String get squadraDiCasa => "Home team";
+  /// "Home team's jersey"
+  @override
+  String get divisaSquadraDiCasa => "Home team's jersey";
+  /// "Away team's jersey"
+  @override
+  String get divisaSquadraOspite => "Away team's jersey";
 
   @override
   TextDirection get textDirection => TextDirection.ltr;

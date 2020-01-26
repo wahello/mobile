@@ -111,6 +111,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                             y: y,
                             footballFieldBloc: footballFieldBloc,
                             inserimentoBloc: inserimentoIncontroBloc,
+                            isHome: widget.isHome,
                           )))
             }
           else
@@ -140,7 +141,9 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
                 height: 50,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/images/maglia.png")))),
+                        image: AssetImage(widget.isHome
+                            ? inserimentoIncontroBloc.jerseyNameHome
+                            : inserimentoIncontroBloc.jerseyNameAway)))),
             Container(
               padding: EdgeInsets.all(3),
               decoration: BoxDecoration(
@@ -204,9 +207,14 @@ class ListPlayerScreen extends StatefulWidget {
   FootballFieldBloc footballFieldBloc;
   int x;
   int y;
+  bool isHome;
 
   ListPlayerScreen(
-      {this.x, this.y, this.inserimentoBloc, this.footballFieldBloc});
+      {this.x,
+      this.y,
+      this.inserimentoBloc,
+      this.footballFieldBloc,
+      this.isHome});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -250,8 +258,9 @@ class ListPlayerScreenState extends State<ListPlayerScreen> {
                                     color: MainColors.PRIMARY,
                                     border: Border.all(width: 2),
                                     image: DecorationImage(
-                                        image: AssetImage(
-                                            "assets/images/maglia.png"))),
+                                        image: AssetImage(widget.isHome
+                                            ? inserimentoBloc.jerseyNameHome
+                                            : inserimentoBloc.jerseyNameAway))),
                               ),
                               Container(
                                 margin: EdgeInsets.only(

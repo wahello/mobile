@@ -23,6 +23,7 @@ import './index.dart';
 
 class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   final CallsRepository callsRepository = new CallsRepository();
+  final List<String> jerseyName = ['assets/images/maglia-arancione.png', 'assets/images/maglia-bianca.png','assets/images/maglia-blu.png','assets/images/maglia-gialla.png','assets/images/maglia-rossa.png'];
 
   List<Category> categories;
   List<Championship> championships;
@@ -54,6 +55,8 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   List<Note> notes;
   List<Event> event;
   List<Module> modules;
+  String jerseyNameHome;
+  String jerseyNameAway;
   int activeTeam; //1 o 2
   FootballFieldBloc footballFieldBlocHome;
   FootballFieldBloc footballFieldBlocAway;
@@ -304,6 +307,10 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       } catch (error) {
         yield InserimentoFailure(error: error.toString());
       }
+      yield InserimentoFinishState();
+    }
+    if (event is ChooseJerseyEvent) {
+      yield InserimentoLoadingState();
       yield InserimentoFinishState();
     }
     if (event is InserisciIncontroEvent) {
