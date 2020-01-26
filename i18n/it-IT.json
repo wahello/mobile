@@ -53,5 +53,7 @@
   "numero": "Numero",
   "minimoNumeroGiocatori": "Devi selezionare almeno {numero} giocatori",
   "squadraOspite": "Squadra ospite",
-  "squadraDiCasa": "Squadra di casa"
+  "squadraDiCasa": "Squadra di casa",
+  "divisaSquadraDiCasa": "Divisa squadra di casa",
+  "divisaSquadraOspite": "Divisa squadra ospite"
 }

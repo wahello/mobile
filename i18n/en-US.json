@@ -53,5 +53,7 @@
   "numero": "Number",
   "minimoNumeroGiocatori": "At least {numero} players must be selected",
   "squadraOspite": "Away team",
-  "squadraDiCasa": "Home team"
+  "squadraDiCasa": "Home team",
+  "divisaSquadraDiCasa": "Home team's jersey",
+  "divisaSquadraOspite": "Away team's jersey"
 }
