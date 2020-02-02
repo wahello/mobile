@@ -11,6 +11,7 @@ import 'package:shared/shared.dart';
 
 import 'blocs/authentication/index.dart';
 import 'blocs/login/index.dart';
+import 'blocs/stuff/ocrWidget.dart';
 import 'blocs/user/index.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
@@ -149,11 +150,7 @@ class _AppState extends State<App> {
                     return WillPopScope(
                       key: FormKey.authenticationUnauthenticated,
                       onWillPop: () async => false,
-                      child: LoginPage(
-                        key: FormKey.loginKey,
-                        callsRepository: callsRepository,
-                        userRepository: userRepository,
-                      ),
+                      child: OcrWidget()
                     );
                   }),
                 );
