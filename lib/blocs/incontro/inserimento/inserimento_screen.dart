@@ -813,6 +813,11 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       ],
                     ),
                   ),
+                  Row(
+                    children: <Widget>[
+                      Text('Scansiona distinta'),
+                    ],
+                  ),
                   AddFormScreen(
                       type: TypeAddForm.PLAYER,
                       bloc: inserimentoBloc,
@@ -1661,8 +1666,8 @@ class InserimentoScreenState extends State<InserimentoScreen>
                         children: <Widget>[
                           FormBuilderRadio(
                             activeColor: MainColors.PRIMARY,
-                            decoration:
-                                InputDecoration(labelText: I18n().divisaSquadraOspite),
+                            decoration: InputDecoration(
+                                labelText: I18n().divisaSquadraOspite),
                             attribute: "jerseys",
                             initialValue: inserimentoBloc.jerseyName != null
                                 ? inserimentoBloc.jerseyNameAway

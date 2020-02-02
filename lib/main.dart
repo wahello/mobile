@@ -11,6 +11,7 @@ import 'package:shared/shared.dart';
 
 import 'blocs/authentication/index.dart';
 import 'blocs/login/index.dart';
+import 'blocs/ocr/index.dart';
 import 'blocs/stuff/ocrWidget.dart';
 import 'blocs/user/index.dart';
 
@@ -148,10 +149,9 @@ class _AppState extends State<App> {
                   context,
                   MaterialPageRoute(builder: (context) {
                     return WillPopScope(
-                      key: FormKey.authenticationUnauthenticated,
-                      onWillPop: () async => false,
-                      child: OcrWidget()
-                    );
+                        key: FormKey.authenticationUnauthenticated,
+                        onWillPop: () async => false,
+                        child: OcrPage());
                   }),
                 );
               }
@@ -164,42 +164,43 @@ class _AppState extends State<App> {
                       key: FormKey.authenticationAuthenticated,
                       onWillPop: () async => false,
                       child: Scaffold(
-                        key: FormKey.homeKey,
-                        persistentFooterButtons: <Widget>[
-                          FloatingActionButton(
-                            backgroundColor: MainColors.PRIMARY,
-                            child: Icon(Icons.home),
-                            heroTag: "home",
-                            onPressed: () => {authenticationBloc.add(GoHome())},
-                          ),
-                          Divider(
-                            indent: MediaQuery.of(context).size.width / 2.65,
-                          ),
-                        ],
-                        appBar: AppBar(
-                          leading: FlatButton(
-                            key: FormKey.logoutKey,
-                            child: Icon(Icons.exit_to_app),
-                            onPressed: () =>
-                                {authenticationBloc.add(LoggedOut())},
-                          ),
-                          title: appBarTitleText,
-                          actions: actions,
-                          backgroundColor: MainColors.PRIMARY,
-                        ),
-                        body: Container(
-                            height: MediaQuery.of(context).size.height,
-                            decoration: BoxDecoration(
-                              color: MainColors.SECONDARY,
+                          key: FormKey.homeKey,
+                          persistentFooterButtons: <Widget>[
+                            FloatingActionButton(
+                              backgroundColor: MainColors.PRIMARY,
+                              child: Icon(Icons.home),
+                              heroTag: "home",
+                              onPressed: () =>
+                                  {authenticationBloc.add(GoHome())},
                             ),
-                            child: Container(
-                                padding: EdgeInsets.all(3.0),
-                                child: Home(
-                                  notifyParent: updateAppBarTitle,
-                                  notifyAction: updateAppBarActions,
-                                  callsRepository: callsRepository,
-                                  userRepository: userRepository,
-                                )))),
+                            Divider(
+                              indent: MediaQuery.of(context).size.width / 2.65,
+                            ),
+                          ],
+                          appBar: AppBar(
+                            leading: FlatButton(
+                              key: FormKey.logoutKey,
+                              child: Icon(Icons.exit_to_app),
+                              onPressed: () =>
+                                  {authenticationBloc.add(LoggedOut())},
+                            ),
+                            title: appBarTitleText,
+                            actions: actions,
+                            backgroundColor: MainColors.PRIMARY,
+                          ),
+                          body: Container(
+                              height: MediaQuery.of(context).size.height,
+                              decoration: BoxDecoration(
+                                color: MainColors.SECONDARY,
+                              ),
+                              child: Container(
+                                  padding: EdgeInsets.all(3.0),
+                                  child: Home(
+                                    notifyParent: updateAppBarTitle,
+                                    notifyAction: updateAppBarActions,
+                                    callsRepository: callsRepository,
+                                    userRepository: userRepository,
+                                  )))),
                     );
                   }),
                 );
