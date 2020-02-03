@@ -19,14 +19,16 @@ class OcrBloc extends Bloc<OcrEvent, OcrState> {
   }
 
   @override
-  OcrState get initialState => UnOcrState(0);
+  OcrState get initialState => OcrInitialState();
 
   @override
   Stream<OcrState> mapEventToState(
     OcrEvent event,
   ) async* {
     try {
-      yield await event.applyAsync(currentState: state, bloc: this);
+      if(event is OcrFotoCaptured){
+        yield OcrCaptureFoto(event.playersName);
+      }
     } catch (_, stackTrace) {
       developer.log('$_', name: 'OcrBloc', error: _, stackTrace: stackTrace);
       yield state;

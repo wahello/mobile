@@ -6,6 +6,7 @@ import 'package:football_system/blocs/stuff/ScannerUtils.dart';
 
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared/shared.dart';
 
 class OcrPage extends StatefulWidget {
   @override
@@ -15,16 +16,9 @@ class OcrPage extends StatefulWidget {
 class OcrPageState extends State<OcrPage> {
   static const String routeName = '/ocr';
 
-  bool _isDetecting = false;
-
-  VisionText _textScanResults;
-
   CameraLensDirection _direction = CameraLensDirection.back;
 
   CameraController _camera;
-
-  final TextRecognizer _textRecognizer =
-      FirebaseVision.instance.textRecognizer();
 
   @override
   void initState() {
@@ -43,32 +37,7 @@ class OcrPageState extends State<OcrPage> {
 
     await _camera.initialize();
 
-    _camera.startImageStream(((CameraImage image) {
-      if (_isDetecting) return;
-
-      setState(() {
-        _isDetecting = true;
-      });
-      ScannerUtils.detect(
-        image: image,
-        detectInImage: _getDetectionMethod(),
-        imageRotation: description.sensorOrientation,
-      ).then(
-        (results) {
-          setState(() {
-            if (results != null) {
-              setState(() {
-                _textScanResults = results;
-              });
-            }
-          });
-        },
-      ).whenComplete(() => _isDetecting = false);
-    }));
-  }
-
-  Future<VisionText> Function(FirebaseVisionImage image) _getDetectionMethod() {
-    return _textRecognizer.processImage;
+    _camera.startImageStream(((CameraImage image) {}));
   }
 
   @override
@@ -101,7 +70,7 @@ class OcrPageState extends State<OcrPage> {
         },
       ),
       appBar: AppBar(
-        title: Text('Ocr'),
+        backgroundColor: MainColors.PRIMARY,
       ),
       body: OcrScreen(
         ocrBloc: _ocrBloc,

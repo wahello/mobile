@@ -16,13 +16,12 @@ class OcrScreen extends StatefulWidget {
 
   @override
   OcrScreenState createState() {
-    return OcrScreenState(_ocrBloc);
+    return OcrScreenState();
   }
 }
 
 class OcrScreenState extends State<OcrScreen> {
-  final OcrBloc _ocrBloc;
-  OcrScreenState(this._ocrBloc);
+  OcrScreenState();
 
   @override
   void initState() {
@@ -42,19 +41,25 @@ class OcrScreenState extends State<OcrScreen> {
           BuildContext context,
           OcrState currentState,
         ) {
-          return Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              widget.camera == null
-                  ? Container(
-                      color: Colors.red,
-                    )
-                  : Container(
-                      height: MediaQuery.of(context).size.height - 150,
-                      child: CameraPreview(widget.camera),
-                    ),
-            ],
-          );
+          if (currentState is OcrFotoToCapture) {
+            return Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                widget.camera == null
+                    ? Container(
+                        color: Colors.red,
+                      )
+                    : Container(
+                        height: MediaQuery.of(context).size.height - 150,
+                        child: CameraPreview(widget.camera),
+                      ),
+              ],
+            );
+          }
+          if (currentState is OcrCaptureFoto){
+            return OcrListPlayers(playersToShow: currentState.playersName);
+          }
+          return Container();
         });
   }
 }
