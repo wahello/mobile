@@ -13,10 +13,17 @@ class DisplayPictureScreen extends StatefulWidget {
   const DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
 
   @override
-  DisplayPictureScreenState createState() => DisplayPictureScreenState();
+  DisplayPictureScreenState createState() =>
+      DisplayPictureScreenState(imagePath);
 }
 
 class DisplayPictureScreenState extends State<DisplayPictureScreen> {
+  String path;
+
+  DisplayPictureScreenState(String path) {
+    this.path = path;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -25,7 +32,8 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
         context: context,
         builder: (BuildContext context) => new AlertDialog(
           title: new Text("Label titolo"),
-          content: new Text("Controlla di selezionare solo i giocatori, non date, non numeri"),
+          content: new Text(
+              "Controlla di selezionare solo i giocatori, non date, non numeri"),
           actions: <Widget>[
             new FlatButton(
               child: new Text("OK"),
@@ -54,9 +62,9 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
     OcrBloc().add(OcrFotoCaptured(playersName));
   }
 
-  Future<File> cropImage() async {
-    return await ImageCropper.cropImage(
-        sourcePath: widget.imagePath,
+  void cropImage() async {
+    File resized = await ImageCropper.cropImage(
+        sourcePath: path,
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
           CropAspectRatioPreset.ratio3x2,
@@ -66,23 +74,32 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
         ],
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
+            toolbarColor: MainColors.PRIMARY,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
           minimumAspectRatio: 1.0,
         ));
+
+    setState(() {
+      path = resized.path;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FloatingActionButton(
-              child: Icon(Icons.camera_alt), onPressed: readText),
-          FloatingActionButton(child: Icon(Icons.crop), onPressed: cropImage)
+              child: Icon(Icons.camera_alt),
+              onPressed: readText,
+              heroTag: "camera"),
+          Padding(padding: EdgeInsets.all(10)),
+          FloatingActionButton(
+              child: Icon(Icons.crop), onPressed: cropImage, heroTag: "crop")
         ],
       ),
       appBar: AppBar(
@@ -90,7 +107,7 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
       ),
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
-      body: Image.file(File(widget.imagePath)),
+      body: Image.file(File(path)),
     );
   }
 }

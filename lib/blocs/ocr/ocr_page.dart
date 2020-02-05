@@ -20,6 +20,8 @@ class OcrPageState extends State<OcrPage> {
 
   CameraController _camera;
 
+  bool _isDetecting = false;
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +39,16 @@ class OcrPageState extends State<OcrPage> {
 
     await _camera.initialize();
 
-    _camera.startImageStream(((CameraImage image) {}));
+    _camera.startImageStream(((CameraImage image) {
+      if (_isDetecting) return;
+      _isDetecting = true;
+      try {
+        // await doSomethingWith(image)
+      } catch (e) {
+        // await handleExepction(e)
+      } finally {
+        _isDetecting = false;
+      }}));
   }
 
   @override
