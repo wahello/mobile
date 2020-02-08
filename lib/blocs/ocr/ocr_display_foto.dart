@@ -25,6 +25,11 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -47,64 +52,9 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
     });
   }
 
-  Future readText() async {
-    FirebaseVisionImage ourImage =
-        FirebaseVisionImage.fromFile(File(widget.imagePath));
-    TextRecognizer recognizeText = FirebaseVision.instance.textRecognizer();
-    VisionText readText = await recognizeText.processImage(ourImage);
-
-    List<String> playersName = List();
-    for (TextBlock block in readText.blocks) {
-      for (TextLine line in block.lines) {
-        playersName.add(line.text);
-      }
-    }
-    OcrBloc().add(OcrFotoCaptured(playersName));
-  }
-
-  void cropImage() async {
-    File resized = await ImageCropper.cropImage(
-        sourcePath: path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
-        ],
-        androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: MainColors.PRIMARY,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
-          minimumAspectRatio: 1.0,
-        ));
-
-    setState(() {
-      path = resized.path;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          FloatingActionButton(
-              child: Icon(Icons.camera_alt),
-              onPressed: readText,
-              heroTag: "camera"),
-          Padding(padding: EdgeInsets.all(10)),
-          FloatingActionButton(
-              child: Icon(Icons.crop), onPressed: cropImage, heroTag: "crop")
-        ],
-      ),
-      appBar: AppBar(
-        backgroundColor: MainColors.PRIMARY,
-      ),
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
       body: Image.file(File(path)),

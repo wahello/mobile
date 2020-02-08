@@ -8,3 +8,13 @@ class OcrFotoCaptured extends OcrEvent {
 
   OcrFotoCaptured(this.playersName);
 }
+
+class OcrFotoToCrop extends OcrEvent {
+  final String imagePath;
+  OcrFotoToCrop(this.imagePath);
+}
+
+class OcrFotoCropped extends OcrEvent {
+  final String imagePath;
+  OcrFotoCropped(this.imagePath);
+}

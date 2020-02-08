@@ -26,8 +26,14 @@ class OcrBloc extends Bloc<OcrEvent, OcrState> {
     OcrEvent event,
   ) async* {
     try {
-      if(event is OcrFotoCaptured){
-        yield OcrCaptureFoto(event.playersName);
+      if (event is OcrFotoCaptured) {
+        yield OcrCapturedFoto(event.playersName);
+      }
+      if (event is OcrFotoToCrop) {
+        yield OcrFotoToCropState(event.imagePath);
+      }
+      if (event is OcrFotoCropped) {
+        yield OcrFotoCroppedState(event.imagePath);
       }
     } catch (_, stackTrace) {
       developer.log('$_', name: 'OcrBloc', error: _, stackTrace: stackTrace);
