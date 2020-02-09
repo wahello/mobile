@@ -34,7 +34,7 @@ class AuthenticationBloc
       yield AuthenticationAuthenticated();
     }
     if (event is GoHome) {
-      yield AuthenticationAuthenticated();
+      yield BackedToHomeFromButton();
     }
 
     if (event is LoggedOut) {
@@ -47,6 +47,10 @@ class AuthenticationBloc
     if (event is OTP) {
       yield AuthenticationLoading();
       yield OTPRequired();
+    }
+
+    if (event is GoToInserimentoPage) {
+      yield InserimentoPageSelected();
     }
   }
 }

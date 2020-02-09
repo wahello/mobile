@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/home/index.dart';
+import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/splash/index.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:football_system/blocs/stuff/index.dart';
@@ -122,6 +123,88 @@ class _AppState extends State<App> {
             cursorColor: MainColors.PRIMARY,
             indicatorColor: MainColors.PRIMARY,
           ),
+          //start to implement routing of app
+          routes: {
+            '/splashPage': (context) => SplashPage(),
+            '/loginPage': (context) => LoginPage(
+                  key: FormKey.loginKey,
+                  callsRepository: callsRepository,
+                  userRepository: userRepository,
+                ),
+                /*
+                importante: il push delle pagine funziona solo con widget di tipo material(quindi devono essere
+                figli di uno scaffold come per l'home page e l'incontro page)
+                */
+            '/homePage': (context) => Scaffold(
+                key: FormKey.homeKey,
+                persistentFooterButtons: <Widget>[
+                  FloatingActionButton(
+                    backgroundColor: MainColors.PRIMARY,
+                    child: Icon(Icons.home),
+                    heroTag: "home",
+                    onPressed: () => {authenticationBloc.add(GoHome())},
+                  ),
+                  Divider(
+                    indent: MediaQuery.of(context).size.width / 2.65,
+                  ),
+                ],
+                appBar: AppBar(
+                  leading: FlatButton(
+                    key: FormKey.logoutKey,
+                    child: Icon(Icons.exit_to_app),
+                    onPressed: () => {authenticationBloc.add(LoggedOut())},
+                  ),
+                  title: appBarTitleText,
+                  actions: actions,
+                  backgroundColor: MainColors.PRIMARY,
+                ),
+                body: Container(
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      color: MainColors.SECONDARY,
+                    ),
+                    child: Container(
+                        padding: EdgeInsets.all(3.0),
+                        child: HomePage(
+                          key: FormKey.homeKey,
+                          authenticationBloc: authenticationBloc,
+                        )))),
+            '/incontroPage': (context) => Scaffold(
+                key: FormKey.matchPageKey,
+                persistentFooterButtons: <Widget>[
+                  FloatingActionButton(
+                    backgroundColor: MainColors.PRIMARY,
+                    child: Icon(Icons.home),
+                    heroTag: "home",
+                    onPressed: () => {authenticationBloc.add(GoHome())},
+                  ),
+                  Divider(
+                    indent: MediaQuery.of(context).size.width / 2.65,
+                  ),
+                ],
+                appBar: AppBar(
+                  leading: FlatButton(
+                    key: FormKey.logoutKey,
+                    child: Icon(Icons.exit_to_app),
+                    onPressed: () => {authenticationBloc.add(LoggedOut())},
+                  ),
+                  title: appBarTitleText,
+                  actions: actions,
+                  backgroundColor: MainColors.PRIMARY,
+                ),
+                body: Container(
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      color: MainColors.SECONDARY,
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.all(3.0),
+                      child: InserimentoPage(
+                          key: FormKey.matchPageKey,
+                          notifyAction: this.updateAppBarActions,
+                          notifyParent: this.updateAppBarTitle),
+                    ))),
+          },
           home: BlocListener<AuthenticationBloc, AuthenticationState>(
             child: Scaffold(
               key: FormKey.loadingKey,
@@ -130,82 +213,32 @@ class _AppState extends State<App> {
             bloc: authenticationBloc,
             listener: (BuildContext context, AuthenticationState state) {
               if (state is AuthenticationUninitialized) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return SplashPage(
-                      key: FormKey.fliploaderkey,
-                    );
-                  }),
-                );
+                Navigator.pushNamed(context, '/splashPage');
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) {
+                //     return SplashPage(
+                //       key: FormKey.fliploaderkey,
+                //     );
+                //   }),
+                // );
               }
               // if (state is AuthenticationUnauthenticated) {
               //   Navigator.push(
               //     context,
+              if (state is InserimentoPageSelected) {
+                Navigator.pushNamed(context, '/incontroPage');
+              }
               if (state is AuthenticationUnauthenticated) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return WillPopScope(
-                      key: FormKey.authenticationUnauthenticated,
-                      onWillPop: () async => false,
-                      child: LoginPage(
-                        key: FormKey.loginKey,
-                        callsRepository: callsRepository,
-                        userRepository: userRepository,
-                      ),
-                    );
-                  }),
-                );
+                print(state);
+                Navigator.pushNamed(context, '/loginPage');
+              }
+              if (state is BackedToHomeFromButton) {
+                Navigator.pop(context);
               }
               if (state is AuthenticationAuthenticated ||
                   state is OTPRequired) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return WillPopScope(
-                      key: FormKey.authenticationAuthenticated,
-                      onWillPop: () async => false,
-                      child: Scaffold(
-                        key: FormKey.homeKey,
-                        persistentFooterButtons: <Widget>[
-                          FloatingActionButton(
-                            backgroundColor: MainColors.PRIMARY,
-                            child: Icon(Icons.home),
-                            heroTag: "home",
-                            onPressed: () => {authenticationBloc.add(GoHome())},
-                          ),
-                          Divider(
-                            indent: MediaQuery.of(context).size.width / 2.65,
-                          ),
-                        ],
-                        appBar: AppBar(
-                          leading: FlatButton(
-                            key: FormKey.logoutKey,
-                            child: Icon(Icons.exit_to_app),
-                            onPressed: () =>
-                                {authenticationBloc.add(LoggedOut())},
-                          ),
-                          title: appBarTitleText,
-                          actions: actions,
-                          backgroundColor: MainColors.PRIMARY,
-                        ),
-                        body: Container(
-                            height: MediaQuery.of(context).size.height,
-                            decoration: BoxDecoration(
-                              color: MainColors.SECONDARY,
-                            ),
-                            child: Container(
-                                padding: EdgeInsets.all(3.0),
-                                child: Home(
-                                  notifyParent: updateAppBarTitle,
-                                  notifyAction: updateAppBarActions,
-                                  callsRepository: callsRepository,
-                                  userRepository: userRepository,
-                                )))),
-                    );
-                  }),
-                );
+                Navigator.pushNamed(context, '/homePage');
               }
             },
           )),

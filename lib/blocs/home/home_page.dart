@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:football_system/blocs/authentication/authentication_bloc.dart';
 
 import 'index.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  AuthenticationBloc authenticationBloc;
+
+  HomePage({Key key, this.authenticationBloc}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() =>
+      _HomePageState(authenticationBloc: authenticationBloc);
 }
 
 class _HomePageState extends State<HomePage> {
+  AuthenticationBloc authenticationBloc;
+
+  _HomePageState({this.authenticationBloc});
   @override
   void initState() {
     super.initState();
@@ -17,7 +24,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return HomeScreen();
+    return HomeScreen(authenticationBloc: authenticationBloc);
   }
 
   @override

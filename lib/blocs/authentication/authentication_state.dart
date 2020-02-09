@@ -12,6 +12,16 @@ class AuthenticationAuthenticated extends AuthenticationState {
   String toString() => 'AuthenticationAuthenticated';
 }
 
+class BackedToHomeFromButton extends AuthenticationState {
+  @override
+  String toString() => 'BackedToHomeFromButton';
+}
+
+class InserimentoPageSelected extends AuthenticationState {
+  @override
+  String toString() => 'InserimentoPageSelected';
+}
+
 class AuthenticationUnauthenticated extends AuthenticationState {
   @override
   String toString() => 'AuthenticationUnauthenticated';

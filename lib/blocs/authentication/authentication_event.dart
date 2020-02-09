@@ -30,6 +30,11 @@ class GoHome extends AuthenticationEvent {
   String toString() => 'GoHome';
 }
 
+class GoToInserimentoPage extends AuthenticationEvent {
+  @override
+  String toString() => 'GoToInserimentoPage';
+}
+
 class OTP extends AuthenticationEvent {
   final String token;
 
