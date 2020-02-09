@@ -100,10 +100,7 @@ class OcrPageState extends State<OcrPage> {
           minimumAspectRatio: 1.0,
         ));
 
-    setState(() {
-      path = resized.path;
-      _ocrBloc.add(OcrFotoCropped(path));
-    });
+    _ocrBloc.add(OcrFotoCropped(resized.path));
   }
 
   @override
@@ -136,20 +133,23 @@ class OcrPageState extends State<OcrPage> {
                       }
                     },
                   )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      FloatingActionButton(
-                          child: Icon(Icons.camera_alt),
-                          onPressed: readText,
-                          heroTag: "camera"),
-                      Padding(padding: EdgeInsets.all(10)),
-                      FloatingActionButton(
-                          child: Icon(Icons.crop),
-                          onPressed: cropImage,
-                          heroTag: "crop")
-                    ],
-                  ),
+                : currentState is OcrFotoToCropState ||
+                        currentState is OcrFotoCroppedState
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          FloatingActionButton(
+                              child: Icon(Icons.camera_alt),
+                              onPressed: readText,
+                              heroTag: "camera"),
+                          Padding(padding: EdgeInsets.all(10)),
+                          FloatingActionButton(
+                              child: Icon(Icons.crop),
+                              onPressed: cropImage,
+                              heroTag: "crop")
+                        ],
+                      )
+                    : null,
             appBar: AppBar(
               backgroundColor: MainColors.PRIMARY,
             ),

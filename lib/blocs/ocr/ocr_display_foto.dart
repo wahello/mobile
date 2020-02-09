@@ -10,7 +10,7 @@ import 'package:shared/shared.dart';
 class DisplayPictureScreen extends StatefulWidget {
   final String imagePath;
 
-  const DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
+  DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
 
   @override
   DisplayPictureScreenState createState() =>

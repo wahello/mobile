@@ -33,7 +33,9 @@ class OcrBloc extends Bloc<OcrEvent, OcrState> {
         yield OcrFotoToCropState(event.imagePath);
       }
       if (event is OcrFotoCropped) {
-        yield OcrFotoCroppedState(event.imagePath);
+        //yield new OcrFotoCroppedState(event.imagePath);
+        Future.delayed(Duration(seconds: 1));
+        yield new OcrFotoToCropState(event.imagePath);
       }
     } catch (_, stackTrace) {
       developer.log('$_', name: 'OcrBloc', error: _, stackTrace: stackTrace);
