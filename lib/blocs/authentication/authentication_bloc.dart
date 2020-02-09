@@ -41,7 +41,7 @@ class AuthenticationBloc
       yield AuthenticationLoading();
       hasToken = await callsRepository.hasToken();
       if (hasToken) await callsRepository.deleteKey('token');
-      yield AuthenticationUnauthenticated();
+      yield Logout();
     }
 
     if (event is OTP) {

@@ -32,6 +32,11 @@ class AuthenticationLoading extends AuthenticationState {
   String toString() => 'AuthenticationLoading';
 }
 
+class Logout extends AuthenticationState {
+  @override
+  String toString() => 'Logout';
+}
+
 class OTPRequired extends AuthenticationState {
   @override
   String toString() => 'OTPRequired';
