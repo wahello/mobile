@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:football_system/blocs/authentication/authentication_bloc.dart';
+import 'package:football_system/generated/i18n.dart';
 
 import 'index.dart';
 
 class HomePage extends StatefulWidget {
   AuthenticationBloc authenticationBloc;
+  final Function(Widget) notifyParent;
+  final Function(Widget) notifyAction;
 
-  HomePage({Key key, this.authenticationBloc}) : super(key: key);
+  HomePage(
+      {Key key, this.authenticationBloc, this.notifyParent, this.notifyAction})
+      : super(key: key);
 
   @override
   State<HomePage> createState() =>
@@ -24,6 +29,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    widget.notifyParent(Text(I18n().inserimentoIncontro));
     return HomeScreen(authenticationBloc: authenticationBloc);
   }
 
