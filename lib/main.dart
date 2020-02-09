@@ -176,6 +176,9 @@ class _AppState extends State<App> {
                 print(state);
                 Navigator.pushNamed(context, '/loginPage');
               }
+              if (state is Logout) {
+                Navigator.popUntil(context, ModalRoute.withName('/loginPage'));
+              }
               if (state is BackedToHomeFromButton) {
                 Navigator.pushNamed(context, '/homePage');
               }
