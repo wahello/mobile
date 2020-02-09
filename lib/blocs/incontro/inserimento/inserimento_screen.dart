@@ -1584,9 +1584,12 @@ class InserimentoScreenState extends State<InserimentoScreen>
         ? PageView(
             controller: pageController,
             scrollDirection: Axis.horizontal,
+            pageSnapping: true,
             children: <Widget>[
               FootballFieldScreen(
                 isHome: true,
+                teamName: inserimentoBloc
+                    .getTeamNameById(inserimentoBloc.selectedTeamHome),
                 notifyParent: notifyParent,
                 notifyAction: notifyAction,
                 inserimentoIncontroBloc: inserimentoBloc,
@@ -1599,6 +1602,8 @@ class InserimentoScreenState extends State<InserimentoScreen>
               ),
               FootballFieldScreen(
                 isHome: false,
+                teamName: inserimentoBloc
+                    .getTeamNameById(inserimentoBloc.selectedTeamAway),
                 notifyParent: notifyParent,
                 notifyAction: notifyAction,
                 inserimentoIncontroBloc: inserimentoBloc,

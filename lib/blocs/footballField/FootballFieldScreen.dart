@@ -17,10 +17,12 @@ class FootballFieldScreen extends StatefulWidget {
   final Function(Widget) notifyAction;
   final bool isHome;
   final double lato;
+  final String teamName;
 
   FootballFieldScreen(
       {Key key,
       this.isHome,
+      this.teamName,
       this.notifyAction,
       this.notifyParent,
       @required this.lato,
@@ -54,11 +56,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
 
   @override
   Widget build(BuildContext context) {
-    widget.notifyParent(widget.isHome
-        ? Text(inserimentoIncontroBloc
-            .getTeamNameById(inserimentoIncontroBloc.selectedTeamHome))
-        : Text(inserimentoIncontroBloc
-            .getTeamNameById(inserimentoIncontroBloc.selectedTeamAway)));
+    widget.notifyParent(Text(widget.teamName));
     return BlocBuilder<FootballFieldBloc, FootballFieldState>(
         bloc: footballFieldBloc,
         builder: (BuildContext context, FootballFieldState state) {

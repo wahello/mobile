@@ -12,6 +12,7 @@ import 'package:shared/shared.dart';
 
 import 'blocs/authentication/index.dart';
 import 'blocs/login/index.dart';
+import 'blocs/stuff/page.dart';
 import 'blocs/user/index.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
@@ -131,79 +132,32 @@ class _AppState extends State<App> {
                   callsRepository: callsRepository,
                   userRepository: userRepository,
                 ),
-                /*
+            /*
                 importante: il push delle pagine funziona solo con widget di tipo material(quindi devono essere
                 figli di uno scaffold come per l'home page e l'incontro page)
                 */
-            '/homePage': (context) => Scaffold(
-                key: FormKey.homeKey,
-                persistentFooterButtons: <Widget>[
-                  FloatingActionButton(
-                    backgroundColor: MainColors.PRIMARY,
-                    child: Icon(Icons.home),
-                    heroTag: "home",
-                    onPressed: () => {authenticationBloc.add(GoHome())},
-                  ),
-                  Divider(
-                    indent: MediaQuery.of(context).size.width / 2.65,
-                  ),
-                ],
-                appBar: AppBar(
-                  leading: FlatButton(
-                    key: FormKey.logoutKey,
-                    child: Icon(Icons.exit_to_app),
-                    onPressed: () => {authenticationBloc.add(LoggedOut())},
-                  ),
-                  title: appBarTitleText,
+            '/homePage': (context) => CustomPage(
                   actions: actions,
-                  backgroundColor: MainColors.PRIMARY,
+                  appBarTitleText: appBarTitleText,
+                  authenticationBloc: authenticationBloc,
+                  child: HomePage(
+                    authenticationBloc: authenticationBloc,
+                    notifyAction: this.updateAppBarActions,
+                    notifyParent: this.updateAppBarTitle,
+                    key: FormKey.homeKey,
+                  ),
+                  key: FormKey.homeKey,
                 ),
-                body: Container(
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      color: MainColors.SECONDARY,
-                    ),
-                    child: Container(
-                        padding: EdgeInsets.all(3.0),
-                        child: HomePage(
-                          key: FormKey.homeKey,
-                          authenticationBloc: authenticationBloc,
-                        )))),
-            '/incontroPage': (context) => Scaffold(
-                key: FormKey.matchPageKey,
-                persistentFooterButtons: <Widget>[
-                  FloatingActionButton(
-                    backgroundColor: MainColors.PRIMARY,
-                    child: Icon(Icons.home),
-                    heroTag: "home",
-                    onPressed: () => {authenticationBloc.add(GoHome())},
-                  ),
-                  Divider(
-                    indent: MediaQuery.of(context).size.width / 2.65,
-                  ),
-                ],
-                appBar: AppBar(
-                  leading: FlatButton(
-                    key: FormKey.logoutKey,
-                    child: Icon(Icons.exit_to_app),
-                    onPressed: () => {authenticationBloc.add(LoggedOut())},
-                  ),
-                  title: appBarTitleText,
+            '/incontroPage': (context) => CustomPage(
+                  key: FormKey.matchPageKey,
                   actions: actions,
-                  backgroundColor: MainColors.PRIMARY,
+                  appBarTitleText: appBarTitleText,
+                  authenticationBloc: authenticationBloc,
+                  child: InserimentoPage(
+                      key: FormKey.matchPageKey,
+                      notifyAction: this.updateAppBarActions,
+                      notifyParent: this.updateAppBarTitle),
                 ),
-                body: Container(
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      color: MainColors.SECONDARY,
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.all(3.0),
-                      child: InserimentoPage(
-                          key: FormKey.matchPageKey,
-                          notifyAction: this.updateAppBarActions,
-                          notifyParent: this.updateAppBarTitle),
-                    ))),
           },
           home: BlocListener<AuthenticationBloc, AuthenticationState>(
             child: Scaffold(
@@ -214,18 +168,7 @@ class _AppState extends State<App> {
             listener: (BuildContext context, AuthenticationState state) {
               if (state is AuthenticationUninitialized) {
                 Navigator.pushNamed(context, '/splashPage');
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) {
-                //     return SplashPage(
-                //       key: FormKey.fliploaderkey,
-                //     );
-                //   }),
-                // );
               }
-              // if (state is AuthenticationUnauthenticated) {
-              //   Navigator.push(
-              //     context,
               if (state is InserimentoPageSelected) {
                 Navigator.pushNamed(context, '/incontroPage');
               }
@@ -234,7 +177,7 @@ class _AppState extends State<App> {
                 Navigator.pushNamed(context, '/loginPage');
               }
               if (state is BackedToHomeFromButton) {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/homePage');
               }
               if (state is AuthenticationAuthenticated ||
                   state is OTPRequired) {
