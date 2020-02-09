@@ -5,10 +5,11 @@ import 'package:football_system/generated/i18n.dart';
 class InserimentoPage extends StatefulWidget {
   final Function(Widget) notifyParent;
   final Function(Widget) notifyAction;
+  final Key key;
 
   InserimentoPage({
     this.notifyAction,
-    Key key,
+    this.key,
     this.notifyParent,
   }) : super(key: key);
 

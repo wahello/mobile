@@ -21,4 +21,5 @@ class FormKey {
       const Key('authenticationUnauthenticated');
   static final authenticationAuthenticated =
       const Key('authenticationAuthenticated');
+  static final matchPageKey = const Key('matchPageKey');
 }

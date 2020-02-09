@@ -18,7 +18,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async* {
     if (event is HomeStarted) {
       yield HomeUninitialized();
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(Duration(seconds: 2));
       yield HomeInitialized();
     }
     if (event is InserimentoIncontroEvent) {
