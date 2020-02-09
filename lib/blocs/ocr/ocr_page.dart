@@ -80,6 +80,10 @@ class OcrPageState extends State<OcrPage> {
     OcrBloc().add(OcrFotoCaptured(playersName));
   }
 
+  Future backFoto() async {
+    OcrBloc().add(OcrFotoToCapture());
+  }
+
   void cropImage() async {
     File resized = await ImageCropper.cropImage(
         sourcePath: path,
@@ -99,8 +103,10 @@ class OcrPageState extends State<OcrPage> {
         iosUiSettings: IOSUiSettings(
           minimumAspectRatio: 1.0,
         ));
-
-    _ocrBloc.add(OcrFotoCropped(resized.path));
+    if (resized != null) {
+      path = resized.path;
+      _ocrBloc.add(OcrFotoCropped(resized.path));
+    }
   }
 
   @override
@@ -139,14 +145,34 @@ class OcrPageState extends State<OcrPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           FloatingActionButton(
-                              child: Icon(Icons.camera_alt),
-                              onPressed: readText,
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.camera_alt),
+                                  //Text("Scatta un'altro foto")
+                                ],
+                              ),
+                              onPressed: backFoto,
                               heroTag: "camera"),
                           Padding(padding: EdgeInsets.all(10)),
                           FloatingActionButton(
-                              child: Icon(Icons.crop),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.crop),
+                                  //Text("Ritaglia")
+                                ],
+                              ),
                               onPressed: cropImage,
-                              heroTag: "crop")
+                              heroTag: "crop"),
+                          Padding(padding: EdgeInsets.all(10)),
+                          FloatingActionButton(
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.check),
+                                  //Text("Conferma")
+                                ],
+                              ),
+                              onPressed: readText,
+                              heroTag: "crop"),
                         ],
                       )
                     : null,

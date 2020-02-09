@@ -4,7 +4,7 @@ abstract class OcrState extends Equatable {}
 
 class OcrInitialState extends OcrState {}
 
-class OcrFotoToCapture extends OcrState {}
+class OcrFotoToCaptureState extends OcrState {}
 
 class OcrFotoToCropState extends OcrState {
   final String imagePath;

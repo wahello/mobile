@@ -26,6 +26,9 @@ class OcrBloc extends Bloc<OcrEvent, OcrState> {
     OcrEvent event,
   ) async* {
     try {
+      if (event is OcrFotoToCapture) {
+        yield OcrFotoToCaptureState();
+      }
       if (event is OcrFotoCaptured) {
         yield OcrCapturedFoto(event.playersName);
       }
@@ -33,7 +36,7 @@ class OcrBloc extends Bloc<OcrEvent, OcrState> {
         yield OcrFotoToCropState(event.imagePath);
       }
       if (event is OcrFotoCropped) {
-        //yield new OcrFotoCroppedState(event.imagePath);
+        yield new OcrFotoCroppedState(event.imagePath);
         Future.delayed(Duration(seconds: 1));
         yield new OcrFotoToCropState(event.imagePath);
       }

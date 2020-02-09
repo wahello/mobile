@@ -13,17 +13,10 @@ class DisplayPictureScreen extends StatefulWidget {
   DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
 
   @override
-  DisplayPictureScreenState createState() =>
-      DisplayPictureScreenState(imagePath);
+  DisplayPictureScreenState createState() => DisplayPictureScreenState();
 }
 
 class DisplayPictureScreenState extends State<DisplayPictureScreen> {
-  String path;
-
-  DisplayPictureScreenState(String path) {
-    this.path = path;
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -57,7 +50,7 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
     return Scaffold(
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
-      body: Image.file(File(path)),
+      body: Image.file(File(widget.imagePath)),
     );
   }
 }
