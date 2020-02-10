@@ -1,11 +1,6 @@
 import 'dart:io';
 
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
-import 'package:football_system/blocs/ocr/ocr_bloc.dart';
-import 'package:football_system/blocs/ocr/ocr_event.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:shared/shared.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
   final String imagePath;
