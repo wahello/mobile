@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:shared/shared.dart';
 
 class OcrListPlayers extends StatefulWidget {
   final List<String> playersToShow;
@@ -15,24 +17,38 @@ class OcrListPlayers extends StatefulWidget {
 class OcrListPlayerState extends State<OcrListPlayers> {
   ScrollController _scrollController;
 
+  void changePlayer(String newValue, int index) {
+    widget.playersToShow[index] = newValue;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.playersToShow.length > 0) {
-      return Container(
-        child: ListView.builder(
-            controller: _scrollController,
-            itemCount: widget.playersToShow.length,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext ctxt, int index) {
-              String name = widget.playersToShow[index].toString();
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Text(name),
-                ],
-              );
-            }),
-      );
+      return SingleChildScrollView(
+          child: Column(
+        children: <Widget>[
+          Text('Giocatori da inserire'),
+          ListView.builder(
+              controller: _scrollController,
+              itemCount: widget.playersToShow.length,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext ctxt, int index) {
+                String name = widget.playersToShow[index].toString();
+                return TextFormField(
+                  initialValue: name ?? '',
+                  onChanged: (newValue) {
+                    changePlayer(newValue, index);
+                  },
+                );
+              }),
+          StyledButtonWidget(
+            hint: 'Submit',
+            onPressed: (){
+              print('Premuto bottono di submit');
+            },
+          )
+        ],
+      ));
     } else {
       return Container();
     }
