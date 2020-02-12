@@ -34,19 +34,23 @@ class AuthenticationBloc
       yield AuthenticationAuthenticated();
     }
     if (event is GoHome) {
-      yield AuthenticationAuthenticated();
+      yield BackedToHomeFromButton();
     }
 
     if (event is LoggedOut) {
       yield AuthenticationLoading();
       hasToken = await callsRepository.hasToken();
       if (hasToken) await callsRepository.deleteKey('token');
-      yield AuthenticationUnauthenticated();
+      yield Logout();
     }
 
     if (event is OTP) {
       yield AuthenticationLoading();
       yield OTPRequired();
+    }
+
+    if (event is GoToInserimentoPage) {
+      yield InserimentoPageSelected();
     }
   }
 }
