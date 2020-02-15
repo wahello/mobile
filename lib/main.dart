@@ -71,9 +71,7 @@ class _AppState extends State<App> {
 
   @override
   void initState() {
-    authenticationBloc = AuthenticationBloc(
-      callsRepository: callsRepository,
-    );
+    authenticationBloc = AuthenticationBloc();
     authenticationBloc.add(AppStarted());
     loginBloc = LoginBloc(
       callsRepository: callsRepository,

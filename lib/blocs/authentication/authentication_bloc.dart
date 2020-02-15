@@ -8,12 +8,16 @@ import 'index.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({@required this.callsRepository})
-      : assert(callsRepository != null);
+  static final AuthenticationBloc _authenticationBloc =
+      AuthenticationBloc._internal();
+  factory AuthenticationBloc() {
+    return _authenticationBloc;
+  }
+  AuthenticationBloc._internal();
 
   bool hasToken = false;
   bool registered = false;
-  final CallsRepository callsRepository;
+
 
   @override
   AuthenticationState get initialState => AuthenticationUninitialized();
@@ -39,8 +43,8 @@ class AuthenticationBloc
 
     if (event is LoggedOut) {
       yield AuthenticationLoading();
-      hasToken = await callsRepository.hasToken();
-      if (hasToken) await callsRepository.deleteKey('token');
+      hasToken = await CallsRepository().hasToken();
+      if (hasToken) await CallsRepository().deleteKey('token');
       yield Logout();
     }
 

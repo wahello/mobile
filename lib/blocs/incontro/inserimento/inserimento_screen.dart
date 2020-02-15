@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/index.dart';
+import 'package:football_system/blocs/authentication/authentication_bloc.dart';
+import 'package:football_system/blocs/authentication/authentication_event.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
 import 'package:football_system/blocs/home/index.dart';
@@ -815,7 +817,9 @@ class InserimentoScreenState extends State<InserimentoScreen>
                   ),
                   Row(
                     children: <Widget>[
-                      Text('Scansiona distinta'),
+                      FlatButton(onPressed: (){
+
+                      }, child: Text('Scansiona distinta'))
                     ],
                   ),
                   AddFormScreen(
@@ -961,6 +965,13 @@ class InserimentoScreenState extends State<InserimentoScreen>
                         ),
                       ],
                     ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      FlatButton(onPressed: (){
+                        AuthenticationBloc().add(OCRPage());
+                      }, child: Text('Scansiona distinta'))
+                    ],
                   ),
                   AddFormScreen(
                     type: TypeAddForm.PLAYER,

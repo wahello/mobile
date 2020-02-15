@@ -35,6 +35,11 @@ class GoToInserimentoPage extends AuthenticationEvent {
   String toString() => 'GoToInserimentoPage';
 }
 
+class OCRPage extends AuthenticationEvent {
+  @override
+  String toString() => 'OCRPage';
+}
+
 class OTP extends AuthenticationEvent {
   final String token;
 
