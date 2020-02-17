@@ -816,9 +816,11 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     ),
                   ),
                   Row(
+                    mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
+                      Icon(Icons.camera),
                       FlatButton(onPressed: (){
-
+                         AuthenticationBloc().add(OCRPage());
                       }, child: Text('Scansiona distinta'))
                     ],
                   ),

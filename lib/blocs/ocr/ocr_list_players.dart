@@ -25,30 +25,33 @@ class OcrListPlayerState extends State<OcrListPlayers> {
   Widget build(BuildContext context) {
     if (widget.playersToShow.length > 0) {
       return SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
-        children: <Widget>[
-          Text('Giocatori da inserire'),
-          ListView.builder(
-              controller: _scrollController,
-              itemCount: widget.playersToShow.length,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext ctxt, int index) {
-                String name = widget.playersToShow[index].toString();
-                return TextFormField(
-                  initialValue: name ?? '',
-                  onChanged: (newValue) {
-                    changePlayer(newValue, index);
-                  },
-                );
-              }),
-          StyledButtonWidget(
-            hint: 'Submit',
-            onPressed: (){
-              print('Premuto bottono di submit');
-            },
-          )
-        ],
-      ));
+            children: <Widget>[
+              Text('Giocatori da inserire',
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),),
+              ListView.builder(
+                  primary: false,
+                  controller: _scrollController,
+                  itemCount: widget.playersToShow.length,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext ctxt, int index) {
+                    String name = widget.playersToShow[index].toString();
+                    return TextFormField(
+                      initialValue: name ?? '',
+                      onChanged: (newValue) {
+                        changePlayer(newValue, index);
+                      },
+                    );
+                  }),
+              StyledButtonWidget(
+                hint: 'Submit',
+                onPressed: () {
+                  print('Premuto bottono di submit');
+                },
+              )
+            ],
+          ));
     } else {
       return Container();
     }

@@ -158,6 +158,8 @@ class _AppState extends State<App> {
                       notifyAction: this.updateAppBarActions,
                       notifyParent: this.updateAppBarTitle),
                 ),
+                '/ocr': (context) => OcrPage(),
+                
           },
           home: BlocListener<AuthenticationBloc, AuthenticationState>(
             child: Scaffold(
@@ -185,6 +187,9 @@ class _AppState extends State<App> {
               if (state is AuthenticationAuthenticated ||
                   state is OTPRequired) {
                 Navigator.pushNamed(context, '/homePage');
+              }
+              if(state is OCRPageState){
+                 Navigator.pushNamed(context, '/ocr');
               }
             },
           )),

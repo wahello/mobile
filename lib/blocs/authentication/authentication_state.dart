@@ -37,6 +37,11 @@ class Logout extends AuthenticationState {
   String toString() => 'Logout';
 }
 
+class OCRPageState extends AuthenticationState {
+  @override
+  String toString() => 'OCRPageState';
+}
+
 class OTPRequired extends AuthenticationState {
   @override
   String toString() => 'OTPRequired';

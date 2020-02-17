@@ -41,6 +41,10 @@ class AuthenticationBloc
       yield BackedToHomeFromButton();
     }
 
+    if(event is OCRPage){
+      yield OCRPageState();
+    }
+
     if (event is LoggedOut) {
       yield AuthenticationLoading();
       hasToken = await CallsRepository().hasToken();

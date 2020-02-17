@@ -145,32 +145,21 @@ class OcrPageState extends State<OcrPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           FloatingActionButton(
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.camera_alt),
-                                  //Text("Scatta un'altro foto")
-                                ],
-                              ),
+                              child: Icon(Icons.camera_alt),
                               onPressed: backFoto,
                               heroTag: "camera"),
                           Padding(padding: EdgeInsets.all(10)),
                           FloatingActionButton(
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.crop),
-                                  //Text("Ritaglia")
-                                ],
-                              ),
+                              child: Icon(Icons.crop),
+                              //Text("Ritaglia")
+
                               onPressed: cropImage,
                               heroTag: "crop"),
                           Padding(padding: EdgeInsets.all(10)),
                           FloatingActionButton(
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.check),
-                                  //Text("Conferma")
-                                ],
-                              ),
+                              child: Icon(Icons.check),
+                              //Text("Conferma")
+
                               onPressed: readText,
                               heroTag: "crop"),
                         ],
