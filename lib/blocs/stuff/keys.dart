@@ -22,4 +22,5 @@ class FormKey {
   static final authenticationAuthenticated =
       const Key('authenticationAuthenticated');
   static final matchPageKey = const Key('matchPageKey');
+  static final ocrPageKey = const Key('ocrPageKey');
 }

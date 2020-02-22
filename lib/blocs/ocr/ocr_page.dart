@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/ocr/index.dart';
 import 'package:football_system/blocs/stuff/ScannerUtils.dart';
+import 'package:football_system/generated/i18n.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 import 'package:path/path.dart' show join;
@@ -13,6 +14,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared/shared.dart';
 
 class OcrPage extends StatefulWidget {
+  final Function(Widget) notifyParent;
+  final Function(Widget) notifyAction;
+  final Key key;
+
+  OcrPage({
+    @required this.notifyAction,
+    @required this.key,
+    @required this.notifyParent,
+  }) : super(key: key);
+
   @override
   State<OcrPage> createState() => OcrPageState();
 }
@@ -111,6 +122,7 @@ class OcrPageState extends State<OcrPage> {
 
   @override
   Widget build(BuildContext context) {
+    widget.notifyParent(Text(I18n().inserimentoDistinta));
     return BlocBuilder<OcrBloc, OcrState>(
         bloc: _ocrBloc,
         builder: (
@@ -120,6 +132,7 @@ class OcrPageState extends State<OcrPage> {
           return Scaffold(
             floatingActionButton: currentState is OcrInitialState
                 ? FloatingActionButton(
+                    backgroundColor: MainColors.PRIMARY,
                     child: Icon(Icons.camera_alt),
                     onPressed: () async {
                       try {
@@ -145,21 +158,22 @@ class OcrPageState extends State<OcrPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           FloatingActionButton(
+                              backgroundColor: MainColors.PRIMARY,
                               child: Icon(Icons.camera_alt),
                               onPressed: backFoto,
                               heroTag: "camera"),
                           Padding(padding: EdgeInsets.all(10)),
                           FloatingActionButton(
+                              backgroundColor: MainColors.PRIMARY,
                               child: Icon(Icons.crop),
                               //Text("Ritaglia")
-
                               onPressed: cropImage,
                               heroTag: "crop"),
                           Padding(padding: EdgeInsets.all(10)),
                           FloatingActionButton(
+                              backgroundColor: MainColors.PRIMARY,
                               child: Icon(Icons.check),
                               //Text("Conferma")
-
                               onPressed: readText,
                               heroTag: "crop"),
                         ],
@@ -169,6 +183,8 @@ class OcrPageState extends State<OcrPage> {
               backgroundColor: MainColors.PRIMARY,
             ),
             body: OcrScreen(
+              notifyParent: widget.notifyParent,
+              notifyAction: widget.notifyAction,
               ocrBloc: _ocrBloc,
               camera: _camera,
             ),

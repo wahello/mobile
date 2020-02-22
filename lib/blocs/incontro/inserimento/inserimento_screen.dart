@@ -779,6 +779,17 @@ class InserimentoScreenState extends State<InserimentoScreen>
               autovalidate: true,
               child: Column(
                 children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Icon(Icons.camera),
+                      FlatButton(
+                          onPressed: () {
+                            AuthenticationBloc().add(OCRPage());
+                          },
+                          child: Text(I18n().inserimentoDistinta))
+                    ],
+                  ),
                   Container(
                     child: ListView(
                       controller: _scrollControllerForPlayers,
@@ -814,15 +825,6 @@ class InserimentoScreenState extends State<InserimentoScreen>
                         ),
                       ],
                     ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Icon(Icons.camera),
-                      FlatButton(onPressed: (){
-                         AuthenticationBloc().add(OCRPage());
-                      }, child: Text('Scansiona distinta'))
-                    ],
                   ),
                   AddFormScreen(
                       type: TypeAddForm.PLAYER,
@@ -932,6 +934,15 @@ class InserimentoScreenState extends State<InserimentoScreen>
               autovalidate: true,
               child: Column(
                 children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      FlatButton(
+                          onPressed: () {
+                            AuthenticationBloc().add(OCRPage());
+                          },
+                          child: Text(I18n().inserimentoDistinta))
+                    ],
+                  ),
                   Container(
                     child: ListView(
                       controller: _scrollControllerForPlayers,
@@ -967,13 +978,6 @@ class InserimentoScreenState extends State<InserimentoScreen>
                         ),
                       ],
                     ),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      FlatButton(onPressed: (){
-                        AuthenticationBloc().add(OCRPage());
-                      }, child: Text('Scansiona distinta'))
-                    ],
                   ),
                   AddFormScreen(
                     type: TypeAddForm.PLAYER,

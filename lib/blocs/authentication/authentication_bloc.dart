@@ -10,14 +10,15 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   static final AuthenticationBloc _authenticationBloc =
       AuthenticationBloc._internal();
+
   factory AuthenticationBloc() {
     return _authenticationBloc;
   }
+
   AuthenticationBloc._internal();
 
   bool hasToken = false;
   bool registered = false;
-
 
   @override
   AuthenticationState get initialState => AuthenticationUninitialized();

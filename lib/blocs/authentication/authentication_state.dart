@@ -46,3 +46,8 @@ class OTPRequired extends AuthenticationState {
   @override
   String toString() => 'OTPRequired';
 }
+
+class OCRState extends AuthenticationState {
+  @override
+  String toString() => 'OCRState';
+}

@@ -24,7 +24,6 @@ class _InserimentoPageState extends State<InserimentoPage> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     widget.notifyParent(Text(I18n().inserimentoIncontro));
     return InserimentoScreen(

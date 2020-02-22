@@ -9,11 +9,15 @@ class OcrScreen extends StatefulWidget {
     Key key,
     @required OcrBloc ocrBloc,
     @required this.camera,
+    @required this.notifyParent,
+    @required this.notifyAction,
   })  : _ocrBloc = ocrBloc,
         super(key: key);
 
   final OcrBloc _ocrBloc;
   final CameraController camera;
+  final Function(Widget) notifyParent;
+  final Function(Widget) notifyAction;
 
   @override
   OcrScreenState createState() {
