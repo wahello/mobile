@@ -51,7 +51,7 @@ class OcrScreenState extends State<OcrScreen> {
                 child: widget.camera == null
                     ? LoadingIndicator()
                     : Container(
-                        height: MediaQuery.of(context).size.height - 150,
+                        height: MediaQuery.of(context).size.height,
                         child: CameraPreview(widget.camera),
                       ));
           }

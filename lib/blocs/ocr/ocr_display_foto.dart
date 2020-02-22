@@ -45,7 +45,10 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
     return Scaffold(
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
-      body: Image.file(File(widget.imagePath)),
+      body: Image.file(
+        File(widget.imagePath),
+        width: MediaQuery.of(context).size.width,
+      ),
     );
   }
 }
