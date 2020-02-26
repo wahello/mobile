@@ -518,8 +518,8 @@ class _LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
         password: _passwordController.text,
       ));
 
-      _usernameController.text = "";
-      _passwordController.text = "";
+      _loginBloc.add(ClearFormAfterLogin());
+      
     }
   }
 
