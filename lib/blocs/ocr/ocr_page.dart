@@ -4,7 +4,9 @@ import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/ocr/index.dart';
+import 'package:football_system/blocs/stuff/OcrPageArgument.dart';
 import 'package:football_system/blocs/stuff/ScannerUtils.dart';
 import 'package:football_system/generated/i18n.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -18,11 +20,11 @@ class OcrPage extends StatefulWidget {
   final Function(Widget) notifyAction;
   final Key key;
 
-  OcrPage({
-    @required this.notifyAction,
-    @required this.key,
-    @required this.notifyParent,
-  }) : super(key: key);
+  OcrPage(
+      {@required this.notifyAction,
+      @required this.key,
+      @required this.notifyParent})
+      : super(key: key);
 
   @override
   State<OcrPage> createState() => OcrPageState();
@@ -31,13 +33,13 @@ class OcrPage extends StatefulWidget {
 class OcrPageState extends State<OcrPage> {
   static const String routeName = '/ocr';
 
-  CameraLensDirection _direction = CameraLensDirection.back;
-
-  CameraController _camera;
-
   bool _isDetecting = false;
-
+  bool isHome;
+  CameraController _camera;
+  CameraLensDirection _direction = CameraLensDirection.back;
+  String categoryId;
   String path;
+  String teamId;
 
   var _ocrBloc = OcrBloc();
 
@@ -123,6 +125,7 @@ class OcrPageState extends State<OcrPage> {
   @override
   Widget build(BuildContext context) {
     widget.notifyParent(Text(I18n().inserimentoDistinta));
+    final OCRPageArgument args = ModalRoute.of(context).settings.arguments;
     return BlocBuilder<OcrBloc, OcrState>(
         bloc: _ocrBloc,
         builder: (
@@ -187,6 +190,10 @@ class OcrPageState extends State<OcrPage> {
               notifyAction: widget.notifyAction,
               ocrBloc: _ocrBloc,
               camera: _camera,
+              bloc: args.inserimentoBloc,
+              categoryId: args.categoryId,
+              isHome: args.isHome,
+              teamId: args.teamId,
             ),
           );
         });

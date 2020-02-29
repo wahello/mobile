@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:football_system/blocs/stuff/OcrPageArgument.dart';
 import 'package:meta/meta.dart';
 
 abstract class AuthenticationEvent extends Equatable {
@@ -36,6 +37,10 @@ class GoToInserimentoPage extends AuthenticationEvent {
 }
 
 class OCRPage extends AuthenticationEvent {
+  final OCRPageArgument args;
+
+  OCRPage(this.args);
+
   @override
   String toString() => 'OCRPage';
 }
