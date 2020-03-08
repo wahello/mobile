@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:football_system/blocs/addForm/addFormModel.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
+import 'package:football_system/blocs/model/player_model.dart';
 import 'package:shared/shared.dart';
 
 class OcrListPlayers extends StatefulWidget {
-  final List<String> playersToShow;
+  final List<Player> playersToShow;
   final InserimentoBloc bloc;
   final String categoryId;
   final String teamId;
@@ -30,14 +31,22 @@ class OcrListPlayers extends StatefulWidget {
 class OcrListPlayerState extends State<OcrListPlayers> {
   ScrollController _scrollController;
 
-  void changePlayer(String newValue, int index) {
-    widget.playersToShow[index] = newValue;
+  void changePlayer(String newValue, String field, int index) {
+    switch (field) {
+      case 'name':
+        widget.playersToShow[index].name = newValue;
+        break;
+      default:
+    }
   }
 
   List<AddFormModel> createList() {
     List<AddFormModel> list = new List();
-    for (String name in widget.playersToShow) {
-      list.add(new AddFormModel(nome: name));
+    for (Player player in widget.playersToShow) {
+      list.add(new AddFormModel(
+          nome: player.name,
+          anno: '',
+          number: player.number)); //TODO Gestione anno
     }
     return list;
   }
@@ -59,11 +68,11 @@ class OcrListPlayerState extends State<OcrListPlayers> {
                   itemCount: widget.playersToShow.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext ctxt, int index) {
-                    String name = widget.playersToShow[index].toString();
+                    String name = widget.playersToShow[index].name;
                     return TextFormField(
                       initialValue: name ?? '',
                       onChanged: (newValue) {
-                        changePlayer(newValue, index);
+                        changePlayer(newValue, 'name', index);
                       },
                     );
                   }),

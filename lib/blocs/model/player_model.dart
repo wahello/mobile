@@ -8,10 +8,11 @@ class Player {
 
   String note;
   final int id;
-  final String name;
+  String name;
   String ruolo;
   String number;
   String posizione;
+  String anno;
   //#cartellino giallo
   var yellowCard = 0;
   //#cartellino rosso
@@ -21,7 +22,8 @@ class Player {
   //#assist
   var assist = 0;
   List<String> notes = [""].toList();
-  Player({this.number, this.id, this.name, this.ruolo, this.posizione});
+  Player(
+      {this.number, this.id, this.name, this.ruolo, this.posizione, this.anno});
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
   Map<String, dynamic> toJson() => _$PlayerToJson(this);
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:football_system/blocs/model/player_model.dart';
 
 abstract class OcrState extends Equatable {}
 
@@ -13,7 +14,7 @@ class OcrFotoToCropState extends OcrState {
 }
 
 class OcrCapturedFoto extends OcrState {
-  final List<String> playersName;
+  final List<Player> playersName;
 
   OcrCapturedFoto(this.playersName);
 }

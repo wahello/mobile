@@ -4,7 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:football_system/blocs/incontro/inserimento/index.dart';
+import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/ocr/index.dart';
 import 'package:football_system/blocs/stuff/OcrPageArgument.dart';
 import 'package:football_system/blocs/stuff/ScannerUtils.dart';
@@ -14,6 +14,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared/shared.dart';
+import 'package:validators/validators.dart';
 
 class OcrPage extends StatefulWidget {
   final Function(Widget) notifyParent;
@@ -84,10 +85,22 @@ class OcrPageState extends State<OcrPage> {
     TextRecognizer recognizeText = FirebaseVision.instance.textRecognizer();
     VisionText readText = await recognizeText.processImage(ourImage);
 
-    List<String> playersName = List();
+    List<Player> playersName = List();
     for (TextBlock block in readText.blocks) {
       for (TextLine line in block.lines) {
-        playersName.add(line.text);
+        String name = '';
+        String number;
+        String anno;
+        for (TextElement word in line.elements) {
+          if (word.text.contains('/')) {
+            anno = word.text;
+          } else if (isNumeric(word.text)) {
+            number = word.text;
+          } else {
+            name = name + '' + word.text;
+          }
+        }
+        playersName.add(new Player(name: name, number: number, anno: anno));
       }
     }
     OcrBloc().add(OcrFotoCaptured(playersName));
