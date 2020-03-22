@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
@@ -35,17 +36,17 @@ class AddFormProvider {
             Endpoints.submitTeam;
         break;
       case TypeAddForm.PLAYER:
+        List players = new List();
+        for (AddFormModel player in dataToSend) {
+          Map<String, String> toAdd = new Map();
+          toAdd.putIfAbsent('name', () => player.nome);
+          toAdd.putIfAbsent('number', () => player.number);
+          toAdd.putIfAbsent('year', () => player.anno);
+          players.add(toAdd);
+        }
+        body.putIfAbsent('players', () => players);
         isJson = true;
         header = "application/json";
-        body = {
-          'players': [
-            {
-              'name': dataToSend[0].nome,
-              'number': dataToSend[0].number,
-              'year': dataToSend[0].anno
-            }
-          ]
-        };
         endpoint = Endpoints.domain +
             Endpoints.teams +
             '/' +
