@@ -11,6 +11,7 @@ import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
+import 'package:football_system/blocs/stuff/OcrPageArgument.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/generated/i18n.dart';
@@ -785,7 +786,11 @@ class InserimentoScreenState extends State<InserimentoScreen>
                       Icon(Icons.camera),
                       FlatButton(
                           onPressed: () {
-                            AuthenticationBloc().add(OCRPage());
+                            AuthenticationBloc().add(OCRPage(OCRPageArgument(
+                                true,
+                                inserimentoBloc.selectedCategories,
+                                inserimentoBloc.selectedTeamHome,
+                                inserimentoBloc)));
                           },
                           child: Text(I18n().inserimentoDistinta))
                     ],
@@ -938,7 +943,11 @@ class InserimentoScreenState extends State<InserimentoScreen>
                     children: <Widget>[
                       FlatButton(
                           onPressed: () {
-                            AuthenticationBloc().add(OCRPage());
+                            AuthenticationBloc().add(OCRPage(OCRPageArgument(
+                                false,
+                                inserimentoBloc.selectedCategories,
+                                inserimentoBloc.selectedTeamHome,
+                                inserimentoBloc)));
                           },
                           child: Text(I18n().inserimentoDistinta))
                     ],

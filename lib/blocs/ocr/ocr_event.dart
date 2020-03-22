@@ -1,10 +1,11 @@
+import 'package:football_system/blocs/model/player_model.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 abstract class OcrEvent {}
 
 class OcrFotoCaptured extends OcrEvent {
-  final List<String> playersName;
+  final List<Player> playersName;
 
   OcrFotoCaptured(this.playersName);
 }

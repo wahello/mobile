@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
@@ -18,7 +19,7 @@ class AddFormProvider {
   Future<http.Response> sendData(List<AddFormModel> dataToSend,
       TypeAddForm type, String categoryId, String teamId) async {
     String endpoint;
-    Map<String, String> body = new Map();
+    Map<String, dynamic> body = new Map();
     switch (type) {
       case TypeAddForm.TEAM:
         body = {'name': dataToSend[0].nome};
@@ -29,11 +30,15 @@ class AddFormProvider {
             Endpoints.submitTeam;
         break;
       case TypeAddForm.PLAYER:
-        body = {
-          'name': dataToSend[0].nome,
-          'number': dataToSend[0].number,
-          'year': dataToSend[0].anno
-        };
+        List<Map<String, String>> players = new List();
+        for (AddFormModel player in dataToSend) {
+          Map<String, String> toAdd = new Map();
+          toAdd.putIfAbsent('name', () => player.nome);
+          toAdd.putIfAbsent('number', () => player.number);
+          toAdd.putIfAbsent('year', () => player.anno);
+          players.add(new Map());
+        }
+        body.putIfAbsent('players', () => players);
         endpoint = Endpoints.domain +
             Endpoints.teams +
             '/' +
