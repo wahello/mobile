@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/ocr/index.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 
@@ -12,19 +11,11 @@ class OcrScreen extends StatefulWidget {
     @required this.camera,
     @required this.notifyParent,
     @required this.notifyAction,
-    @required this.bloc,
-    @required this.categoryId,
-    @required this.teamId,
-    @required this.isHome,
   })  : _ocrBloc = ocrBloc,
         super(key: key);
 
   final OcrBloc _ocrBloc;
   final CameraController camera;
-  final InserimentoBloc bloc;
-  final String categoryId;
-  final String teamId;
-  final bool isHome;
   final Function(Widget) notifyParent;
   final Function(Widget) notifyAction;
 
@@ -65,13 +56,7 @@ class OcrScreenState extends State<OcrScreen> {
                       ));
           }
           if (currentState is OcrCapturedFoto) {
-            return OcrListPlayers(
-              playersToShow: currentState.playersName,
-              bloc: widget.bloc,
-              categoryId: widget.categoryId,
-              isHome: widget.isHome,
-              teamId: widget.teamId,
-            );
+            return OcrListPlayers(playersToShow: currentState.playersName);
           }
           if (currentState is OcrFotoToCropState) {
             return DisplayPictureScreen(imagePath: currentState.imagePath);
