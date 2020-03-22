@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
@@ -18,7 +19,12 @@ class AddFormProvider {
   Future<http.Response> sendData(List<AddFormModel> dataToSend,
       TypeAddForm type, String categoryId, String teamId) async {
     String endpoint;
-    Map<String, String> body = new Map();
+    Map body = new Map();
+
+    String header = "application/x-www-form-urlencoded";
+    //per retrocompatibilità usiamo questa variabile per abilitare le chiamate che (non)usano json
+    bool isJson = false;
+
     switch (type) {
       case TypeAddForm.TEAM:
         body = {'name': dataToSend[0].nome};
@@ -29,10 +35,16 @@ class AddFormProvider {
             Endpoints.submitTeam;
         break;
       case TypeAddForm.PLAYER:
+        isJson = true;
+        header = "application/json";
         body = {
-          'name': dataToSend[0].nome,
-          'number': dataToSend[0].number,
-          'year': dataToSend[0].anno
+          'players': [
+            {
+              'name': dataToSend[0].nome,
+              'number': dataToSend[0].number,
+              'year': dataToSend[0].anno
+            }
+          ]
         };
         endpoint = Endpoints.domain +
             Endpoints.teams +
@@ -55,10 +67,10 @@ class AddFormProvider {
     try {
       http.Response _resp = await http.post(endpoint,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": header,
             HttpHeaders.authorizationHeader: token
           },
-          body: body);
+          body: isJson ? json.encode(body) : body);
       return _resp;
     } catch (error) {
       print(error);
