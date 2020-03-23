@@ -42,8 +42,8 @@ class AuthenticationBloc
       yield BackedToHomeFromButton();
     }
 
-    if(event is OCRPage){
-      yield OCRPageState();
+    if (event is OCRPage) {
+      yield OCRPageState(ocrPageArgument: event.args);
     }
 
     if (event is LoggedOut) {

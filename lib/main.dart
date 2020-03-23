@@ -192,7 +192,8 @@ class _AppState extends State<App> {
                 Navigator.pushNamed(context, '/homePage');
               }
               if (state is OCRPageState) {
-                Navigator.pushNamed(context, '/ocr');
+                Navigator.pushNamed(context, '/ocr',
+                    arguments: state.ocrPageArgument);
               }
             },
           )),

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:football_system/blocs/stuff/OcrPageArgument.dart';
 
 abstract class AuthenticationState extends Equatable {}
 
@@ -38,6 +39,9 @@ class Logout extends AuthenticationState {
 }
 
 class OCRPageState extends AuthenticationState {
+  OCRPageArgument ocrPageArgument;
+
+  OCRPageState({this.ocrPageArgument});
   @override
   String toString() => 'OCRPageState';
 }
