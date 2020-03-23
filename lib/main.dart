@@ -159,7 +159,7 @@ class _AppState extends State<App> {
                       notifyParent: this.updateAppBarTitle),
                 ),
             //Chiama direttamente la OcrPage perché al suo interno ha già appbar e scaffold
-            '/ocr': (context) => OcrPage(
+            OcrPage.routeName: (context) => OcrPage(
                 key: FormKey.ocrPageKey,
                 notifyAction: this.updateAppBarActions,
                 notifyParent: this.updateAppBarTitle),
@@ -192,7 +192,8 @@ class _AppState extends State<App> {
                 Navigator.pushNamed(context, '/homePage');
               }
               if (state is OCRPageState) {
-                Navigator.pushNamed(context, '/ocr');
+                Navigator.pushNamed(context, '/ocr',
+                    arguments: state.ocrPageArgument);
               }
             },
           )),
