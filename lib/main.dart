@@ -159,7 +159,7 @@ class _AppState extends State<App> {
                       notifyParent: this.updateAppBarTitle),
                 ),
             //Chiama direttamente la OcrPage perché al suo interno ha già appbar e scaffold
-            OcrPage.routeName: (context) => OcrPage(
+            '/ocr': (context) => OcrPage(
                 key: FormKey.ocrPageKey,
                 notifyAction: this.updateAppBarActions,
                 notifyParent: this.updateAppBarTitle),
