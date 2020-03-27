@@ -16,11 +16,14 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
     anno: json['anno'] as String,
   )
     ..note = json['note'] as String
+    ..test = json['test'] as String
     ..yellowCard = json['yellowCard'] as int
     ..redCard = json['redCard'] as int
     ..goal = json['goal'] as int
     ..assist = json['assist'] as int
-    ..notes = (json['notes'] as List).map((e) => e as String).toList();
+    ..notes = json['notes'] != null
+        ? (json['notes'] as List).map((e) => e as String).toList()
+        : List();
 }
 
 Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
@@ -31,6 +34,7 @@ Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
       'number': instance.number,
       'posizione': instance.posizione,
       'anno': instance.anno,
+      'test': instance.test,
       'yellowCard': instance.yellowCard,
       'redCard': instance.redCard,
       'goal': instance.goal,

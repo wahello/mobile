@@ -1,7 +1,11 @@
 import 'package:football_system/blocs/model/coach_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/team_model.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'addFormModel.g.dart';
+
+@JsonSerializable()
 class AddFormModel {
   final String nome;
   final String number;
@@ -27,4 +31,9 @@ class AddFormModel {
         (number != '' ? ' $number' : '') +
         (anno != '' ? ' $anno' : '');
   }
+
+  factory AddFormModel.fromJson(Map<String, dynamic> json) =>
+      _$AddFormModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AddFormModelToJson(this);
 }
