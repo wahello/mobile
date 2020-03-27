@@ -44,8 +44,8 @@ class OcrListPlayerState extends State<OcrListPlayers> {
     List<AddFormModel> list = new List();
     for (Player player in widget.playersToShow) {
       list.add(new AddFormModel(
-          nome: player.name,
-          anno: '',
+          name: player.name,
+          year: '',
           number: player.number)); //TODO Gestione anno
     }
     return list;

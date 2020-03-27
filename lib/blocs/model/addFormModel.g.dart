@@ -8,15 +8,15 @@ part of 'addFormModel.dart';
 
 AddFormModel _$AddFormModelFromJson(Map<String, dynamic> json) {
   return AddFormModel(
-    nome: json['nome'] as String,
+    name: json['name'] as String,
     number: json['number'] as String,
-    anno: json['anno'] as String,
+    year: json['year'] as String,
   );
 }
 
 Map<String, dynamic> _$AddFormModelToJson(AddFormModel instance) =>
     <String, dynamic>{
-      'nome': instance.nome,
+      'name': instance.name,
       'number': instance.number,
-      'anno': instance.anno,
+      'year': instance.year,
     };

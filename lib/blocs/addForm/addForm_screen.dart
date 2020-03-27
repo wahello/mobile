@@ -64,9 +64,9 @@ class AddFormScreenState extends State<AddFormScreen> {
     }
   }
 
-  void _addElement(String nome, String number, String anno) {
-    if (rows.length < maxRows && (nome?.isNotEmpty ?? false)) {
-      rows.add(new AddFormModel(nome: nome, number: number, anno: anno));
+  void _addElement(String name, String number, String year) {
+    if (rows.length < maxRows && (name?.isNotEmpty ?? false)) {
+      rows.add(new AddFormModel(name: name, number: number, year: year));
     }
   }
 

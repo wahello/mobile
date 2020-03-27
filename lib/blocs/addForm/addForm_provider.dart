@@ -28,7 +28,7 @@ class AddFormProvider {
 
     switch (type) {
       case TypeAddForm.TEAM:
-        body = {'name': dataToSend[0].nome};
+        body = {'name': dataToSend[0].name};
         endpoint = Endpoints.domain +
             Endpoints.categories +
             '/' +
@@ -48,7 +48,7 @@ class AddFormProvider {
             Endpoints.submitPlayer;
         break;
       case TypeAddForm.COACH:
-        body = {'name': dataToSend[0].nome};
+        body = {'name': dataToSend[0].name};
         endpoint = Endpoints.domain +
             Endpoints.teams +
             '/' +
@@ -65,7 +65,7 @@ class AddFormProvider {
             "Content-Type": header,
             HttpHeaders.authorizationHeader: token
           },
-          body: isJson ? json.encode(body) : body);
+          body: body);
       return _resp;
     } catch (error) {
       print(error);
