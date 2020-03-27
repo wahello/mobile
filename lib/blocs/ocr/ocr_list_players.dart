@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:football_system/blocs/addForm/addFormModel.dart';
+import 'package:football_system/blocs/model/addFormModel.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/model/player_model.dart';
@@ -44,8 +44,8 @@ class OcrListPlayerState extends State<OcrListPlayers> {
     List<AddFormModel> list = new List();
     for (Player player in widget.playersToShow) {
       list.add(new AddFormModel(
-          nome: player.name,
-          anno: '',
+          name: player.name,
+          year: '',
           number: player.number)); //TODO Gestione anno
     }
     return list;

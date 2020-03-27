@@ -4,11 +4,11 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
+import 'package:football_system/blocs/model/addFormModel.dart';
+import 'package:football_system/blocs/model/playerRequest_model.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared/shared.dart';
-
-import 'addFormModel.dart';
 
 class AddFormProvider {
   static final AddFormProvider _addFormProvider = AddFormProvider._internal();
@@ -28,7 +28,7 @@ class AddFormProvider {
 
     switch (type) {
       case TypeAddForm.TEAM:
-        body = {'name': dataToSend[0].nome};
+        body = {'name': dataToSend[0].name};
         endpoint = Endpoints.domain +
             Endpoints.categories +
             '/' +
@@ -36,15 +36,9 @@ class AddFormProvider {
             Endpoints.submitTeam;
         break;
       case TypeAddForm.PLAYER:
-        List players = new List();
-        for (AddFormModel player in dataToSend) {
-          Map<String, String> toAdd = new Map();
-          toAdd.putIfAbsent('name', () => player.nome);
-          toAdd.putIfAbsent('number', () => player.number);
-          toAdd.putIfAbsent('year', () => player.anno);
-          players.add(toAdd);
-        }
-        body.putIfAbsent('players', () => players);
+        PlayerRequest playerRequest = new PlayerRequest(dataToSend);
+
+        body = playerRequest.toJson();
         isJson = true;
         header = "application/json";
         endpoint = Endpoints.domain +
@@ -54,7 +48,7 @@ class AddFormProvider {
             Endpoints.submitPlayer;
         break;
       case TypeAddForm.COACH:
-        body = {'name': dataToSend[0].nome};
+        body = {'name': dataToSend[0].name};
         endpoint = Endpoints.domain +
             Endpoints.teams +
             '/' +
@@ -71,7 +65,7 @@ class AddFormProvider {
             "Content-Type": header,
             HttpHeaders.authorizationHeader: token
           },
-          body: isJson ? json.encode(body) : body);
+          body: body);
       return _resp;
     } catch (error) {
       print(error);

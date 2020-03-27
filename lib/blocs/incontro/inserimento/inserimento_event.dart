@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:football_system/blocs/addForm/addFormModel.dart';
+import 'package:football_system/blocs/model/addFormModel.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:meta/meta.dart';
 
@@ -19,7 +19,8 @@ class SubmitFormEvent extends InserimentoEvent {
   final String teamId;
   final bool isHome;
 
-  SubmitFormEvent(this.dataToSend, this.type, this.categoryId, this.teamId, this.isHome);
+  SubmitFormEvent(
+      this.dataToSend, this.type, this.categoryId, this.teamId, this.isHome);
 
   @override
   String toString() => 'SubmitFormEvent';
@@ -72,6 +73,7 @@ class GetTeamsEventAway extends InserimentoEvent {
   @override
   String toString() => 'GetTeamsEventAway';
 }
+
 class GetTournamentsEvent extends InserimentoEvent {
   final String inputTextValue;
 
@@ -93,6 +95,7 @@ class GetPlayersEventAway extends InserimentoEvent {
   @override
   String toString() => 'GetPlayersEventAway';
 }
+
 class GetCoachesEventHome extends InserimentoEvent {
   @override
   String toString() => 'GetCoachesEventHome';
@@ -102,6 +105,7 @@ class GetCoachesEventAway extends InserimentoEvent {
   @override
   String toString() => 'GetCoachesEventAway';
 }
+
 class InserisciIncontroEvent extends InserimentoEvent {
   @override
   String toString() => 'InserisciIncontroEvent';
@@ -111,7 +115,6 @@ class InserisciModuloEventHome extends InserimentoEvent {
   @override
   String toString() => 'InserisciModuloEventHome';
 }
-
 
 class ChooseJerseyEvent extends InserimentoEvent {
   @override
