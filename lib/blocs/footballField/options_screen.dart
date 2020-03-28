@@ -27,6 +27,10 @@ class _OptionsScreenState extends State<OptionsScreen> {
     redCard = footballFieldBloc.footballField.players[x][y].redCard;
     goal = footballFieldBloc.footballField.players[x][y].goal;
     assist = footballFieldBloc.footballField.players[x][y].assist;
+
+    if (notes != null && notes.isEmpty) {
+      notes.add('');
+    }
   }
   //#cartellino giallo
   var yellowCard = 0;
@@ -166,7 +170,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
           label,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        Text(count != null ? count.toString() : 0),
+        Text(count != null ? count.toString() : "0"),
         FlatButton(
           onPressed: () => {
             setState(() => {
