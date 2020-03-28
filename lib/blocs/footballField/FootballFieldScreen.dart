@@ -105,8 +105,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
       return GestureDetector(
         // This does not give the tap position ...
         onTap: () => {
-          if (footballFieldBloc.footballField.players[x][y].id.toString() ==
-              "0")
+          if (footballFieldBloc.footballField.players[x][y].id == 0)
             {
               Navigator.push(
                   context,
