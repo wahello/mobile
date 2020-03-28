@@ -65,7 +65,7 @@ class AddFormProvider {
             "Content-Type": header,
             HttpHeaders.authorizationHeader: token
           },
-          body: body);
+          body: JsonEncoder().convert(body));
       return _resp;
     } catch (error) {
       print(error);
