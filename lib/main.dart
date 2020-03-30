@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/home/index.dart';
+import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/splash/index.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:football_system/blocs/stuff/index.dart';
@@ -11,6 +12,9 @@ import 'package:shared/shared.dart';
 
 import 'blocs/authentication/index.dart';
 import 'blocs/login/index.dart';
+import 'blocs/stuff/page.dart';
+import 'blocs/ocr/index.dart';
+import 'blocs/stuff/ocrWidget.dart';
 import 'blocs/user/index.dart';
 import 'blocs/incontro/inserimento/index.dart';
 
@@ -69,9 +73,7 @@ class _AppState extends State<App> {
 
   @override
   void initState() {
-    authenticationBloc = AuthenticationBloc(
-      callsRepository: callsRepository,
-    );
+    authenticationBloc = AuthenticationBloc();
     authenticationBloc.add(AppStarted());
     loginBloc = LoginBloc(
       callsRepository: callsRepository,
@@ -177,6 +179,46 @@ class _AppState extends State<App> {
             cursorColor: MainColors.PRIMARY,
             indicatorColor: MainColors.PRIMARY,
           ),
+          //start to implement routing of app
+          routes: {
+            '/splashPage': (context) => SplashPage(),
+            '/loginPage': (context) => LoginPage(
+                  key: FormKey.loginKey,
+                  callsRepository: callsRepository,
+                  userRepository: userRepository,
+                ),
+            /*
+                importante: il push delle pagine funziona solo con widget di tipo material(quindi devono essere
+                figli di uno scaffold come per l'home page e l'incontro page)
+                */
+            '/homePage': (context) => CustomPage(
+                  actions: actions,
+                  appBarTitleText: appBarTitleText,
+                  authenticationBloc: authenticationBloc,
+                  child: HomePage(
+                    authenticationBloc: authenticationBloc,
+                    notifyAction: this.updateAppBarActions,
+                    notifyParent: this.updateAppBarTitle,
+                    key: FormKey.homeKey,
+                  ),
+                  key: FormKey.homeKey,
+                ),
+            '/incontroPage': (context) => CustomPage(
+                  key: FormKey.matchPageKey,
+                  actions: actions,
+                  appBarTitleText: appBarTitleText,
+                  authenticationBloc: authenticationBloc,
+                  child: InserimentoPage(
+                      key: FormKey.matchPageKey,
+                      notifyAction: this.updateAppBarActions,
+                      notifyParent: this.updateAppBarTitle),
+                ),
+            //Chiama direttamente la OcrPage perché al suo interno ha già appbar e scaffold
+            '/ocr': (context) => OcrPage(
+                key: FormKey.ocrPageKey,
+                notifyAction: this.updateAppBarActions,
+                notifyParent: this.updateAppBarTitle),
+          },
           home: BlocListener<AuthenticationBloc, AuthenticationState>(
             child: Scaffold(
               key: FormKey.loadingKey,
@@ -185,93 +227,28 @@ class _AppState extends State<App> {
             bloc: authenticationBloc,
             listener: (BuildContext context, AuthenticationState state) {
               if (state is AuthenticationUninitialized) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return SplashPage(
-                      key: FormKey.fliploaderkey,
-                    );
-                  }),
-                );
+                Navigator.pushNamed(context, '/splashPage');
+              }
+              if (state is InserimentoPageSelected) {
+                Navigator.pushNamed(context, '/incontroPage');
               }
               if (state is AuthenticationUnauthenticated) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return WillPopScope(
-                      key: FormKey.authenticationUnauthenticated,
-                      onWillPop: () async => false,
-                      child: LoginPage(
-                        key: FormKey.loginKey,
-                        callsRepository: callsRepository,
-                        userRepository: userRepository,
-                      ),
-                    );
-                  }),
-                );
+                print(state);
+                Navigator.pushNamed(context, '/loginPage');
+              }
+              if (state is Logout) {
+                Navigator.popUntil(context, ModalRoute.withName('/loginPage'));
+              }
+              if (state is BackedToHomeFromButton) {
+                Navigator.pushNamed(context, '/homePage');
               }
               if (state is AuthenticationAuthenticated ||
                   state is OTPRequired) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return WillPopScope(
-                      key: FormKey.authenticationAuthenticated,
-                      onWillPop: () async => false,
-                      child: Scaffold(
-                          key: FormKey.homeKey,
-                          persistentFooterButtons: (persistentFloatingButton ??
-                              [
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      right: MediaQuery.of(context).size.width /
-                                          4.72),
-                                  child: FloatingActionButton(
-                                    backgroundColor: MainColors.PRIMARY,
-                                    child: Icon(Icons.home),
-                                    heroTag: "home",
-                                    onPressed: () =>
-                                        {authenticationBloc.add(GoHome())},
-                                  ),
-                                ),
-                                Container(
-                                  child: FloatingActionButton(
-                                    backgroundColor: Colors.grey,
-                                    child: Icon(Icons.save),
-                                    heroTag: "save",
-                                    onPressed: () => {},
-                                  ),
-                                ),
-                              ]),
-                          appBar: AppBar(
-                            leading: FlatButton(
-                              key: FormKey.logoutKey,
-                              child: Icon(Icons.exit_to_app),
-                              onPressed: () =>
-                                  {authenticationBloc.add(LoggedOut())},
-                            ),
-                            title: appBarTitleText,
-                            actions: actions,
-                            backgroundColor: MainColors.PRIMARY,
-                          ),
-                          body: Container(
-                              height: MediaQuery.of(context).size.height,
-                              decoration: BoxDecoration(
-                                color: MainColors.SECONDARY,
-                              ),
-                              child: Container(
-                                  padding: EdgeInsets.all(3.0),
-                                  child: Home(
-                                      notifyParent: updateAppBarTitle,
-                                      notifyAction: updateAppBarActions,
-                                      callsRepository: callsRepository,
-                                      userRepository: userRepository,
-                                      activeSaveButton: activeSaveButton,
-                                      deactiveSaveButton:
-                                          deactiveSaveButton)))),
-                    );
-                  }),
-                );
+                Navigator.pushNamed(context, '/homePage');
+              }
+              if (state is OCRPageState) {
+                Navigator.pushNamed(context, '/ocr',
+                    arguments: state.ocrPageArgument);
               }
             },
           )),

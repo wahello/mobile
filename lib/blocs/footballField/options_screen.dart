@@ -27,15 +27,19 @@ class _OptionsScreenState extends State<OptionsScreen> {
     redCard = footballFieldBloc.footballField.players[x][y].redCard ?? 0;
     goal = footballFieldBloc.footballField.players[x][y].goal ?? 0;
     assist = footballFieldBloc.footballField.players[x][y].assist ?? 0;
+
+    if (notes != null && notes.isEmpty) {
+      notes.add('');
+    }
   }
   //#cartellino giallo
-  var yellowCard = 0;
+  int yellowCard = 0;
   //#cartellino rosso
-  var redCard = 0;
+  int redCard = 0;
   //#goal
-  var goal = 0;
+  int goal = 0;
   //#assist
-  var assist = 0;
+  int assist = 0;
 
   //note giocatore
   List<String> notes;
@@ -233,11 +237,12 @@ class _OptionsScreenState extends State<OptionsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                _buildPlayerEventStatus('red_card.png', 'C. rosso', redCard),
                 _buildPlayerEventStatus(
-                    'yellow_card.png', 'C. giallo', yellowCard),
-                _buildPlayerEventStatus('goal.png', 'Goal', goal),
-                _buildPlayerEventStatus('assist.png', 'Assist', assist),
+                    'red_card.png', 'C. rosso', redCard ?? (redCard = 0)),
+                _buildPlayerEventStatus(
+                    'yellow_card.png', 'C. giallo', yellowCard ?? 0),
+                _buildPlayerEventStatus('goal.png', 'Goal', goal ?? 0),
+                _buildPlayerEventStatus('assist.png', 'Assist', assist ?? 0),
                 // _buildPlayerEventStatus('red_card.png', 'Cartellino rosso', 0),
               ],
             ),

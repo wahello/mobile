@@ -18,11 +18,13 @@ class FootballFieldScreen extends StatefulWidget {
   final Function(Size, InserimentoBloc) activeSaveButton;
   final bool isHome;
   final double lato;
+  final String teamName;
 
   FootballFieldScreen(
       {Key key,
       this.activeSaveButton,
       this.isHome,
+      this.teamName,
       this.notifyAction,
       this.notifyParent,
       @required this.lato,
@@ -56,39 +58,44 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
 
   @override
   Widget build(BuildContext context) {
-    widget.activeSaveButton(
-        MediaQuery.of(context).size, inserimentoIncontroBloc);
-    widget.notifyParent(widget.isHome
-        ? Text(inserimentoIncontroBloc
-            .getTeamNameById(inserimentoIncontroBloc.selectedTeamHome))
-        : Text(inserimentoIncontroBloc
-            .getTeamNameById(inserimentoIncontroBloc.selectedTeamAway)));
     return BlocBuilder<FootballFieldBloc, FootballFieldState>(
         bloc: footballFieldBloc,
         builder: (BuildContext context, FootballFieldState state) {
-          return Scaffold(
-              body: Center(
-                  child: FractionallySizedBox(
-                      heightFactor: 1,
-                      widthFactor: 1,
-                      child: Stack(alignment: Alignment.center, children: [
-                        Image.asset('assets/images/football_field.jpg'),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: List.generate(
-                              9,
-                              (i) => SingleChildScrollView(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: List.generate(
-                                          11,
-                                          (j) => _getPlayerOrPlaceHolder(
-                                              i, j, state)),
-                                    ),
-                                  )),
-                        )
-                      ]))));
+          return Center(
+              child: Stack(
+            alignment: Alignment.topCenter,
+            children: <Widget>[
+              FractionallySizedBox(
+                  heightFactor: 1,
+                  widthFactor: 1,
+                  child: Stack(alignment: Alignment.center, children: [
+                    Image.asset('assets/images/football_field.jpg'),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(
+                          9,
+                          (i) => SingleChildScrollView(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: List.generate(
+                                      11,
+                                      (j) =>
+                                          _getPlayerOrPlaceHolder(i, j, state)),
+                                ),
+                              )),
+                    ),
+                  ])),
+              Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1), color: Colors.white38),
+                  child: Text(
+                    widget.teamName,
+                    style:
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                  ))
+            ],
+          ));
         });
   }
 
@@ -100,8 +107,7 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
       return GestureDetector(
         // This does not give the tap position ...
         onTap: () => {
-          if (footballFieldBloc.footballField.players[x][y].id.toString() ==
-              "0")
+          if (footballFieldBloc.footballField.players[x][y].id == 0)
             {
               Navigator.push(
                   context,

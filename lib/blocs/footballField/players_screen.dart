@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:shared/shared.dart';
 
 class PlayerPage extends StatefulWidget {
   PlayerPage({Key key, this.title}) : super(key: key);
@@ -234,6 +235,7 @@ class _PlayerPageState extends State<PlayerPage> {
     return Container(
         margin: EdgeInsets.only(top: screenSize.height / 20.5),
         child: FloatingActionButton(
+          backgroundColor: MainColors.PRIMARY,
           onPressed: () => {this.addNewNote()},
           child: Icon(Icons.add),
         ));

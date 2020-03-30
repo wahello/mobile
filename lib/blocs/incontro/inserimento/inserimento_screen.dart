@@ -3,12 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/index.dart';
+import 'package:football_system/blocs/authentication/authentication_bloc.dart';
+import 'package:football_system/blocs/authentication/authentication_event.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldScreen.dart';
 import 'package:football_system/blocs/home/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/model/player_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
+import 'package:football_system/blocs/stuff/OcrPageArgument.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:football_system/blocs/stuff/index.dart';
 import 'package:football_system/generated/i18n.dart';
@@ -779,6 +782,21 @@ class InserimentoScreenState extends State<InserimentoScreen>
               autovalidate: true,
               child: Column(
                 children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Icon(Icons.camera),
+                      FlatButton(
+                          onPressed: () {
+                            AuthenticationBloc().add(OCRPage(OCRPageArgument(
+                                true,
+                                inserimentoBloc.selectedCategories,
+                                inserimentoBloc.selectedTeamHome,
+                                inserimentoBloc)));
+                          },
+                          child: Text(I18n().inserimentoDistinta))
+                    ],
+                  ),
                   Container(
                     child: ListView(
                       controller: _scrollControllerForPlayers,
@@ -923,6 +941,19 @@ class InserimentoScreenState extends State<InserimentoScreen>
               autovalidate: true,
               child: Column(
                 children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      FlatButton(
+                          onPressed: () {
+                            AuthenticationBloc().add(OCRPage(OCRPageArgument(
+                                false,
+                                inserimentoBloc.selectedCategories,
+                                inserimentoBloc.selectedTeamHome,
+                                inserimentoBloc)));
+                          },
+                          child: Text(I18n().inserimentoDistinta))
+                    ],
+                  ),
                   Container(
                     child: ListView(
                       controller: _scrollControllerForPlayers,
@@ -1663,8 +1694,8 @@ class InserimentoScreenState extends State<InserimentoScreen>
                         children: <Widget>[
                           FormBuilderRadio(
                             activeColor: MainColors.PRIMARY,
-                            decoration:
-                                InputDecoration(labelText: I18n().divisaSquadraOspite),
+                            decoration: InputDecoration(
+                                labelText: I18n().divisaSquadraOspite),
                             attribute: "jerseys",
                             initialValue: inserimentoBloc.jerseyName != null
                                 ? inserimentoBloc.jerseyNameAway
@@ -1780,10 +1811,13 @@ class InserimentoScreenState extends State<InserimentoScreen>
         ? PageView(
             controller: pageController,
             scrollDirection: Axis.horizontal,
+            pageSnapping: true,
             children: <Widget>[
               FootballFieldScreen(
                 activeSaveButton: activeSaveButton,
                 isHome: true,
+                teamName: inserimentoBloc
+                    .getTeamNameById(inserimentoBloc.selectedTeamHome),
                 notifyParent: notifyParent,
                 notifyAction: notifyAction,
                 inserimentoIncontroBloc: inserimentoBloc,
@@ -1797,6 +1831,8 @@ class InserimentoScreenState extends State<InserimentoScreen>
               FootballFieldScreen(
                 activeSaveButton: activeSaveButton,
                 isHome: false,
+                teamName: inserimentoBloc
+                    .getTeamNameById(inserimentoBloc.selectedTeamAway),
                 notifyParent: notifyParent,
                 notifyAction: notifyAction,
                 inserimentoIncontroBloc: inserimentoBloc,

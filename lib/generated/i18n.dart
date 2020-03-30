@@ -146,6 +146,8 @@ class I18n implements WidgetsLocalizations {
   String get divisaSquadraDiCasa => "Divisa squadra di casa";
   /// "Divisa squadra ospite"
   String get divisaSquadraOspite => "Divisa squadra ospite";
+  /// "Scansiona distinta"
+  String get inserimentoDistinta => "Scansiona distinta";
 }
 
 class _I18n_it_IT extends I18n {
@@ -329,6 +331,9 @@ class _I18n_en_US extends I18n {
   /// "Away team's jersey"
   @override
   String get divisaSquadraOspite => "Away team's jersey";
+  /// "Scan rank"
+  @override
+  String get inserimentoDistinta => "Scan rank";
 
   @override
   TextDirection get textDirection => TextDirection.ltr;

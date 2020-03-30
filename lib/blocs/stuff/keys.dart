@@ -16,9 +16,12 @@ class FormKey {
   static final materialAppKey = const Key('materialAppKey');
   static final loadingKey = const Key('loadingKey');
   static final fliploaderkey = const Key('fliploaderkey');
+  static final splashpagekey = const Key('splashpagekey');
   static final logoutKey = const Key('logoutKey');
   static final authenticationUnauthenticated =
       const Key('authenticationUnauthenticated');
   static final authenticationAuthenticated =
       const Key('authenticationAuthenticated');
+  static final matchPageKey = const Key('matchPageKey');
+  static final ocrPageKey = const Key('ocrPageKey');
 }

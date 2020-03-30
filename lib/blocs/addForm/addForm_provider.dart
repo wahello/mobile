@@ -1,12 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
+import 'package:football_system/blocs/model/addFormModel.dart';
+import 'package:football_system/blocs/model/playerRequest_model.dart';
 import 'package:football_system/blocs/stuff/calls_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared/shared.dart';
-
-import 'addFormModel.dart';
 
 class AddFormProvider {
   static final AddFormProvider _addFormProvider = AddFormProvider._internal();
@@ -18,10 +20,15 @@ class AddFormProvider {
   Future<http.Response> sendData(List<AddFormModel> dataToSend,
       TypeAddForm type, String categoryId, String teamId) async {
     String endpoint;
-    Map<String, String> body = new Map();
+    Map body = new Map();
+
+    String header = "application/x-www-form-urlencoded";
+    //per retrocompatibilità usiamo questa variabile per abilitare le chiamate che (non)usano json
+    bool isJson = false;
+
     switch (type) {
       case TypeAddForm.TEAM:
-        body = {'name': dataToSend[0].nome};
+        body = {'name': dataToSend[0].name};
         endpoint = Endpoints.domain +
             Endpoints.categories +
             '/' +
@@ -29,11 +36,11 @@ class AddFormProvider {
             Endpoints.submitTeam;
         break;
       case TypeAddForm.PLAYER:
-        body = {
-          'name': dataToSend[0].nome,
-          'number': dataToSend[0].number,
-          'year': dataToSend[0].anno
-        };
+        PlayerRequest playerRequest = new PlayerRequest(dataToSend);
+
+        body = playerRequest.toJson();
+        isJson = true;
+        header = "application/json";
         endpoint = Endpoints.domain +
             Endpoints.teams +
             '/' +
@@ -41,7 +48,7 @@ class AddFormProvider {
             Endpoints.submitPlayer;
         break;
       case TypeAddForm.COACH:
-        body = {'name': dataToSend[0].nome};
+        body = {'name': dataToSend[0].name};
         endpoint = Endpoints.domain +
             Endpoints.teams +
             '/' +
@@ -55,10 +62,10 @@ class AddFormProvider {
     try {
       http.Response _resp = await http.post(endpoint,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": header,
             HttpHeaders.authorizationHeader: token
           },
-          body: body);
+          body: isJson ? JsonEncoder().convert(body) : body);
       return _resp;
     } catch (error) {
       print(error);

@@ -5,12 +5,12 @@ import 'package:football_system/generated/i18n.dart';
 class InserimentoPage extends StatefulWidget {
   final Function(Widget) notifyParent;
   final Function(Widget) notifyAction;
-  final Function(Size, InserimentoBloc) activeSaveButton;
+  final Key key;
 
   InserimentoPage({
     this.activeSaveButton,
     this.notifyAction,
-    Key key,
+    this.key,
     this.notifyParent,
   }) : super(key: key);
 
@@ -24,7 +24,6 @@ class _InserimentoPageState extends State<InserimentoPage> {
     super.initState();
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     widget.notifyParent(Text(I18n().inserimentoIncontro));

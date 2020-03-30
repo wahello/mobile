@@ -3,7 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CallsRepository {
   final CallsProvider callsProvider = new CallsProvider();
-  
+
+  static final CallsRepository _callsRepository = CallsRepository._internal();
+  factory CallsRepository() {
+    return _callsRepository;
+  }
+  CallsRepository._internal();
 
   Future<void> deleteKey(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

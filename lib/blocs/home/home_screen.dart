@@ -7,6 +7,9 @@ import 'package:shared/shared.dart';
 import '../authentication/index.dart';
 
 class HomeScreen extends StatelessWidget {
+  final AuthenticationBloc authenticationBloc;
+
+  HomeScreen({this.authenticationBloc});
   Card makeDashboardItem(String title, IconData icon, Function click) {
     return Card(
         elevation: 1.0,
@@ -46,7 +49,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _body(
-        authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+        authenticationBloc: authenticationBloc,
         homeBloc: BlocProvider.of<HomeBloc>(context),
         context: context);
   }
@@ -64,7 +67,7 @@ class HomeScreen extends StatelessWidget {
         padding: EdgeInsets.all(3.0),
         children: <Widget>[
           makeDashboardItem(I18n().inserisciIncontro, Icons.insert_invitation,
-              () => {homeBloc.add(InserimentoIncontroEvent())}),
+              () => {authenticationBloc.add(GoToInserimentoPage())}),
           makeDashboardItem(
               I18n().modificaIncontro, Icons.edit, _onModificaButtonPressed),
           makeDashboardItem(I18n().inserisciFormazioneTipo, Icons.people,

@@ -18,13 +18,18 @@ import 'package:football_system/blocs/model/team_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
 import 'package:football_system/blocs/stuff/event.dart';
 import 'package:football_system/blocs/stuff/index.dart';
-import 'package:flutter/material.dart';
 
 import './index.dart';
 
 class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
   final CallsRepository callsRepository = new CallsRepository();
-  final List<String> jerseyName = ['assets/images/maglia-arancione.png', 'assets/images/maglia-bianca.png','assets/images/maglia-blu.png','assets/images/maglia-gialla.png','assets/images/maglia-rossa.png'];
+  final List<String> jerseyName = [
+    'assets/images/maglia-arancione.png',
+    'assets/images/maglia-bianca.png',
+    'assets/images/maglia-blu.png',
+    'assets/images/maglia-gialla.png',
+    'assets/images/maglia-rossa.png'
+  ];
 
   List<Category> categories;
   List<Championship> championships;

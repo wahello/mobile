@@ -41,6 +41,14 @@ class OtpPageLoaded extends LoginEvent {
   String toString() => 'OtpPageLoaded { mobileNumber: $mobileNumber }';
 }
 
+class ClearFormAfterLogin extends LoginEvent {
+
+  ClearFormAfterLogin();
+
+  @override
+  String toString() => 'ClearFormAfterLogin';
+}
+
 class ForgotPasswordButtonPressed extends LoginEvent {
   final String username;
   final String password;

@@ -8,12 +8,17 @@ import 'index.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({@required this.callsRepository})
-      : assert(callsRepository != null);
+  static final AuthenticationBloc _authenticationBloc =
+      AuthenticationBloc._internal();
+
+  factory AuthenticationBloc() {
+    return _authenticationBloc;
+  }
+
+  AuthenticationBloc._internal();
 
   bool hasToken = false;
   bool registered = false;
-  final CallsRepository callsRepository;
 
   @override
   AuthenticationState get initialState => AuthenticationUninitialized();
@@ -34,19 +39,27 @@ class AuthenticationBloc
       yield AuthenticationAuthenticated();
     }
     if (event is GoHome) {
-      yield AuthenticationAuthenticated();
+      yield BackedToHomeFromButton();
+    }
+
+    if (event is OCRPage) {
+      yield OCRPageState(ocrPageArgument: event.args);
     }
 
     if (event is LoggedOut) {
       yield AuthenticationLoading();
-      hasToken = await callsRepository.hasToken();
-      if (hasToken) await callsRepository.deleteKey('token');
-      yield AuthenticationUnauthenticated();
+      hasToken = await CallsRepository().hasToken();
+      if (hasToken) await CallsRepository().deleteKey('token');
+      yield Logout();
     }
 
     if (event is OTP) {
       yield AuthenticationLoading();
       yield OTPRequired();
+    }
+
+    if (event is GoToInserimentoPage) {
+      yield InserimentoPageSelected();
     }
   }
 }

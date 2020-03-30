@@ -36,6 +36,7 @@ void main() {
 }
 
 class Home extends StatefulWidget {
+  AuthenticationBloc authenticationBloc;
   final CallsRepository callsRepository;
   final UserRepository userRepository;
   final Function(Widget widget) notifyParent;
@@ -49,12 +50,14 @@ class Home extends StatefulWidget {
       this.activeSaveButton,
       this.notifyAction,
       this.notifyParent,
+      this.authenticationBloc,
       @required this.callsRepository,
       @required this.userRepository})
       : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Home> createState() =>
+      _HomeState(authenticationBloc: authenticationBloc);
 }
 
 class _HomeState extends State<Home> {
@@ -64,14 +67,14 @@ class _HomeState extends State<Home> {
   CallsRepository get callsRepository => widget.callsRepository;
   UserRepository get userRepository => widget.userRepository;
 
+  _HomeState({this.authenticationBloc});
+
   @override
   void initState() {
     homeBloc = HomeBloc(
       callsRepository: callsRepository,
     );
-    authenticationBloc = AuthenticationBloc(
-      callsRepository: callsRepository,
-    );
+
     inserimentoBloc = InserimentoBloc();
     homeBloc.add(HomeStarted());
     super.initState();
@@ -113,17 +116,23 @@ class _HomeState extends State<Home> {
         child: BlocProvider<HomeBloc>(
             builder: (BuildContext context) => homeBloc,
             child: Scaffold(
-              body: BlocBuilder<HomeBloc, HomeState>(
-                builder: (BuildContext context, HomeState state) {
+              /*
+              utilizzo un bloc listener perchè non voglio ritornare più un widget ma triggerare
+              l'authenticationBloc(che chiameremo routing bloc) che pusherà la nuova pagina
+              */
+              body: BlocListener<HomeBloc, HomeState>(
+                bloc: homeBloc,
+                listener: (BuildContext context, HomeState state) {
                   if (state is HomeInitialized) {
-                    return HomePage();
+                    return HomePage(
+                      authenticationBloc: authenticationBloc,
+                    );
                   }
                   if (state is InserimentoIncontroState) {
-                    return InserimentoPage(
-                      notifyParent: updateAppBarTitle,
-                      notifyAction: updateAppBarActions,
-                      activeSaveButton: widget.activeSaveButton,
-                    );
+                    authenticationBloc.add(GoToInserimentoPage());
+                    // return InserimentoPage(
+                    //     notifyParent: updateAppBarTitle,
+                    //     notifyAction: updateAppBarActions);
                   }
                   return SplashPage();
                 },
