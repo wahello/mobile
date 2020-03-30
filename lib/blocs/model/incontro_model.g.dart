@@ -31,7 +31,7 @@ Map<String, dynamic> _$IncontroToJson(Incontro instance) => <String, dynamic>{
       //FIXME: tournament è null, capire perchè
       // 'tournament': instance.tournament.toJson(),
       'team': instance.team.toJson(),
-      'players': instance.players.map((player) => player.toJson()),
+      'players': instance.players.map((player) => player.toJson()).toList(),
       'coach': instance.coach.toJson(),
       'module': instance.module.toJson(),
     };

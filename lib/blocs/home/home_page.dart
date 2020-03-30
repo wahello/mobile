@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     widget.notifyParent(Text(I18n().inserimentoIncontro));
+    widget.notifyAction(null);
     return HomeScreen(authenticationBloc: authenticationBloc);
   }
 

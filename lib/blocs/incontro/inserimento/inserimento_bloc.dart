@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:football_system/blocs/addForm/addFormSingleInstance.dart';
 import 'package:football_system/blocs/addForm/index.dart';
+import 'package:football_system/blocs/model/incontri_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:football_system/blocs/model/category_model.dart';
 import 'package:football_system/blocs/model/championship_model.dart';
@@ -18,6 +19,7 @@ import 'package:football_system/blocs/model/team_model.dart';
 import 'package:football_system/blocs/model/tournament_model.dart';
 import 'package:football_system/blocs/stuff/event.dart';
 import 'package:football_system/blocs/stuff/index.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import './index.dart';
 
@@ -482,21 +484,10 @@ class InserimentoBloc extends Bloc<InserimentoEvent, InserimentoState> {
       }
       yield InserimentoFormSuccess();
     }
-    if (event is SalvaIncontro) {
-      //TODO eliminare il print e chiamare il provider
-      print(incontroAway.toJson());
-
-      List<Incontro> teamHome = List<Incontro>();
-      teamHome.add(incontroHome);
-      teamHome.add(incontroAway);
-
-      List<Incontro> teamAway = List<Incontro>();
-      teamAway.add(incontroAway);
-
-      Game game = Game(teamHome, teamAway);
-      var test = json.encode(game.toJson().toString());
-
-      print(test);
+    if (event is SaveMatchEvent) {
+      var incontri = Incontri(this.incontroHome, this.incontroAway);
+      print(JsonEncoder().convert(incontri.home.toJson()));
+      print(JsonEncoder().convert(incontri.away.toJson()));
     }
   }
 }

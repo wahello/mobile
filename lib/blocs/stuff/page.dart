@@ -34,19 +34,28 @@ class _CustomPageState extends State<CustomPage> {
 
   @override
   Widget build(BuildContext context) {
+    var homeAndSave = [
+      FloatingActionButton(
+        backgroundColor: MainColors.PRIMARY,
+        child: Icon(Icons.home),
+        heroTag: "home",
+        onPressed: () => {authenticationBloc.add(GoHome())},
+      ),
+      Divider(
+        indent: MediaQuery.of(context).size.width * 0.375,
+        // endIndent: ,
+      ),
+      // FloatingActionButton(
+      //   backgroundColor: MainColors.PRIMARY,
+      //   child: Icon(Icons.home),
+      //   heroTag: "save",
+      //   onPressed: () => {},
+      // ),
+    ];
+
     return Scaffold(
         key: key,
-        persistentFooterButtons: <Widget>[
-          FloatingActionButton(
-            backgroundColor: MainColors.PRIMARY,
-            child: Icon(Icons.home),
-            heroTag: "home",
-            onPressed: () => {authenticationBloc.add(GoHome())},
-          ),
-          Divider(
-            indent: MediaQuery.of(context).size.width / 2.65,
-          ),
-        ],
+        persistentFooterButtons: homeAndSave,
         appBar: AppBar(
           leading: FlatButton(
             key: FormKey.logoutKey,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:football_field/presentation/soccerplayer_icons.dart';
+
+import 'presentation/soccerplayer_icons.dart';
 
 //UNA CASELLA DELLA SCACCHIERA
 class FieldFraction extends StatelessWidget {

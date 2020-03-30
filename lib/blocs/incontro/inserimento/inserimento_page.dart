@@ -8,7 +8,6 @@ class InserimentoPage extends StatefulWidget {
   final Key key;
 
   InserimentoPage({
-    this.activeSaveButton,
     this.notifyAction,
     this.key,
     this.notifyParent,
@@ -28,9 +27,7 @@ class _InserimentoPageState extends State<InserimentoPage> {
   Widget build(BuildContext context) {
     widget.notifyParent(Text(I18n().inserimentoIncontro));
     return InserimentoScreen(
-        notifyParent: widget.notifyParent,
-        notifyAction: widget.notifyAction,
-        activeSaveButton: widget.activeSaveButton);
+        notifyParent: widget.notifyParent, notifyAction: widget.notifyAction);
   }
 
   @override

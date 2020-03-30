@@ -100,7 +100,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    widget.deactiveSaveButton(MediaQuery.of(context).size);
     return MultiBlocProvider(
         providers: [
           BlocProvider<AuthenticationBloc>(

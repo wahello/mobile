@@ -97,58 +97,6 @@ class _AppState extends State<App> {
     });
   }
 
-  void activeSaveButton(Size size, InserimentoBloc inserimentoBloc) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        persistentFloatingButton = [
-          Container(
-            margin: EdgeInsets.only(right: size.width / 4.72),
-            child: FloatingActionButton(
-              backgroundColor: MainColors.PRIMARY,
-              child: Icon(Icons.home),
-              heroTag: "home",
-              onPressed: () => {authenticationBloc.add(GoHome())},
-            ),
-          ),
-          Container(
-            child: FloatingActionButton(
-              backgroundColor: MainColors.PRIMARY,
-              child: Icon(Icons.save),
-              heroTag: "save",
-              onPressed: () => {inserimentoBloc.add(SalvaIncontro())},
-            ),
-          ),
-        ];
-      });
-    });
-  }
-
-  void deactiveSaveButton(Size size) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        persistentFloatingButton = [
-          Container(
-            margin: EdgeInsets.only(right: size.width / 4.72),
-            child: FloatingActionButton(
-              backgroundColor: MainColors.PRIMARY,
-              child: Icon(Icons.home),
-              heroTag: "home",
-              onPressed: () => {authenticationBloc.add(GoHome())},
-            ),
-          ),
-          Container(
-            child: FloatingActionButton(
-              backgroundColor: MainColors.DISABLED,
-              child: Icon(Icons.save),
-              heroTag: "save",
-              onPressed: () => {},
-            ),
-          ),
-        ];
-      });
-    });
-  }
-
   void updateAppBarActions(Widget widget) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {

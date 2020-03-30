@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldBloc.dart';
 import 'package:football_system/blocs/footballField/FootballFieldEvent.dart';
 import 'package:football_system/blocs/footballField/FootballFieldState.dart';
+import 'package:football_system/blocs/incontro/inserimento/index.dart';
 import 'package:football_system/blocs/incontro/inserimento/inserimento_bloc.dart';
 import 'package:football_system/blocs/model/module_model.dart';
 import 'package:football_system/blocs/model/player_model.dart';
@@ -58,6 +59,31 @@ class FootballFieldScreenState extends State<FootballFieldScreen> {
 
   @override
   Widget build(BuildContext context) {
+    widget.notifyParent(Text(
+      inserimentoIncontroBloc.incontroHome.team.name +
+          "-" +
+          inserimentoIncontroBloc.incontroAway.team.name,
+      style: TextStyle(fontSize: 18),
+      textAlign: TextAlign.center,
+    ));
+    //TODO: spostare la definizione del button
+    widget.notifyAction(FlatButton(
+      onPressed: () => {inserimentoIncontroBloc.add(SaveMatchEvent())},
+      padding: EdgeInsets.all(5.0),
+      child: Container(
+        decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            border: Border.all(width: 1.5)),
+        width: MediaQuery.of(context).size.width / 5,
+        child: Center(
+            child: Text(
+          "salva incontro",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white),
+        )),
+      ),
+    ));
     return BlocBuilder<FootballFieldBloc, FootballFieldState>(
         bloc: footballFieldBloc,
         builder: (BuildContext context, FootballFieldState state) {
